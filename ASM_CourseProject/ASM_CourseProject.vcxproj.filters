@@ -13,10 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="資源檔\Class">
+      <UniqueIdentifier>{98f418ef-f0cf-4d90-b3e8-771d910c8c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\Project">
+      <UniqueIdentifier>{2d9bb6fb-0ced-442b-aab5-039bf15b9626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\Class\Week1">
+      <UniqueIdentifier>{55a4d1ac-a998-44b4-9259-5446b41824f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="main.asm">
-      <Filter>資源檔</Filter>
+    <None Include="PPT\Lab1_English.pptx">
+      <Filter>資源檔\Class\Week1</Filter>
+    </None>
+    <None Include="class data\week 1\report.docx">
+      <Filter>資源檔\Class\Week1</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="class data\week 1\week_1.asm">
+      <Filter>資源檔\Class\Week1</Filter>
     </MASM>
   </ItemGroup>
 </Project>
