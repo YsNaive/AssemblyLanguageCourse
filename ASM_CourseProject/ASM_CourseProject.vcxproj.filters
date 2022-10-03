@@ -13,27 +13,51 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="資源檔\Class">
-      <UniqueIdentifier>{98f418ef-f0cf-4d90-b3e8-771d910c8c71}</UniqueIdentifier>
+    <Filter Include="資源檔\Lab">
+      <UniqueIdentifier>{f353fda5-deda-4f7f-a442-e44c9d6ae26f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="資源檔\Project">
-      <UniqueIdentifier>{2d9bb6fb-0ced-442b-aab5-039bf15b9626}</UniqueIdentifier>
+    <Filter Include="資源檔\Lab\Week1">
+      <UniqueIdentifier>{f6056bba-c81b-42a7-b2cc-3629c8b345ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="資源檔\Class\Week1">
-      <UniqueIdentifier>{55a4d1ac-a998-44b4-9259-5446b41824f2}</UniqueIdentifier>
+    <Filter Include="資源檔\Lab\Week2">
+      <UniqueIdentifier>{314291d6-dc1a-46f7-854a-7349ae71b0d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\110504517">
+      <UniqueIdentifier>{fc70cb9a-2e82-4eba-9418-6fa2d1bc84a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\110504517\HW#1">
+      <UniqueIdentifier>{15553c62-2162-4dfd-ba44-c7595c9c3221}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="PPT\Lab1_English.pptx">
-      <Filter>資源檔\Class\Week1</Filter>
-    </None>
-    <None Include="class data\week 1\report.docx">
-      <Filter>資源檔\Class\Week1</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="class data\week 1\week_1.asm">
-      <Filter>資源檔\Class\Week1</Filter>
+    <MASM Include="lab\week 1\Lab1_65.asm">
+      <Filter>資源檔\Lab\Week1</Filter>
     </MASM>
+    <MASM Include="lab\week 2\Lab2_65.asm">
+      <Filter>資源檔\Lab\Week2</Filter>
+    </MASM>
+    <MASM Include="110504517HW\HW#1\HW_1_110504517.asm">
+      <Filter>資源檔\110504517\HW#1</Filter>
+    </MASM>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="lab\week 1\Lab1_65.docx">
+      <Filter>資源檔\Lab\Week1</Filter>
+    </None>
+    <None Include="lab\week 1\Lab1_English.pptx">
+      <Filter>資源檔\Lab\Week1</Filter>
+    </None>
+    <None Include="lab\week 2\Lab2_65.docx">
+      <Filter>資源檔\Lab\Week2</Filter>
+    </None>
+    <None Include="lab\week 2\Lab2_English.pptx">
+      <Filter>資源檔\Lab\Week2</Filter>
+    </None>
+    <None Include="110504517HW\HW#1\111_HW1-Arithmetic.pptx">
+      <Filter>資源檔\110504517\HW#1</Filter>
+    </None>
+    <None Include="110504517HW\HW#1\HW_1_110504517.docx">
+      <Filter>資源檔\110504517\HW#1</Filter>
+    </None>
   </ItemGroup>
 </Project>

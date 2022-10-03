@@ -19,11 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="class data\week 1\report.docx" />
-    <None Include="PPT\Lab1_English.pptx" />
+    <MASM Include="110504517HW\HW#1\HW_1_110504517.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="lab\week 1\Lab1_65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="lab\week 2\Lab2_65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="class data\week 1\week_1.asm" />
+    <None Include="110504517HW\HW#1\111_HW1-Arithmetic.pptx" />
+    <None Include="110504517HW\HW#1\HW_1_110504517.docx" />
+    <None Include="lab\week 1\Lab1_65.docx" />
+    <None Include="lab\week 1\Lab1_English.pptx" />
+    <None Include="lab\week 2\Lab2_65.docx" />
+    <None Include="lab\week 2\Lab2_English.pptx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -100,13 +112,13 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>H:\UseFolder\大學課程相關\1111\組語\CourseProject\Irvine</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Irvine</AdditionalLibraryDirectories>
       <AdditionalDependencies>Irvine32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateMapFile>true</GenerateMapFile>
     </Link>
     <MASM>
       <AssembledCodeListingFile>$ASM_CourseProject.lst</AssembledCodeListingFile>
-      <IncludePaths>H:\UseFolder\大學課程相關\1111\組語\CourseProject\Irvine</IncludePaths>
+      <IncludePaths>..\Irvine</IncludePaths>
     </MASM>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

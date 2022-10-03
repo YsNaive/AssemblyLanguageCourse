@@ -7,6 +7,6 @@ main PROC
 	mov ax, 4517h
 	mov dx, 0EEEAh
 	sub dx, ax
-invoke ExitProcess,0 
+invoke ExitProcess,0
 main ENDP 
 END main
