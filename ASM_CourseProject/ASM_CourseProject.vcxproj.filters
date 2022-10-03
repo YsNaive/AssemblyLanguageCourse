@@ -28,6 +28,9 @@
     <Filter Include="資源檔\110504517\HW#1">
       <UniqueIdentifier>{15553c62-2162-4dfd-ba44-c7595c9c3221}</UniqueIdentifier>
     </Filter>
+    <Filter Include="資源檔\Lab\Week3">
+      <UniqueIdentifier>{92c00cbb-056e-474f-913e-01222b6dfdcd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="lab\week 1\Lab1_65.asm">
@@ -38,6 +41,9 @@
     </MASM>
     <MASM Include="110504517HW\HW#1\HW_1_110504517.asm">
       <Filter>資源檔\110504517\HW#1</Filter>
+    </MASM>
+    <MASM Include="lab\week 3\Lab3_65.asm">
+      <Filter>資源檔\Lab\Week3</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +64,12 @@
     </None>
     <None Include="110504517HW\HW#1\HW_1_110504517.docx">
       <Filter>資源檔\110504517\HW#1</Filter>
+    </None>
+    <None Include="lab\week 3\Lab3_65.docx">
+      <Filter>資源檔\Lab\Week3</Filter>
+    </None>
+    <None Include="lab\week 3\Lab3_English.pptx">
+      <Filter>資源檔\Lab\Week3</Filter>
     </None>
   </ItemGroup>
 </Project>

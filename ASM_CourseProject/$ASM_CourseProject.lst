@@ -1,5 +1,5 @@
-Microsoft (R) Macro Assembler Version 14.29.30145.0	    10/02/22 17:39:44
-110504517HW\HW#1\HW_1_110504517.asm			     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.29.30145.0	    10/03/22 20:45:36
+lab\week 3\Lab3_65.asm					     Page 1 - 1
 
 
 				include Irvine32.inc
@@ -20,28 +20,30 @@ Microsoft (R) Macro Assembler Version 14.29.30145.0	    10/02/22 17:39:44
 			      C .NOLIST
 			      C .LIST
 			      C 
- 00000000			.data 
- 00000000 04			Digit0 BYTE 4h
- 00000001 05			Digit1 BYTE 5h
- 00000002 01			Digit2 BYTE 1h
- 00000003 07			Digit3 BYTE 7h
- 00000004 00000000		MyId DWORD ?
 
- 00000000			.code 
- 00000000			main PROC			
- 00000000  8A 25 00000000 R		MOV ah, Digit0
- 00000006  A0 00000001 R		MOV al, Digit1
- 0000000B  C1 E0 10			SHL eax, 16
- 0000000E  8A 25 00000002 R		MOV ah, Digit2
- 00000014  A0 00000003 R		MOV al, Digit3
- 00000019  A3 00000004 R		MOV MyId, eax
+ 00000000			.data
+ 00000000  00000009 [		Result byte 9 DUP(?)
+	    00
+	   ]
 
+ 00000000			.code
+ 00000000			Main PROC
+ 00000000  B9 00000009			Mov ecx, 9
+ 00000005  BE 00000000 R		Mov esi, OFFSET Result
+ 0000000A  B0 09			MOV al, 9
+
+ 0000000C			Calculate:
+ 0000000C  88 06			MOV [esi], al
+ 0000000E  83 C6 01			ADD esi, 1
+ 00000011  04 09			ADD al, 9
+ 00000013  E2 F7			LOOP Calculate
+
+ 00000015  8A C3			MOV al, bl
 					exit
- 00000025			main ENDP
+ 0000001E			main ENDP
 				END main
-
-Microsoft (R) Macro Assembler Version 14.29.30145.0	    10/02/22 17:39:44
-110504517HW\HW#1\HW_1_110504517.asm			     Symbols 2 - 1
+Microsoft (R) Macro Assembler Version 14.29.30145.0	    10/03/22 20:45:36
+lab\week 3\Lab3_65.asm					     Symbols 2 - 1
 
 
 
@@ -134,8 +136,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000008 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000025 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000009 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000001E Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -183,6 +185,8 @@ HeapFree . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 HeapSize . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 IsDigit  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 LocalFree  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000001E Public STDCALL
+  Calculate  . . . . . . . . . .	L Near	 0000000C _TEXT	
 MessageBoxA  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 MsgBoxAsk  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 MsgBox . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -242,7 +246,6 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000025 Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -268,10 +271,6 @@ CREATE_NEW . . . . . . . . . . .	Number	 00000001h
 CTRL_MASK  . . . . . . . . . . .	Number	 0000000Ch   
 CreateFile . . . . . . . . . . .	Text   	 CreateFileA
 DO_NOT_SHARE . . . . . . . . . .	Number	 00000000h   
-Digit0 . . . . . . . . . . . . .	Byte	 00000000 _DATA	
-Digit1 . . . . . . . . . . . . .	Byte	 00000001 _DATA	
-Digit2 . . . . . . . . . . . . .	Byte	 00000002 _DATA	
-Digit3 . . . . . . . . . . . . .	Byte	 00000003 _DATA	
 ENABLE_ECHO_INPUT  . . . . . . .	Number	 00000004h   
 ENABLE_LINE_INPUT  . . . . . . .	Number	 00000002h   
 ENABLE_MOUSE_INPUT . . . . . . .	Number	 00000010h   
@@ -365,7 +364,6 @@ MB_YESNO . . . . . . . . . . . .	Number	 00000004h
 MENU_EVENT . . . . . . . . . . .	Number	 00000008h   
 MOUSE_EVENT  . . . . . . . . . .	Number	 00000002h   
 MessageBox . . . . . . . . . . .	Text   	 MessageBoxA
-MyId . . . . . . . . . . . . . .	DWord	 00000004 _DATA	
 NULL . . . . . . . . . . . . . .	Number	 00000000h   
 NUMLOCK_ON . . . . . . . . . . .	Number	 00000020h   
 OPEN_ALWAYS  . . . . . . . . . .	Number	 00000004h   
@@ -375,6 +373,7 @@ RIGHT_ALT_PRESSED  . . . . . . .	Number	 00000001h
 RIGHT_CTRL_PRESSED . . . . . . .	Number	 00000004h   
 ReadConsoleInput . . . . . . . .	Text   	 ReadConsoleInputA
 ReadConsole  . . . . . . . . . .	Text   	 ReadConsoleA
+Result . . . . . . . . . . . . .	Byte	 00000000 _DATA	
 SCROLLLOCK_ON  . . . . . . . . .	Number	 00000040h   
 SHIFT_MASK . . . . . . . . . . .	Number	 00000010h   
 SHIFT_PRESSED  . . . . . . . . .	Number	 00000010h   
