@@ -1,5 +1,5 @@
-Microsoft (R) Macro Assembler Version 14.29.30145.0	    10/03/22 20:45:36
-lab\week 3\Lab3_65.asm					     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    10/17/22 16:55:06
+lab\week 5\Lab5_65.asm					     Page 1 - 1
 
 
 				include Irvine32.inc
@@ -21,29 +21,49 @@ lab\week 3\Lab3_65.asm					     Page 1 - 1
 			      C .LIST
 			      C 
 
- 00000000			.data
- 00000000  00000009 [		Result byte 9 DUP(?)
+ 00000000			.data   
+ 00000000 31 31 30 35 30	myID byte 49,49,48,53,48,52,53,49,55
+	   34 35 31 37
+ 00000009 31 31 30 35 30	myID2 byte 49,49,48,53,48,52,53,49,56
+	   34 35 31 38
+ 00000012  00000009 [		result byte 9 DUP(?)  
 	    00
 	   ]
 
+
  00000000			.code
- 00000000			Main PROC
- 00000000  B9 00000009			Mov ecx, 9
- 00000005  BE 00000000 R		Mov esi, OFFSET Result
- 0000000A  B0 09			MOV al, 9
+ 00000000			Main PROC ;we can't found ASCII code in mem watch window, so we use ANSI code.
+ 00000000  B9 00000009		    mov ecx, 9
+ 00000005  BE 00000000			mov esi, 0
+ 0000000A			L1:
+ 0000000A  8A 86 00000000 R		mov al, myID[esi]
+ 00000010  8A 9E 00000009 R		mov bl, myID2[esi]
+ 00000016  3A C3			cmp al, bl			; al - bl
+ 00000018  77 0B			JA Above			; al > bl
+ 0000001A  72 12			JB Below			; al < bl
+ 0000001C  C6 86 00000012 R		mov result[esi], 65 ; al = bl
+	   41
+ 00000023  EB 12			JMP nextLoop
 
- 0000000C			Calculate:
- 0000000C  88 06			MOV [esi], al
- 0000000E  83 C6 01			ADD esi, 1
- 00000011  04 09			ADD al, 9
- 00000013  E2 F7			LOOP Calculate
+ 00000025			Above:
+ 00000025  C6 86 00000012 R		mov result[esi], 66
+	   42
+ 0000002C  EB 09			JMP nextLoop
 
- 00000015  8A C3			MOV al, bl
+ 0000002E			Below:
+ 0000002E  C6 86 00000012 R		mov result[esi], 67
+	   43
+ 00000035  EB 00			JMP nextLoop
+
+ 00000037			nextLoop:
+ 00000037  46				inc esi
+ 00000038  E2 D0			LOOP L1
+
 					exit
- 0000001E			main ENDP
+ 00000041			main ENDP
 				END main
-Microsoft (R) Macro Assembler Version 14.29.30145.0	    10/03/22 20:45:36
-lab\week 3\Lab3_65.asm					     Symbols 2 - 1
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    10/17/22 16:55:06
+lab\week 5\Lab5_65.asm					     Symbols 2 - 1
 
 
 
@@ -136,8 +156,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000009 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000001E Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000001B Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000041 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -185,8 +205,11 @@ HeapFree . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 HeapSize . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 IsDigit  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 LocalFree  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-Main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000001E Public STDCALL
-  Calculate  . . . . . . . . . .	L Near	 0000000C _TEXT	
+Main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000041 Public STDCALL
+  L1 . . . . . . . . . . . . . .	L Near	 0000000A _TEXT	
+  Above  . . . . . . . . . . . .	L Near	 00000025 _TEXT	
+  Below  . . . . . . . . . . . .	L Near	 0000002E _TEXT	
+  nextLoop . . . . . . . . . . .	L Near	 00000037 _TEXT	
 MessageBoxA  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 MsgBoxAsk  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 MsgBox . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -373,7 +396,6 @@ RIGHT_ALT_PRESSED  . . . . . . .	Number	 00000001h
 RIGHT_CTRL_PRESSED . . . . . . .	Number	 00000004h   
 ReadConsoleInput . . . . . . . .	Text   	 ReadConsoleInputA
 ReadConsole  . . . . . . . . . .	Text   	 ReadConsoleA
-Result . . . . . . . . . . . . .	Byte	 00000000 _DATA	
 SCROLLLOCK_ON  . . . . . . . . .	Number	 00000040h   
 SHIFT_MASK . . . . . . . . . . .	Number	 00000010h   
 SHIFT_PRESSED  . . . . . . . . .	Number	 00000010h   
@@ -479,7 +501,10 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
+myID2  . . . . . . . . . . . . .	Byte	 00000009 _DATA	
+myID . . . . . . . . . . . . . .	Byte	 00000000 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+result . . . . . . . . . . . . .	Byte	 00000012 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

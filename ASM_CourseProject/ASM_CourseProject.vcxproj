@@ -29,7 +29,13 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
     <MASM Include="lab\week 3\Lab3_65.asm">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="lab\week 4\Lab4_65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="lab\week 5\Lab5_65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +47,10 @@
     <None Include="lab\week 2\Lab2_English.pptx" />
     <None Include="lab\week 3\Lab3_65.docx" />
     <None Include="lab\week 3\Lab3_English.pptx" />
+    <None Include="lab\week 4\Lab4_65.docx" />
+    <None Include="lab\week 4\Lab4_English.pptx" />
+    <None Include="lab\week 5\Lab5_65.docx" />
+    <None Include="lab\week 5\Lab5_English.pptx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
