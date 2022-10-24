@@ -37,6 +37,9 @@
     <MASM Include="lab\week 5\Lab5_65.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
+    <MASM Include="lab\week 6\Lab6_65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="110504517HW\HW#1\111_HW1-Arithmetic.pptx" />
@@ -51,6 +54,8 @@
     <None Include="lab\week 4\Lab4_English.pptx" />
     <None Include="lab\week 5\Lab5_65.docx" />
     <None Include="lab\week 5\Lab5_English.pptx" />
+    <None Include="lab\week 6\Lab6_65.docx" />
+    <None Include="lab\week 6\Lab6_English.pptx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
