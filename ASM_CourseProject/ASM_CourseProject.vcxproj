@@ -22,6 +22,9 @@
     <MASM Include="110504517HW\HW#1\HW_1_110504517.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
+    <MASM Include="110504517HW\HW#2\HW_2_110504517.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </MASM>
     <MASM Include="lab\week 1\Lab1_65.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
@@ -40,10 +43,15 @@
     <MASM Include="lab\week 6\Lab6_65.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
+    <MASM Include="lab\week 7\Lab7_65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="110504517HW\HW#1\111_HW1-Arithmetic.pptx" />
     <None Include="110504517HW\HW#1\HW_1_110504517.docx" />
+    <None Include="110504517HW\HW#2\HW2.pptx" />
+    <None Include="110504517HW\HW#2\HW_2_110504517.docx" />
     <None Include="lab\week 1\Lab1_65.docx" />
     <None Include="lab\week 1\Lab1_English.pptx" />
     <None Include="lab\week 2\Lab2_65.docx" />
@@ -56,6 +64,8 @@
     <None Include="lab\week 5\Lab5_English.pptx" />
     <None Include="lab\week 6\Lab6_65.docx" />
     <None Include="lab\week 6\Lab6_English.pptx" />
+    <None Include="lab\week 7\Lab7_65.docx" />
+    <None Include="lab\week 7\Lab7_English.pptx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
