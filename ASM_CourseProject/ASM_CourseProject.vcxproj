@@ -25,6 +25,14 @@
     <MASM Include="110504517HW\HW#2\HW_2_110504517.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </MASM>
+    <MASM Include="110504517HW\HW#3\Bonus\HW_3_110504517_Bonus.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="110504517HW\HW#3\HW_3_110504517.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="DosBox\test.asm" />
+    <MASM Include="hello.asm" />
     <MASM Include="lab\week 1\Lab1_65.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
@@ -46,12 +54,26 @@
     <MASM Include="lab\week 7\Lab7_65.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
+    <MASM Include="lab\week 8\lab8_group65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="lab\week 9\lab9_group65_DifferentInputs.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="lab\week 9\lab9_group65_StringRemove.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="lab\week10\lab10_group65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="110504517HW\HW#1\111_HW1-Arithmetic.pptx" />
     <None Include="110504517HW\HW#1\HW_1_110504517.docx" />
     <None Include="110504517HW\HW#2\HW2.pptx" />
     <None Include="110504517HW\HW#2\HW_2_110504517.docx" />
+    <None Include="110504517HW\HW#3\Bonus\HW_3_110504517_Bonus.docx" />
+    <None Include="110504517HW\HW#3\HW_3_110504517.docx" />
     <None Include="lab\week 1\Lab1_65.docx" />
     <None Include="lab\week 1\Lab1_English.pptx" />
     <None Include="lab\week 2\Lab2_65.docx" />
@@ -66,6 +88,16 @@
     <None Include="lab\week 6\Lab6_English.pptx" />
     <None Include="lab\week 7\Lab7_65.docx" />
     <None Include="lab\week 7\Lab7_English.pptx" />
+    <None Include="lab\week 8\Lab8_65.docx" />
+    <None Include="lab\week 8\week10_lab8.pptx" />
+    <None Include="lab\week 9\3rdExecuteResult.xlsx" />
+    <None Include="lab\week 9\lab9_groub65_DifferentInputs.docx" />
+    <None Include="lab\week 9\lab9_groub65_StringRemove.docx" />
+    <None Include="lab\week 9\week11_lab9.docx" />
+    <None Include="lab\week 9\week11_lab9.pptx" />
+    <None Include="lab\week10\lab10_groub65.docx" />
+    <None Include="lab\week10\week12_lab10.docx" />
+    <None Include="lab\week10\week12_lab10.pptx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
