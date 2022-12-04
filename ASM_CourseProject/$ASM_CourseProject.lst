@@ -1,50 +1,65 @@
-Microsoft (R) Macro Assembler Version 14.29.30146.0	    11/30/22 19:14:09
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/04/22 16:03:14
 DosBox\test.asm						     Page 1 - 1
 
 
-				; 定義數據段，存放數據
- 0000				data segment
-				    ; db 是定義接下來的數據為單字節的意思，
-				    ; '$'是字串的結尾，類似 C 的 '\0'
- 0000 0D 0A 48 65 6C 6C		    string db 13,10,'Hello World!',13,10,'$'
-       6F 20 57 6F 72 6C
-       64 21 0D 0A 24
- 0011				data ends
+				.486
+				IDEAL
+DosBox\test.asm(2) : error A2008:syntax error : IDEAL
+				MODEL small
+DosBox\test.asm(3) : error A2008:syntax error : MODEL
+				STACK 256d
+DosBox\test.asm(4) : error A2008:syntax error : STACK
+				DATASEG	
+DosBox\test.asm(5) : error A2008:syntax error : DATASEG
 
-				; 定義代碼段，執行的程式碼
- 0000				code segment
-				    ; 偽指令，告訴組譯器代碼段的對應
-				    assume cs:code, ds:data
- 0000				start:
-				;完整呼叫
- 0000  B9 000A			mov cx,10             ;x座標
- 0003  BA 000A			mov dx,10             ;y座標
- 0006  B0 0C			mov al,1100b          ;淡紅色
- 0008  B4 0C			mov ah,0ch            ;寫入點像
- 000A  CD 10			int 10h               ;呼叫中斷
- 000C				code ends
+				CODESEG
+DosBox\test.asm(7) : error A2008:syntax error : CODESEG
+				    includelib "DrawFunction\UtilLib.inc"
+				    includelib "DrawFunction\GrLib.inc"   
+				start:
+DosBox\test.asm(10) : error A2034:must be in segment block
+				    mov ax, @data
+DosBox\test.asm(11) : error A2034:must be in segment block
+				    mov ds,ax
+DosBox\test.asm(12) : error A2034:must be in segment block
 
-				end start   ; 讓組譯器知道程式的進入點
-Microsoft (R) Macro Assembler Version 14.29.30146.0	    11/30/22 19:14:09
+				    ; Init library with double buffering flag on
+				    mov ax, TRUE
+DosBox\test.asm(15) : error A2034:must be in segment block
+				    ut_init_lib ax
+DosBox\test.asm(16) : error A2008:syntax error : ax
+				  
+				    ; Allocate double buffering memory space
+				    call AllocateDblBuffer
+DosBox\test.asm(19) : error A2034:must be in segment block
+
+				    ; set display to VGA mode
+				    gr_set_video_mode_vga
+DosBox\test.asm(22) : error A2008:syntax error : gr_set_video_mode_vga
+
+				    ; Set initial pen color
+				    gr_set_color GR_COLOR_GREEN
+DosBox\test.asm(25) : error A2008:syntax error : gr_set_color
+
+				    ; your code here - we will draw a line...
+				    grm_DrawLine  10, 10, 200, 200
+DosBox\test.asm(28) : error A2008:syntax error : grm_DrawLine
+
+				exit:
+DosBox\test.asm(30) : error A2034:must be in segment block
+				    call WaitForKeypress    
+DosBox\test.asm(31) : error A2034:must be in segment block
+				    call ReleaseDblBuffer
+DosBox\test.asm(32) : error A2034:must be in segment block
+				    gr_set_video_mode_txt
+DosBox\test.asm(33) : error A2008:syntax error : gr_set_video_mode_txt
+				    return 0
+DosBox\test.asm(34) : error A2008:syntax error : return
+				END start    
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/04/22 16:03:14
 DosBox\test.asm						     Symbols 2 - 1
 
 
 
-
-Segments and Groups:
-
-                N a m e                 Size     Length   Align   Combine Class
-
-code . . . . . . . . . . . . . .	16 Bit	 000C	  	  Private 
-data . . . . . . . . . . . . . .	16 Bit	 0011	  	  Private 
-
-
-Symbols:
-
-                N a m e                 Type     Value    Attr
-
-start  . . . . . . . . . . . . .	L Near	 0000	  code	Public
-string . . . . . . . . . . . . .	Byte	 0000	  data	
-
-	   1 Warnings
-	   0 Errors
+	   0 Warnings
+	   21 Errors

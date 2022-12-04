@@ -1,42 +1,35 @@
-stack segment para stack
-	db 64 dup(' ')
-stack ends
-; 定義數據段，存放數據
-data segment
-    ; db 是定義接下來的數據為單字節的意思，
-    ; '$'是字串的結尾，類似 C 的 '\0'
-    string db 13,10,'Hello World!',13,10,'$'
-data ends
+.486
+IDEAL
+MODEL small
+STACK 256d
+DATASEG	
 
-; 定義代碼段，執行的程式碼
-code segment
-    ; 偽指令，告訴組譯器代碼段的對應
-    assume  cs:code, ds:data, ss:stack
+CODESEG
+    include "UtilLib.inc"
+    include "GrLib.inc"   
 start:
-	mov ax, data
-	mov ds, ax
-	mov ax, stack
-	mov ss, ax
+    mov ax, @data
+    mov ds,ax
 
-	mov ah, 00h
-	mov al, 13h
-	int 10h
+    ; Init library with double buffering flag on
+    mov ax, TRUE
+    ut_init_lib ax
+  
+    ; Allocate double buffering memory space
+    call AllocateDblBuffer
 
-	mov ah, 0ch
-	mov cx, 160
-	mov dx, 100
-	mov al, 4
-	int 10h
+    ; set display to VGA mode
+    gr_set_video_mode_vga
 
-	mov ah, 00h
-	int 16h
+    ; Set initial pen color
+    gr_set_color GR_COLOR_GREEN
 
-	mov ah, 00h
-	mov al, 03h
-	int 10h
+    ; your code here - we will draw a line...
+    grm_DrawLine  10, 10, 200, 200
 
-	mov ah,4ch
-	int 21h
-code ends
-
-end start   ; 讓組譯器知道程式的進入點
+exit:
+    call WaitForKeypress    
+    call ReleaseDblBuffer
+    gr_set_video_mode_txt
+    return 0
+END start    
