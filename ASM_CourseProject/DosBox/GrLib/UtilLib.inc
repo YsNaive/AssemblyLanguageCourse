@@ -16,13 +16,13 @@ FALSE       equ     0
 NULL        equ     0
 
 ; Includes
-include "UtilLib\util.asm"
-include "UtilLib\string.asm"
-include "UtilLib\math.asm"
-include "UtilLib\file.asm"
-include "UtilLib\print.asm"
-include "UtilLib\sound.asm"
-include "UtilLib\time.asm"
-include "UtilLib\keys.asm"
-include "UtilLib\mouse.asm"
-include "UtilLib\mem.asm"
+include GrLib\UtilLib\util.asm
+include GrLib\UtilLib\string.asm
+include GrLib\UtilLib\math.asm
+include GrLib\UtilLib\file.asm
+include GrLib\UtilLib\print.asm
+include GrLib\UtilLib\sound.asm
+include GrLib\UtilLib\time.asm
+include GrLib\UtilLib\keys.asm
+include GrLib\UtilLib\mouse.asm
+include GrLib\UtilLib\mem.asm

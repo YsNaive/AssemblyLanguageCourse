@@ -14,13 +14,13 @@
 BMP_STRUCT_SIZE         equ         444h
 
 ; Includes
-include "GrLib\dblbuf.asm"
-include "GrLib\colors.asm"
-include "GrLib\graphx.asm"
-include "GrLib\line.asm"
-include "GrLib\rect.asm"
-include "GrLib\poly.asm"
-include "GrLib\circle.asm"
-include "GrLib\bmp.asm"
-include "GrLib\image.asm"
-include "GrLib\anim.asm"
+include GrLib\GrLib\dblbuf.asm
+include GrLib\GrLib\colors.asm
+include GrLib\GrLib\graphx.asm
+include GrLib\GrLib\line.asm
+include GrLib\GrLib\rect.asm
+include GrLib\GrLib\poly.asm
+include GrLib\GrLib\circle.asm
+include GrLib\GrLib\bmp.asm
+include GrLib\GrLib\image.asm
+include GrLib\GrLib\anim.asm

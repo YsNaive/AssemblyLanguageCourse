@@ -31,10 +31,17 @@
     <MASM Include="110504517HW\HW#3\HW_3_110504517.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\test.asm">
+    <MASM Include="DosBox\main.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="hello.asm">
+    <MASM Include="DosBox\procedure.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="DosBox\PROC\Init.asm" />
+    <MASM Include="DosBox\structure.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="DosBox\variable.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
     <MASM Include="lab\week 1\Lab1_65.asm">
@@ -81,6 +88,7 @@
     <None Include="110504517HW\HW#2\HW_2_110504517.docx" />
     <None Include="110504517HW\HW#3\Bonus\HW_3_110504517_Bonus.docx" />
     <None Include="110504517HW\HW#3\HW_3_110504517.docx" />
+    <None Include="DosBox\Run.bat" />
     <None Include="lab\week 1\Lab1_65.docx" />
     <None Include="lab\week 1\Lab1_English.pptx" />
     <None Include="lab\week 2\Lab2_65.docx" />

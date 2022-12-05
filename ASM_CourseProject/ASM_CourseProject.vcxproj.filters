@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="資源檔\Lab">
-      <UniqueIdentifier>{f353fda5-deda-4f7f-a442-e44c9d6ae26f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="資源檔\110504517">
       <UniqueIdentifier>{fc70cb9a-2e82-4eba-9418-6fa2d1bc84a5}</UniqueIdentifier>
     </Filter>
@@ -24,6 +21,12 @@
     </Filter>
     <Filter Include="資源檔\110504517\HW#2">
       <UniqueIdentifier>{83e222d6-16a2-4cea-8cb2-d0494fd8aa23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\110504517\HW#3">
+      <UniqueIdentifier>{57f15422-e4d9-4af7-b42f-695265d5b30c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\Lab">
+      <UniqueIdentifier>{f353fda5-deda-4f7f-a442-e44c9d6ae26f}</UniqueIdentifier>
     </Filter>
     <Filter Include="資源檔\Lab\Lab1">
       <UniqueIdentifier>{f6056bba-c81b-42a7-b2cc-3629c8b345ae}</UniqueIdentifier>
@@ -52,17 +55,20 @@
     <Filter Include="資源檔\Lab\Lab9">
       <UniqueIdentifier>{f7a2ee07-2c80-48e3-befa-39453e29f33d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="資源檔\110504517\HW#3">
-      <UniqueIdentifier>{57f15422-e4d9-4af7-b42f-695265d5b30c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="資源檔\Lab\Lab10">
       <UniqueIdentifier>{a15f7a63-8918-4c66-b5db-4fc2f3c73daa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\Lab\Lab11">
+      <UniqueIdentifier>{1d6b7448-a138-4ef8-9a12-62300344231f}</UniqueIdentifier>
     </Filter>
     <Filter Include="資源檔\FinalProject">
       <UniqueIdentifier>{c700a9a1-b8f3-4c02-ba45-ed88b74ed354}</UniqueIdentifier>
     </Filter>
-    <Filter Include="資源檔\Lab\Lab11">
-      <UniqueIdentifier>{1d6b7448-a138-4ef8-9a12-62300344231f}</UniqueIdentifier>
+    <Filter Include="資源檔\FinalProject\PROC">
+      <UniqueIdentifier>{a08eae93-bfec-4c7f-a6af-a941d5de98d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\FinalProject\Core">
+      <UniqueIdentifier>{90c4512b-8c10-411e-a140-7b1c3927dd12}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,14 +117,23 @@
     <MASM Include="lab\week10\lab10_group65.asm">
       <Filter>資源檔\Lab\Lab10</Filter>
     </MASM>
-    <MASM Include="DosBox\test.asm">
-      <Filter>資源檔\FinalProject</Filter>
-    </MASM>
-    <MASM Include="hello.asm">
-      <Filter>資源檔\FinalProject</Filter>
-    </MASM>
     <MASM Include="lab\week11\lab11_group65.asm">
       <Filter>資源檔\Lab\Lab11</Filter>
+    </MASM>
+    <MASM Include="DosBox\PROC\Init.asm">
+      <Filter>資源檔\FinalProject\PROC</Filter>
+    </MASM>
+    <MASM Include="DosBox\procedure.asm">
+      <Filter>資源檔\FinalProject\Core</Filter>
+    </MASM>
+    <MASM Include="DosBox\main.asm">
+      <Filter>資源檔\FinalProject\Core</Filter>
+    </MASM>
+    <MASM Include="DosBox\structure.asm">
+      <Filter>資源檔\FinalProject\Core</Filter>
+    </MASM>
+    <MASM Include="DosBox\variable.asm">
+      <Filter>資源檔\FinalProject\Core</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +235,9 @@
     </None>
     <None Include="lab\week11\week14_lab12.pptx">
       <Filter>資源檔\Lab\Lab11</Filter>
+    </None>
+    <None Include="DosBox\Run.bat">
+      <Filter>資源檔\FinalProject</Filter>
     </None>
   </ItemGroup>
 </Project>

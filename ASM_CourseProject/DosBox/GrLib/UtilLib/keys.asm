@@ -12,7 +12,7 @@
 LOCALS @@
 
 DATASEG
-    include   "UtilLib\keymap.inc"
+    include   "GrLib\UtilLib\keymap.inc"
 
     ; used by PrintFifoStatus
     strTail           db  "TAIL=$",0
