@@ -31,8 +31,12 @@
     <MASM Include="110504517HW\HW#3\HW_3_110504517.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\test.asm" />
-    <MASM Include="hello.asm" />
+    <MASM Include="DosBox\test.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="hello.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
     <MASM Include="lab\week 1\Lab1_65.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
@@ -64,6 +68,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
     <MASM Include="lab\week10\lab10_group65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="lab\week11\lab11_group65.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
   </ItemGroup>
@@ -98,6 +105,9 @@
     <None Include="lab\week10\lab10_groub65.docx" />
     <None Include="lab\week10\week12_lab10.docx" />
     <None Include="lab\week10\week12_lab10.pptx" />
+    <None Include="lab\week11\lab11_groub65.docx" />
+    <None Include="lab\week11\week14_lab12.docx" />
+    <None Include="lab\week11\week14_lab12.pptx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

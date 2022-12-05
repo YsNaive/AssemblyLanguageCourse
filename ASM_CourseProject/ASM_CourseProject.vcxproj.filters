@@ -61,6 +61,9 @@
     <Filter Include="資源檔\FinalProject">
       <UniqueIdentifier>{c700a9a1-b8f3-4c02-ba45-ed88b74ed354}</UniqueIdentifier>
     </Filter>
+    <Filter Include="資源檔\Lab\Lab11">
+      <UniqueIdentifier>{1d6b7448-a138-4ef8-9a12-62300344231f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="lab\week 1\Lab1_65.asm">
@@ -113,6 +116,9 @@
     </MASM>
     <MASM Include="hello.asm">
       <Filter>資源檔\FinalProject</Filter>
+    </MASM>
+    <MASM Include="lab\week11\lab11_group65.asm">
+      <Filter>資源檔\Lab\Lab11</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +211,15 @@
     </None>
     <None Include="lab\week10\week12_lab10.pptx">
       <Filter>資源檔\Lab\Lab10</Filter>
+    </None>
+    <None Include="lab\week11\lab11_groub65.docx">
+      <Filter>資源檔\Lab\Lab11</Filter>
+    </None>
+    <None Include="lab\week11\week14_lab12.docx">
+      <Filter>資源檔\Lab\Lab11</Filter>
+    </None>
+    <None Include="lab\week11\week14_lab12.pptx">
+      <Filter>資源檔\Lab\Lab11</Filter>
     </None>
   </ItemGroup>
 </Project>
