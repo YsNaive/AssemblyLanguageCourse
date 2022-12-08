@@ -70,6 +70,9 @@
     <Filter Include="資源檔\FinalProject\Core">
       <UniqueIdentifier>{90c4512b-8c10-411e-a140-7b1c3927dd12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="資源檔\FinalProject\PROC\Math">
+      <UniqueIdentifier>{516c0075-6d17-4264-8fbf-6bd3097b1263}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="lab\week 1\Lab1_65.asm">
@@ -134,6 +137,15 @@
     </MASM>
     <MASM Include="DosBox\variable.asm">
       <Filter>資源檔\FinalProject\Core</Filter>
+    </MASM>
+    <MASM Include="DosBox\PROC\Draw4Pole.asm">
+      <Filter>資源檔\FinalProject\PROC</Filter>
+    </MASM>
+    <MASM Include="DosBox\PROC\Math\IsLineIntersection.asm">
+      <Filter>資源檔\FinalProject\PROC\Math</Filter>
+    </MASM>
+    <MASM Include="DosBox\PROC\Math\MathCoreMethods.asm">
+      <Filter>資源檔\FinalProject\PROC\Math</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +249,9 @@
       <Filter>資源檔\Lab\Lab11</Filter>
     </None>
     <None Include="DosBox\Run.bat">
+      <Filter>資源檔\FinalProject</Filter>
+    </None>
+    <None Include="DosBox\WorkSpace.bat">
       <Filter>資源檔\FinalProject</Filter>
     </None>
   </ItemGroup>

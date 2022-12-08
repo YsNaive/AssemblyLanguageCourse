@@ -14,6 +14,13 @@ Vector3 ENDS
 
 ;------------------------------------------------------
 
+Line STRUC
+    p1 Vector2 ?
+    p2 Vector2 ?
+Line ENDS 
+
+;------------------------------------------------------
+
 Transform STRUC
     pos   Vector3 ? ; position of object
     euler Vector3 ? ; euler angle of object (rotation)

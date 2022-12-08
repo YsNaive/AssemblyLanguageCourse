@@ -37,7 +37,18 @@
     <MASM Include="DosBox\procedure.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Init.asm" />
+    <MASM Include="DosBox\PROC\Draw4Pole.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="DosBox\PROC\Init.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="DosBox\PROC\Math\IsLineIntersection.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="DosBox\PROC\Math\MathCoreMethods.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
     <MASM Include="DosBox\structure.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
@@ -89,6 +100,7 @@
     <None Include="110504517HW\HW#3\Bonus\HW_3_110504517_Bonus.docx" />
     <None Include="110504517HW\HW#3\HW_3_110504517.docx" />
     <None Include="DosBox\Run.bat" />
+    <None Include="DosBox\WorkSpace.bat" />
     <None Include="lab\week 1\Lab1_65.docx" />
     <None Include="lab\week 1\Lab1_English.pptx" />
     <None Include="lab\week 2\Lab2_65.docx" />
