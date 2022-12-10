@@ -26,7 +26,7 @@ Mult MACRO val1, val2
 
 	cmp ax, 0
 	jb @@neg
-	mov ax, 8FFFh
+	mov ax, 7FFFh
 	jmp @@notOverflow
 	@@neg:
 	mov ax, 0FFFFh
