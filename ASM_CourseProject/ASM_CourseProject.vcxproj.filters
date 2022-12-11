@@ -73,6 +73,9 @@
     <Filter Include="資源檔\FinalProject\PROC\Math">
       <UniqueIdentifier>{516c0075-6d17-4264-8fbf-6bd3097b1263}</UniqueIdentifier>
     </Filter>
+    <Filter Include="資源檔\FinalProject\PROC\Draw">
+      <UniqueIdentifier>{1b7fad93-152b-43c4-9f95-e708b4009bda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="lab\week 1\Lab1_65.asm">
@@ -126,7 +129,7 @@
     <MASM Include="DosBox\PROC\Init.asm">
       <Filter>資源檔\FinalProject\PROC</Filter>
     </MASM>
-    <MASM Include="DosBox\procedure.asm">
+    <MASM Include="DosBox\include.asm">
       <Filter>資源檔\FinalProject\Core</Filter>
     </MASM>
     <MASM Include="DosBox\main.asm">
@@ -138,14 +141,26 @@
     <MASM Include="DosBox\variable.asm">
       <Filter>資源檔\FinalProject\Core</Filter>
     </MASM>
-    <MASM Include="DosBox\PROC\Draw4Pole.asm">
-      <Filter>資源檔\FinalProject\PROC</Filter>
-    </MASM>
     <MASM Include="DosBox\PROC\Math\IsLineIntersection.asm">
       <Filter>資源檔\FinalProject\PROC\Math</Filter>
     </MASM>
     <MASM Include="DosBox\PROC\Math\MathCoreMethods.asm">
       <Filter>資源檔\FinalProject\PROC\Math</Filter>
+    </MASM>
+    <MASM Include="DosBox\PROC\Debug.asm">
+      <Filter>資源檔\FinalProject\PROC</Filter>
+    </MASM>
+    <MASM Include="DosBox\PROC\Bool.asm">
+      <Filter>資源檔\FinalProject\PROC</Filter>
+    </MASM>
+    <MASM Include="DosBox\PROC\Math\SinCos.asm">
+      <Filter>資源檔\FinalProject\PROC\Math</Filter>
+    </MASM>
+    <MASM Include="DosBox\PROC\Draw\Draw4Pole.asm">
+      <Filter>資源檔\FinalProject\PROC\Draw</Filter>
+    </MASM>
+    <MASM Include="DosBox\PROC\Draw\DrawCore.asm">
+      <Filter>資源檔\FinalProject\PROC\Draw</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>

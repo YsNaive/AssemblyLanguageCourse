@@ -26,7 +26,7 @@ Mult MACRO val1, val2
 
 	cmp ax, 0
 	jb @@neg
-	mov ax, 8FFFh
+	mov ax, 7FFFh
 	jmp @@notOverflow
 	@@neg:
 	mov ax, 0FFFFh
@@ -43,8 +43,7 @@ IsNeg MACRO val
 ENDM
 
 CrossProduct2 MACRO pointA, pointB, other
-push bx
-push cx
+push bx cx
 	mov ax, pointB.x
 	sub ax, pointA.x
 	mov bx, other.y
@@ -61,18 +60,20 @@ push cx
 	sub bx, ax
 	mov ax, bx
 
-pop cx
-pop bx
+pop cx bx
 ENDM
 
 SetVector2 MACRO Vector, val1, val2
+push ax
 	mov ax, val1
 	mov Vector.x, ax
 	mov ax, val2
 	mov Vector.y, ax
+pop ax
 ENDM
 
 SetLine MACRO Line, p1x, p1y, p2x, p2y
+push ax
 	mov ax, p1x
 	mov Line.p1.x, ax
 	mov ax, p1y
@@ -80,5 +81,6 @@ SetLine MACRO Line, p1x, p1y, p2x, p2y
 	mov ax, p2x
 	mov Line.p2.x, ax
 	mov ax, p2y
-	mov Line.p2.y, ax     
+	mov Line.p2.y, ax  
+pop ax   
 ENDM
