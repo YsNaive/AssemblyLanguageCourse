@@ -116,16 +116,10 @@ cos_fuction PROC
     ret
 cos_fuction ENDP
 
-; return 8 point
-object_roatate PROC
-
-object_roatate ENDP
-
 
 
 ; calculate point roatation on X-axis
 roatate_on_m MACRO X 
     
 ENDM
-
 
