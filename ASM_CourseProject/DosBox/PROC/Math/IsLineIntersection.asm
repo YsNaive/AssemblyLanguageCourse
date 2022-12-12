@@ -31,18 +31,33 @@ push bx
     ja LineIntersectionFalse
 
     ; product check
+    mov bx, 0
     CrossProduct2 line1.p1, line1.p2, line2.p1
-    mov bx, ax
+    IsNeg ax
+    jf LineIntersectionNegCheck1
+    inc bx
+    LineIntersectionNegCheck1:
     CrossProduct2 line1.p1, line1.p2, line2.p2
-    mult ax, bx
     IsNeg ax
-    jt LineIntersectionTrue
+    jf LineIntersectionNegCheck2
+    inc bx
+    LineIntersectionNegCheck2:
+    cmp ax,1
+    je LineIntersectionTrue
+    
+    mov bx, 0
     CrossProduct2 line2.p1, line2.p2, line1.p1
-    mov bx, ax
-    CrossProduct2 line2.p1, line2.p2, line1.p2
-    mult ax, bx
     IsNeg ax
-    jt LineIntersectionTrue
+    jf LineIntersectionNegCheck3
+    inc bx
+    LineIntersectionNegCheck3:
+    CrossProduct2 line2.p1, line2.p2, line1.p2
+    IsNeg ax
+    jf LineIntersectionNegCheck4
+    inc bx
+    LineIntersectionNegCheck4:
+    cmp ax,1
+    je LineIntersectionTrue
 
     LineIntersectionFalse:
     mov BF, FALSE

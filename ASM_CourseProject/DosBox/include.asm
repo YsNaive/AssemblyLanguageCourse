@@ -4,6 +4,7 @@ include PROC\Math\MathCo~1.asm
 include PROC\Math\SinCos.asm
 include PROC\Math\IsLine~1.asm
 include PROC\init.asm
+include PROC\Draw\DrawCore.asm
 include PROC\Draw4P~1.asm
 include PROC\move.asm
 
@@ -19,8 +20,10 @@ restore_sp_bp MACRO
 
 
 WaitForKeypress PROC 
+push ax
     mov ah, 0
     int 16h
-    ret
+pop ax
+ret
 WaitForKeypress ENDP
 
