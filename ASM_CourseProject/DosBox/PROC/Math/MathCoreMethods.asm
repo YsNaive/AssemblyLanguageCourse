@@ -20,7 +20,8 @@ ENDM
 Mult MACRO val1, val2
 	local @@notOverflow,@@neg
 	mov ax, val1
-	mul val2
+	mov bx, val2
+	mul bx
 	jnc @@notOverflow
 	jno @@notOverflow
 
@@ -31,6 +32,19 @@ Mult MACRO val1, val2
 	@@neg:
 	mov ax, 0FFFFh
 	@@notOverflow:
+ENDM
+
+; todo :  boundary check. push pop register
+mDiv MACRO dividend, divisor
+    MOV dx, 0		
+    MOV ax, dividend
+    MOV bx, divisor
+    IDIV bx		;dx:ax = q:ax, r:dx
+ENDM
+
+mNeg MACRO val
+	MOV ax, val
+	xor ax, 80h
 ENDM
 
 IsNeg MACRO val
@@ -73,15 +87,29 @@ pop ax
 ENDM
 
 SetVector3 MACRO Vector, val1, val2, val3
+push ax
 	mov ax, val1
 	mov Vector.x, ax
 	mov ax, val2
 	mov Vector.y, ax
 	mov ax, val3
 	mov Vector.z, ax
+pop ax
+ENDM
+
+AddVector3 MACRO Vector, val1, val2, val3
+push ax
+	mov ax, val1
+	ADD Vector.x, ax
+	mov ax, val2
+	ADD Vector.y, ax
+	mov ax, val3
+	ADD Vector.z, ax
+pop ax
 ENDM
 
 SetCubeData MACRO CubeData, pos, euler, extend
+push ax
 	mov ax, pos.x
 	mov CubeData.pos.x, ax
 	mov ax, pos.y
@@ -102,9 +130,11 @@ SetCubeData MACRO CubeData, pos, euler, extend
 	mov CubeData.extend.y, ax
 	mov ax, extend.z
 	mov CubeData.extend.z, ax
+pop ax
 ENDM
 
 SetSphereData MACRO SphereData, pos, euler, radius
+push ax
 	mov ax, pos.x
 	mov SphereData.pos.x, ax
 	mov ax, pos.y
@@ -121,9 +151,11 @@ SetSphereData MACRO SphereData, pos, euler, radius
 
 	mov ax, radius
 	mov SphereData.radius, ax
+pop ax
 ENDM
 
 SetCamera MACRO pos, euler
+push ax
 	mov ax, pos.x
 	mov camera.pos.x, ax
 	mov ax, pos.y
@@ -137,7 +169,9 @@ SetCamera MACRO pos, euler
 	mov camera.euler.y, ax
 	mov ax, euler.z
 	mov camera.euler.z, ax
+pop ax
 ENDM
+
 SetLine MACRO Line, p1x, p1y, p2x, p2y
 push ax
 	mov ax, p1x
