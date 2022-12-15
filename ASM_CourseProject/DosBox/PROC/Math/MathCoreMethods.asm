@@ -1,3 +1,12 @@
+IsNeg MACRO val
+	local @@end
+	mov BF, FALSE
+	test val, 1000000000000000b
+	jz @@end
+	mov BF, TRUE
+	@@end:
+ENDM
+
 ; val1 will equal the bigger one
 Max MACRO val1, val2
 	local @@endMacro
@@ -18,29 +27,49 @@ Min MACRO val1, val2
 ENDM
 
 Mult MACRO val1, val2
-	local @@notOverflow,@@neg
+	local @@overflow,@@notOverflow,@@negOverflow
+	push dx
+	mov dx, 0
 	mov ax, val1
-	mul val2
-	jnc @@notOverflow
-	jno @@notOverflow
+	imul val2
 
-	cmp ax, 0
-	jb @@neg
+	cmp dx, 0
+	je @@notOverflow
+	cmp dx, -1
+	je @@notOverflow
+	@@overflow:
+	IsNeg dx
+	jt @@negOverflow
 	mov ax, 7FFFh
 	jmp @@notOverflow
-	@@neg:
-	mov ax, 0FFFFh
+	@@negOverflow:
+	mov ax, 08000h
 	@@notOverflow:
+	pop dx
 ENDM
 
-IsNeg MACRO val
-	local @@end
-	mov BF, FALSE
-	test val, 1000000000000000b
-	jz @@end
-	mov BF, TRUE
+Dive MACRO val1, val2
+	local @@notNeg, @@end
+	push bx
+	mov dx, 0
+	mov ax, val1
+	mov bx, val2
+
+	cmp ax,0
+	je @@end
+	cmp bx,0
+	je @@end
+
+	IsNeg ax
+	jf  @@notNeg
+	imul ax, -1
+	imul bx, -1
+	@@notNeg:
+	idiv bx
 	@@end:
+	pop bx
 ENDM
+
 
 CrossProduct2 MACRO pointA, pointB, other
 push bx cx
@@ -59,7 +88,6 @@ push bx cx
 	
 	sub bx, ax
 	mov ax, bx
-
 pop cx bx
 ENDM
 

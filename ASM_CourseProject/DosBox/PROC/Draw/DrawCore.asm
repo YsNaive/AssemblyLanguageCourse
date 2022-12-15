@@ -15,6 +15,6 @@ push ax cx dx
 	mov cx, point1.x
 	mov dx, point1.y
     int 10h
-	ret
 pop dx cx ax
+ret
 SetPixelProc ENDP

@@ -1,3 +1,13 @@
+save_sp_bp MACRO 
+    push bp
+	mov bp,sp
+ ENDM
+
+load_sp_bp MACRO 
+    mov sp,bp
+    pop bp
+ ENDM
+
 include PROC\Debug.asm
 include PROC\Bool.asm
 include PROC\Math\MathCo~1.asm
@@ -7,15 +17,6 @@ include PROC\init.asm
 include PROC\Draw\DrawCore.asm
 include PROC\Draw\Draw4P~1.asm
 
-store_sp_bp MACRO 
-    push bp
-	mov bp,sp
- ENDM
-
-restore_sp_bp MACRO 
-    mov sp,bp
-    pop bp
- ENDM
 
 
 WaitForKeypress PROC 

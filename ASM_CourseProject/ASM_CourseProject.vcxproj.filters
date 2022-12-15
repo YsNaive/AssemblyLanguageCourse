@@ -76,6 +76,9 @@
     <Filter Include="資源檔\FinalProject\PROC\Draw">
       <UniqueIdentifier>{1b7fad93-152b-43c4-9f95-e708b4009bda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="資源檔\Lab\Lab12">
+      <UniqueIdentifier>{d4999126-48ff-45cf-9e33-4f348aac118e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="lab\week 1\Lab1_65.asm">
@@ -161,6 +164,9 @@
     </MASM>
     <MASM Include="DosBox\PROC\Draw\DrawCore.asm">
       <Filter>資源檔\FinalProject\PROC\Draw</Filter>
+    </MASM>
+    <MASM Include="lab\week12\lab12_group65.asm">
+      <Filter>資源檔\Lab\Lab12</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>
@@ -269,5 +275,19 @@
     <None Include="DosBox\WorkSpace.bat">
       <Filter>資源檔\FinalProject</Filter>
     </None>
+    <None Include="lab\week12\lab12_groub65.docx">
+      <Filter>資源檔\Lab\Lab12</Filter>
+    </None>
+    <None Include="lab\week12\lab13.docx">
+      <Filter>資源檔\Lab\Lab12</Filter>
+    </None>
+    <None Include="lab\week12\lab13.pptx">
+      <Filter>資源檔\Lab\Lab12</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lab\week12\Keyboard Codes.txt">
+      <Filter>資源檔\Lab\Lab12</Filter>
+    </Text>
   </ItemGroup>
 </Project>

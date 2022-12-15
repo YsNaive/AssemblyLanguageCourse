@@ -7,7 +7,7 @@ pop dx ax
 ENDM
 
 WriteNumber MACRO val
-    local @@DebugNumberDivLoop, @@DebugNumberPrintLoop
+    local @@DebugNumberDivLoop, @@DebugNumberPrintLoop, @@negCheck
 push ax bx cx dx
     
     mov ax, val
@@ -15,7 +15,12 @@ push ax bx cx dx
     mov cx, 0
     mov dx, 0
     
-    IsNeg val
+    mov BF, FALSE
+	test ax, 1000000000000000b
+	jz @@negCheck
+	mov BF, TRUE
+	@@negCheck:
+    
     jf @@DebugNumberDivLoop
     mov bx, -1
     mul bx
@@ -100,6 +105,29 @@ logTransform MACRO T
     call NewLine
 ENDM
 
+logLine MACRO line
+    logChar "L"
+    logChar ":"
+    logChar "("
+    logChar " "
+    WriteNumber line.p1.x
+    logChar " "
+    logChar ","
+    WriteNumber line.p1.y
+    logChar " "
+    logChar ")"
+    logChar "-"
+    logChar "("
+    logChar " "
+    WriteNumber line.p2.x
+    logChar " "
+    logChar ","
+    WriteNumber line.p2.y
+    logChar " "
+    logChar ")"
+    call newLine
+ENDM
+
 NewLine Proc
 push ax dx
     MOV dl, 10
@@ -111,15 +139,3 @@ push ax dx
 pop dx ax
 ret
 NewLine ENDP
-
-
-DebugBool PROC
-push ax dx
-
-    mov dl, BF
-    mov ah, 02h
-    int 21h
-    call NewLine
-pop dx ax
-ret
-DebugBool ENDP

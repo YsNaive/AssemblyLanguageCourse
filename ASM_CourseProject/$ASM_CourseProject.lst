@@ -1,8 +1,8 @@
-Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/08/22 00:09:21
-110504517HW\HW#2\HW_2_110504517.asm			     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/13/22 02:15:35
+lab\week12\lab12_group65.asm				     Page 1 - 1
 
 
-				include Irvine32.inc
+				INCLUDE Irvine32.inc
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
 			      C 
 			      C ;OPTION CASEMAP:NONE		; optional: make identifiers case-sensitive
@@ -20,69 +20,82 @@ Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/08/22 00:09:21
 			      C .NOLIST
 			      C .LIST
 			      C 
+ 00000000			.data
+ 00000000 00000000		consoleHandle    DWORD ?
+ 00000004 0013 0013		xyInit COORD <19,19> 
+ 00000008 0050 0019		xyBound COORD <80,25> 
+ 0000000C 0000 0000		xyPos COORD <,>
+ = start@0			main EQU start@0
+ 00000000			.code
+ 00000000			main PROC
+					INVOKE GetStdHandle, STD_OUTPUT_HANDLE
+ 00000007  A3 00000000 R		mov consoleHandle,eax
+ 0000000C			INITIAL:
+ 0000000C  66| A1			mov ax,xyInit.x
+	   00000004 R
+ 00000012  66| A3			mov xyPos.x,ax
+	   0000000C R
+ 00000018  66| A1			mov ax,xyInit.y
+	   00000006 R
+ 0000001E  66| A3			mov xyPos.y,ax
+	   0000000E R
 
- 00000000			.data 
- 00000000  00000008 [		BitStrs BYTE 8 dup(?)
-	    00
-	   ]
- 00000008 23 23 23 23 23	ChStrs BYTE "########"
-	   23 23 23
- 00000010  20 20 20 20 20		   BYTE "      ##"
-	   20 23 23
- 00000018  20 20 20 20 20		   BYTE "     ## "
-	   23 23 20
- 00000020  20 20 20 23 23		   BYTE "   ##   "
-	   20 20 20
- 00000028  20 20 20 23 23		   BYTE "   ##   "
-	   20 20 20
- 00000030  20 20 20 23 23		   BYTE "   ##   "
-	   20 20 20
- 00000038  20 20 20 23 23		   BYTE "   ##   "
-	   20 20 20
- 00000040  20 20 20 23 23		   BYTE "   ##   "
-	   20 20 20
-
- 00000000			.code 
- 00000000			change PROC
- 00000000  D0 A7 00000000 R			SHL BitStrs[edi], 1
- 00000006  80 BE 00000008 R			CMP ChStrs[esi], "#"
-	   23
- 0000000D  75 06				JNE notEqual
- 0000000F  FE 87 00000000 R			INC BitStrs[edi]
- 00000015					notEqual:
-						
- 00000015  46					INC esi
- 00000016  C3					RET
- 00000017			change ENDP
-
- 00000017			main PROC		
- 00000017  B9 00000008			MOV ecx, 8
- 0000001C  BE 00000000			MOV esi, 0 ; use esi as ChStrs's  index
- 00000021  BF 00000000			MOV edi, 0 ; use edi as BitStrs's index
-
- 00000026			ConvertRow:
- 00000026  51				Push ecx
- 00000027  B9 00000008			MOV ecx, 8
- 0000002C				ConvertColumn:
- 0000002C  E8 FFFFFFCF				CALL change
- 00000031  E2 F9				LOOP ConvertColumn
- 00000033  0F B6 87			MOVZX eax, BitStrs[edi]
-	   00000000 R
-
- 0000003A  BB 00000001			MOV ebx, 1
- 0000003F  E8 00000000 E		CALL WriteBinB
- 00000044  E8 00000000 E		CALL Crlf
-
- 00000049  47				INC edi
- 0000004A  59				Pop ecx
- 0000004B  E2 D9			LOOP ConvertRow
-
+ 00000024			START:
+ 00000024  E8 00000000 E		call ClrScr
+					INVOKE SetConsoleCursorPosition, consoleHandle, xyPos
+ 0000003A  E8 00000000 E		call ReadChar
+					.IF ax == 4800h ;UP
+ 00000045  66| 83 2D				sub xyPos.y,1
+	   0000000E R 01
+					.ENDIF
+					.IF ax == 5000h ;DOWN
+ 00000053  66| 83 05				add xyPos.y,1
+	   0000000E R 01
+					.ENDIF
+					.IF ax == 4B00h ;LEFT
+ 00000061  66| 83 2D				sub xyPos.x,1
+	   0000000C R 01
+					.ENDIF
+					.IF ax == 4d00h ;RIGHT
+ 0000006F  66| 83 05				add xyPos.x,1
+	   0000000C R 01
+					.ENDIF
+					.IF ax == 011Bh ;ESC
+ 0000007D  EB 53				jmp END_FUNC
+					.ENDIF
+					
+					; examine if each directions are over the border.
+					.IF xyPos.x == 0h ;x lowerbound
+ 00000089  66| FF 05				inc xyPos.x
+	   0000000C R
+					.ENDIF
+ 00000090  66| A1			mov ax,xyBound.x 
+	   00000008 R
+					.IF xyPos.x == ax ;x upperbound
+ 0000009F  66| FF 0D				dec xyPos.x
+	   0000000C R
+					.ENDIF
+					
+					.IF xyPos.y == 0h ;y lowerbound
+ 000000B0  66| FF 05				inc xyPos.y
+	   0000000E R
+					.ENDIF
+ 000000B7  66| A1			mov ax,xyBound.y
+	   0000000A R
+					.IF xyPos.y == ax ;y upperbound
+ 000000C6  66| FF 0D				dec xyPos.y
+	   0000000E R
+					.ENDIF
+					
+ 000000CD  E9 FFFFFF52			jmp START
+ 000000D2			END_FUNC:
 					exit
- 00000054			main ENDP
+ 000000D9			main ENDP
+
 				END main
 
-Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/08/22 00:09:21
-110504517HW\HW#2\HW_2_110504517.asm			     Symbols 2 - 1
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/13/22 02:15:35
+lab\week12\lab12_group65.asm				     Symbols 2 - 1
 
 
 
@@ -175,8 +188,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000048 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000054 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000010 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000000D9 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -283,13 +296,12 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-change . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000017 Public STDCALL
-  notEqual . . . . . . . . . . .	L Near	 00000015 _TEXT	
-main . . . . . . . . . . . . . .	P Near	 00000017 _TEXT	Length= 0000003D Public STDCALL
-  ConvertRow . . . . . . . . . .	L Near	 00000026 _TEXT	
-  ConvertColumn  . . . . . . . .	L Near	 0000002C _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+start@0  . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000D9 Public STDCALL
+  INITIAL  . . . . . . . . . . .	L Near	 0000000C _TEXT	
+  START  . . . . . . . . . . . .	L Near	 00000024 _TEXT	
+  END_FUNC . . . . . . . . . . .	L Near	 000000D2 _TEXT	
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -307,12 +319,10 @@ Symbols:
 @fardata . . . . . . . . . . . .	Text   	 FLAT
 @stack . . . . . . . . . . . . .	Text   	 FLAT
 ALT_MASK . . . . . . . . . . . .	Number	 00000003h   
-BitStrs  . . . . . . . . . . . .	Byte	 00000000 _DATA	
 CAPSLOCK_ON  . . . . . . . . . .	Number	 00000080h   
 CREATE_ALWAYS  . . . . . . . . .	Number	 00000002h   
 CREATE_NEW . . . . . . . . . . .	Number	 00000001h   
 CTRL_MASK  . . . . . . . . . . .	Number	 0000000Ch   
-ChStrs . . . . . . . . . . . . .	Byte	 00000008 _DATA	
 CreateFile . . . . . . . . . . .	Text   	 CreateFileA
 DO_NOT_SHARE . . . . . . . . . .	Number	 00000000h   
 ENABLE_ECHO_INPUT  . . . . . . .	Number	 00000004h   
@@ -511,6 +521,7 @@ WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
+consoleHandle  . . . . . . . . .	DWord	 00000000 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
@@ -522,9 +533,13 @@ lightGreen . . . . . . . . . . .	Number	 0000000Ah
 lightMagenta . . . . . . . . . .	Number	 0000000Dh   
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
+main . . . . . . . . . . . . . .	Text   	 start@0
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
+xyBound  . . . . . . . . . . . .	COORD	 00000008 _DATA	
+xyInit . . . . . . . . . . . . .	COORD	 00000004 _DATA	
+xyPos  . . . . . . . . . . . . .	COORD	 0000000C _DATA	
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
 	   0 Warnings
