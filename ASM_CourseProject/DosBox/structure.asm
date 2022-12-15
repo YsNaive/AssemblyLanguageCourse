@@ -32,3 +32,10 @@ CubeData STRUC
     trans Transform ?
     extend Vector3  ?
 CubeData ENDS
+
+;------------------------------
+
+SphereData STRUC
+    trans Transform ?
+    radius dw ?
+SphereData ENDs
