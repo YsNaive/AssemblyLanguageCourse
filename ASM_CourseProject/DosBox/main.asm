@@ -13,20 +13,21 @@ main proc
 mov ax,SEG _DATA ; set up data segment
 mov ds,ax
 call init
-    setVector2 point1, 80, 100
-    setVector2 point2, 110, 100
-    setVector2 point3, 110, 110
-    setVector2 point4, 100, 110
-    mov color, 1100b
-    call Draw4Pole
-    setVector2 point1, 200, 100
-    setVector2 point2, 220, 100
-    setVector2 point3, 210, 110
-    setVector2 point4, 200, 110
-    mov color, 1100b
-    call Draw4Pole
-    setLine line1, 5, 0, 5, 5
-    setLine line2, 2, 2, 320, 2
+mov color, 1100b
+    setVector2 point1, 0, 80
+    ;push point1
+    ;call Vec2Len
+    ;log ax
+    mov word1,80
+    call DrawSphere
+    setVector2 point1, 180, 40
+    mov word1,100
+    mov color, 0011b
+    call DrawSphere
+    setVector2 point1, 120, 140
+    mov word1,60
+    mov color, 0110b
+    call DrawSphere
     call waitforkeypress
     ;call IsLineIntersection
     ;debugbool

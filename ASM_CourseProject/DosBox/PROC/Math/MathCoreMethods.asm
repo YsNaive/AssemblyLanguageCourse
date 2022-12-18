@@ -7,6 +7,18 @@ IsNeg MACRO val
 	@@end:
 ENDM
 
+mAbs MACRO val
+	local @@end
+	mov ax, val
+	IsNeg ax
+	jf @@end
+	push bx
+	mov bx, -1
+	imul bx
+	pop bx
+	@@end:
+ENDM
+
 ; val1 will equal the bigger one
 Max MACRO val1, val2
 	local @@endMacro
@@ -70,6 +82,30 @@ Dive MACRO val1, val2
 	pop bx
 ENDM
 
+Sqrt MACRO val
+	local @@loop, @@endloop, @@end
+	push bx cx dx i
+	mov i, 1
+	mov cx,0
+	mov dx, val
+	@@loop:
+		mult i, i	; now -> ax
+		mov bx, dx ; target
+		sub bx, ax	; target - now
+		isAE ax, dx
+		jt @@endloop
+		inc i
+		mov cx, bx
+		jmp @@loop
+	@@endloop:
+	neg bx
+	isB bx, cx
+	mov ax, i
+	jt @@end
+	dec ax
+	@@end:
+	pop i dx cx bx
+ENDM
 
 CrossProduct2 MACRO pointA, pointB, other
 push bx cx

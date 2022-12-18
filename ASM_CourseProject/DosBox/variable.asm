@@ -1,10 +1,12 @@
 TRUE  equ "T"
 FALSE equ "F"
 
-BF db 0 ; Bool Flag
+BF dw 0 ; Bool Flag
 GR_START_ADDR dw 0a000h ; Start Address of VGA Video memory
 
 color db 0
+
+ttst dd 0
 
 i dw 0
 j dw 0
