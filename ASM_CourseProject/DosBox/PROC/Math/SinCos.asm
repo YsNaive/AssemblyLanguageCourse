@@ -9,8 +9,8 @@ DEGREE_TO_RADIAN equ 0001 ; 1 degrees =  0.0174532 radians
 
 ;=====================================
 ; sin fuction
-; input  : i
-; output : ax
+; input  : i = x
+; output : ax = sin(x)
 ;=====================================
 sin_function PROC
     local @@result : word, @@divisor : word

@@ -34,17 +34,26 @@ Mult MACRO val1, val2
 	@@notOverflow:
 ENDM
 
+; todo : boundary check
+; Mult_d MACRO val1 val2
+; 	mov ax, val1
+; 	mov bx, val2
+; 	imul bx
+; ENDM
+
+; Div_d MACRO val1_1 val1_2 val2
+; 	mov dx, val1_1
+; 	mov ax, val1_2
+; 	mov cx, val2
+; 	IDIV cx
+; ENDM
+
 ; todo :  boundary check. push pop register
 mDiv MACRO dividend, divisor
     MOV dx, 0		
     MOV ax, dividend
     MOV bx, divisor
     IDIV bx		;dx:ax = q:ax, r:dx
-ENDM
-
-mNeg MACRO val
-	MOV ax, val
-	xor ax, 80h
 ENDM
 
 IsNeg MACRO val
