@@ -43,8 +43,12 @@
     <MASM Include="DosBox\PROC\Debug.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Draw\Draw4Pole.asm" />
-    <MASM Include="DosBox\PROC\Draw\DrawCore.asm" />
+    <MASM Include="DosBox\PROC\Draw\Draw4Pole.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="DosBox\PROC\Draw\DrawCore.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
     <MASM Include="DosBox\PROC\Init.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
@@ -99,6 +103,7 @@
     <MASM Include="lab\week11\lab11_group65.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
+    <MASM Include="lab\week12\lab12_group65.asm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="110504517HW\HW#1\111_HW1-Arithmetic.pptx" />
@@ -136,6 +141,12 @@
     <None Include="lab\week11\lab11_groub65.docx" />
     <None Include="lab\week11\week14_lab12.docx" />
     <None Include="lab\week11\week14_lab12.pptx" />
+    <None Include="lab\week12\lab12_groub65.docx" />
+    <None Include="lab\week12\lab13.docx" />
+    <None Include="lab\week12\lab13.pptx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lab\week12\Keyboard Codes.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

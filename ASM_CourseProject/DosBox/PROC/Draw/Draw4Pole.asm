@@ -13,6 +13,11 @@ push ax bx dx
     min ax, point3.x
     min ax, point4.x
     mov @@minX, ax
+    sub @@maxX, ax
+    sub point1.x, ax
+    sub point2.x, ax
+    sub point3.x, ax
+    sub point4.x, ax
 
     max point1.y, point2.y
     max ax, point3.y
@@ -23,19 +28,27 @@ push ax bx dx
     min ax, point3.y
     min ax, point4.y
     mov @@minY, ax
-    
-    mov ax, @@minX
-    mov i, ax
-    mov ax, @@minY
-    mov j, ax
+    sub @@maxY, ax
+    sub point1.y, ax
+    sub point2.y, ax
+    sub point3.y, ax
+    sub point4.y, ax
 
-    mov bx, 0
+    mov ax, 1
+    mov i, ax
     Draw4Pole_iLOOP:
-    mov ax, @@minY
+    mov ax, 1
     mov j, ax
         Draw4Pole_jLOOP:
+        mov bx, i
+        mov word1, bx
+        mov bx, @@minX
+        add word1,120
+        
         mov ax, 0
-        setLine line1, i, j, 320, 200
+        setLine line1, i, j, word1, j
+        inc line1.p1.x
+        inc line1.p1.x
         setLine line2, point1.x, point1.y, point2.x, point2.y
         call IsLineIntersection
         jf Draw4PoleLineCheck1
@@ -43,6 +56,7 @@ push ax bx dx
         Draw4PoleLineCheck1:
 
         setLine line2, point2.x, point2.y, point3.x, point3.y
+        
         call IsLineIntersection
         jf Draw4PoleLineCheck2
         inc ax
@@ -60,21 +74,25 @@ push ax bx dx
         inc ax
         Draw4PoleLineCheck4:
         
-        WriteNumber ax
-        cmp ax, 0
-        je Draw4PoleNextLoop
-        mov color, 03h
-        Draw4PoleNextLoop:
-        ;SetPixel i, j
+        ;writeNumber ax
+        mov dx, 0
+        mov bx, 2
+        div bx
+        cmp dx, 0
+        je Draw4PoleNotDraw
+        mov color, 0011b
+        Draw4PoleNotDraw:
+        mov ax, i
+        add ax, @@minX
+        mov bx, j
+        add bx, @@minY
+        SetPixel ax, bx
         mov color, 1100b
-
-
         mov ax, j
         inc j
-        inc bx
         cmp ax, @@maxY
         jb Draw4Pole_jLOOP
-        call newline
+        ;call newLine
     mov ax, i
     inc i
     cmp ax, @@maxX
