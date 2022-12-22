@@ -64,20 +64,17 @@
     <Filter Include="資源檔\FinalProject">
       <UniqueIdentifier>{c700a9a1-b8f3-4c02-ba45-ed88b74ed354}</UniqueIdentifier>
     </Filter>
-    <Filter Include="資源檔\FinalProject\PROC">
-      <UniqueIdentifier>{a08eae93-bfec-4c7f-a6af-a941d5de98d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="資源檔\FinalProject\Core">
-      <UniqueIdentifier>{90c4512b-8c10-411e-a140-7b1c3927dd12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="資源檔\FinalProject\PROC\Math">
-      <UniqueIdentifier>{516c0075-6d17-4264-8fbf-6bd3097b1263}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="資源檔\FinalProject\PROC\Draw">
-      <UniqueIdentifier>{1b7fad93-152b-43c4-9f95-e708b4009bda}</UniqueIdentifier>
-    </Filter>
     <Filter Include="資源檔\Lab\Lab12">
       <UniqueIdentifier>{d4999126-48ff-45cf-9e33-4f348aac118e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\FinalProject\DrawMethod">
+      <UniqueIdentifier>{aed684d1-7696-4a3c-877f-cf98687092a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\FinalProject\MathMethod">
+      <UniqueIdentifier>{14b8db0a-e2a0-4b43-adbf-315ba8473120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="資源檔\FinalProject\Core">
+      <UniqueIdentifier>{8576083a-8565-44f0-86e7-b5227f7da06a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,44 +126,50 @@
     <MASM Include="lab\week11\lab11_group65.asm">
       <Filter>資源檔\Lab\Lab11</Filter>
     </MASM>
-    <MASM Include="DosBox\PROC\Init.asm">
-      <Filter>資源檔\FinalProject\PROC</Filter>
-    </MASM>
-    <MASM Include="DosBox\include.asm">
-      <Filter>資源檔\FinalProject\Core</Filter>
-    </MASM>
-    <MASM Include="DosBox\main.asm">
-      <Filter>資源檔\FinalProject\Core</Filter>
-    </MASM>
-    <MASM Include="DosBox\structure.asm">
-      <Filter>資源檔\FinalProject\Core</Filter>
-    </MASM>
-    <MASM Include="DosBox\variable.asm">
-      <Filter>資源檔\FinalProject\Core</Filter>
-    </MASM>
-    <MASM Include="DosBox\PROC\Math\IsLineIntersection.asm">
-      <Filter>資源檔\FinalProject\PROC\Math</Filter>
-    </MASM>
-    <MASM Include="DosBox\PROC\Math\MathCoreMethods.asm">
-      <Filter>資源檔\FinalProject\PROC\Math</Filter>
-    </MASM>
-    <MASM Include="DosBox\PROC\Debug.asm">
-      <Filter>資源檔\FinalProject\PROC</Filter>
-    </MASM>
-    <MASM Include="DosBox\PROC\Bool.asm">
-      <Filter>資源檔\FinalProject\PROC</Filter>
-    </MASM>
-    <MASM Include="DosBox\PROC\Math\SinCos.asm">
-      <Filter>資源檔\FinalProject\PROC\Math</Filter>
-    </MASM>
-    <MASM Include="DosBox\PROC\Draw\Draw4Pole.asm">
-      <Filter>資源檔\FinalProject\PROC\Draw</Filter>
-    </MASM>
-    <MASM Include="DosBox\PROC\Draw\DrawCore.asm">
-      <Filter>資源檔\FinalProject\PROC\Draw</Filter>
-    </MASM>
     <MASM Include="lab\week12\lab12_group65.asm">
       <Filter>資源檔\Lab\Lab12</Filter>
+    </MASM>
+    <MASM Include="FinalProject\main.asm">
+      <Filter>資源檔\FinalProject</Filter>
+    </MASM>
+    <MASM Include="FinalProject\DrawMethod\DrawCore.asm">
+      <Filter>資源檔\FinalProject\DrawMethod</Filter>
+    </MASM>
+    <MASM Include="FinalProject\Core\variable.asm">
+      <Filter>資源檔\FinalProject\Core</Filter>
+    </MASM>
+    <MASM Include="FinalProject\Core\system.asm">
+      <Filter>資源檔\FinalProject\Core</Filter>
+    </MASM>
+    <MASM Include="FinalProject\Core\struct.asm">
+      <Filter>資源檔\FinalProject\Core</Filter>
+    </MASM>
+    <MASM Include="FinalProject\MathMethod\Vector.asm">
+      <Filter>資源檔\FinalProject\MathMethod</Filter>
+    </MASM>
+    <MASM Include="FinalProject\MathMethod\MathCore.asm">
+      <Filter>資源檔\FinalProject\MathMethod</Filter>
+    </MASM>
+    <MASM Include="FinalProject\MathMethod\SinCos.asm">
+      <Filter>資源檔\FinalProject\MathMethod</Filter>
+    </MASM>
+    <MASM Include="FinalProject\MathMethod\bool.asm">
+      <Filter>資源檔\FinalProject\MathMethod</Filter>
+    </MASM>
+    <MASM Include="FinalProject\Core\Debug.asm">
+      <Filter>資源檔\FinalProject\Core</Filter>
+    </MASM>
+    <MASM Include="FinalProject\MathMethod\RotationMatrix.asm">
+      <Filter>資源檔\FinalProject\MathMethod</Filter>
+    </MASM>
+    <MASM Include="FinalProject\MathMethod\Matrix.asm">
+      <Filter>資源檔\FinalProject\MathMethod</Filter>
+    </MASM>
+    <MASM Include="FinalProject\Core\movement.asm">
+      <Filter>資源檔\FinalProject\Core</Filter>
+    </MASM>
+    <MASM Include="FinalProject\DrawMethod\DrawSphere.asm">
+      <Filter>資源檔\FinalProject\DrawMethod</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>
@@ -268,12 +271,6 @@
     </None>
     <None Include="lab\week11\week14_lab12.pptx">
       <Filter>資源檔\Lab\Lab11</Filter>
-    </None>
-    <None Include="DosBox\Run.bat">
-      <Filter>資源檔\FinalProject</Filter>
-    </None>
-    <None Include="DosBox\WorkSpace.bat">
-      <Filter>資源檔\FinalProject</Filter>
     </None>
     <None Include="lab\week12\lab12_groub65.docx">
       <Filter>資源檔\Lab\Lab12</Filter>

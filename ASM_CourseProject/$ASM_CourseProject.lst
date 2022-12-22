@@ -1,7 +1,11 @@
-Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/13/22 02:15:35
-lab\week12\lab12_group65.asm				     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/22/22 08:39:46
+FinalProject\main.asm					     Page 1 - 1
 
 
+				;=============================================================================
+				; Important!
+				; please set cmd charactor size to 1:1 for best experience
+				;=============================================================================  
 				INCLUDE Irvine32.inc
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
 			      C 
@@ -20,84 +24,2204 @@ lab\week12\lab12_group65.asm				     Page 1 - 1
 			      C .NOLIST
 			      C .LIST
 			      C 
+				.386
  00000000			.data
- 00000000 00000000		consoleHandle    DWORD ?
- 00000004 0013 0013		xyInit COORD <19,19> 
- 00000008 0050 0019		xyBound COORD <80,25> 
- 0000000C 0000 0000		xyPos COORD <,>
- = start@0			main EQU start@0
- 00000000			.code
- 00000000			main PROC
-					INVOKE GetStdHandle, STD_OUTPUT_HANDLE
- 00000007  A3 00000000 R		mov consoleHandle,eax
- 0000000C			INITIAL:
- 0000000C  66| A1			mov ax,xyInit.x
-	   00000004 R
- 00000012  66| A3			mov xyPos.x,ax
-	   0000000C R
- 00000018  66| A1			mov ax,xyInit.y
-	   00000006 R
- 0000001E  66| A3			mov xyPos.y,ax
-	   0000000E R
+				INCLUDE Core/struct.asm
+ 0000000C		      C Vector Struct
+ 00000000  00000000	      C 	x DWORD ?
+ 00000004  00000000	      C 	y DWORD ?
+ 00000008  00000000	      C 	z DWORD ?
+			      C Vector EndS
+			      C 
+ 00000018		      C Line Struct
+ 00000000  00000000	      C     b Vector < > ; begin point
+	   00000000
+	   00000000
+ 0000000C  00000000	      C     e Vector < > ; end point
+	   00000000
+	   00000000
+			      C Line EndS 
+			      C 
+ 00000018		      C Transform Struct
+ 00000000  00000000	      C     pos   Vector < > ; position of object
+	   00000000
+	   00000000
+ 0000000C  00000000	      C     euler Vector < > ; euler angle of object (rotation)
+	   00000000
+	   00000000
+			      C Transform EndS
+			      C 
+ 00000010		      C SphereData Struct
+ 00000000  00000000	      C     pos Vector < >
+	   00000000
+	   00000000
+ 0000000C  00000000	      C     r DWORD ?
+			      C SphereData EndS
+			      C 
+ 00000024		      C Matrix3 Struct
+ 00000000  00000000	      C     n00 DWORD ?      ; n00, n01, n02
+ 00000004  00000000	      C     n01 DWORD ?      ; n10, n11, n12
+ 00000008  00000000	      C     n02 DWORD ?      ; n20, n21 ,n22
+ 0000000C  00000000	      C     n10 DWORD ?
+ 00000010  00000000	      C     n11 DWORD ?
+ 00000014  00000000	      C     n12 DWORD ?
+ 00000018  00000000	      C     n20 DWORD ?
+ 0000001C  00000000	      C     n21 DWORD ?
+ 00000020  00000000	      C     n22 DWORD ?
+			      C Matrix3 EndS
+			      C 
+				INCLUDE Core/variable.asm
+ = start@0		      C main EQU start@0
+			      C 
+ = 00000001		      C T EQU 1
+ = 00000000		      C F EQU 0
+			      C 
+			      C ; last 3 digit is float
+			      C ;==============================================================
+ = 00000C45		      C PI equ 3141       ; pi = 3.1415
+ =-00000C45		      C N_PI equ -3141
+ = 00000A96		      C CONST_E equ 02710        ;  e = 2.71
+ = 0000DFCF		      C Rad2Deg equ 57295 ; 1 radians = 57.2957795 degrees
+ = 00000011		      C Deg2Rag equ 00017 ; 1 degrees =  0.0174532 radians
+			      C ;==============================================================
+			      C 
+			      C ; Console and layout
+			      C ;=============================================================================
+ 00000000 00000000	      C consoleHandle DWORD ?
+ 00000004 0000 0000	      C cursorPos COORD < 0,0 >
+ 00000008 00A0 0064	      C screenSize COORD < 160,100 >			; 160*100 pixel
+ 0000000C 0000 0000 009F      C windowRect SMALL_RECT < 0,0,159,99 >	; display start from 0
+	   0063
+ 00000014  00007D00 [	      C layoutAttributes WORD 32000 DUP(010h)	; things to layout, used by repaint proc (100*160*2(byte))
+	    0010
+	   ]
+			      C 
+			      C ; System Object
+			      C ;=============================================================================
+ 0000FA14 00000000	      C camera Transform << 0,0,-25000 >,< 0,0,0 >> ; facing (0,0,1.000)
+	   00000000
+	   FFFF9E58
+	   00000000
+	   00000000
+	   00000000
+ 0000FA2C 00000000	      C cameraFacing Vector <>
+	   00000000
+	   00000000
+ 0000FA38 00000000	      C cameraRotMat Matrix3 <>
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+ 0000FA5C 00000000	      C neg_cameraRotMat Matrix3 <>
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+ 0000FA80 00000000	      C cameraRotMatX Matrix3 <>
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+ 0000FAA4 00000000	      C cameraRotMatY Matrix3 <>
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+ 0000FAC8 00000000	      C cameraRotMatZ Matrix3 <>
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+	   00000000
+ 0000FAEC 000000F0	      C cameraDepth DWORD 240
+ 0000FAF0 000001F4	      C moveSpeed DWORD 500
+ 0000FAF4 0000		      C keyDownCode WORD 0 ; change when key press
+			      C 
+			      C ; flag and temp variable
+			      C ;=============================================================================
+ 0000FAF6 00		      C BF BYTE 0 ; bool flag
+ 0000FAF7 00000000	      C i DWORD ?
+ 0000FAFB 00000000	      C j DWORD ?
+ 0000FAFF 00000000	      C n DWORD ?
+ 0000FB03 00000000	      C m DWORD ?
+			      C 
+ 0000FB07 00000000		obj1 SphereData < < 0,0,0 >,0 >
+	   00000000
+	   00000000
+	   00000000
+ 0000FB17 000007D0		obj2 SphereData < < 2000,0,0 >,0 > 
+	   00000000
+	   00000000
+	   00000000
+ 0000FB27 00000000		obj3 SphereData < < 0,2000,0 >,0 >
+	   000007D0
+	   00000000
+	   00000000
+ 0000FB37 00000000		obj4 SphereData < < 0,0,2000 >,0 >
+	   00000000
+	   000007D0
+	   00000000
+ 0000FB47 000007D0		obj5 SphereData < < 2000,2000,0 >,0 >   
+	   000007D0
+	   00000000
+	   00000000
+ 0000FB57 00000000		obj6 SphereData < < 0,2000,2000 >,0 >
+	   000007D0
+	   000007D0
+	   00000000
+ 0000FB67 000007D0		obj7 SphereData < < 2000,0,2000 >,0 >
+	   00000000
+	   000007D0
+	   00000000
+ 0000FB77 000007D0		obj8 SphereData < < 2000,2000,2000 >,0 >
+	   000007D0
+	   000007D0
+	   00000000
+ 0000FB87 00000000		sc vector <> 
+	   00000000
+	   00000000
+ 00000000			.code  
+				INCLUDE Core/Debug.asm
+ 00000000		      C DigitsNumber Proc uses ebx ecx edx, val:DWORD
+ 00000006  8B 45 08	      C 	mov eax, val
+ 00000009  B9 00000000	      C 	mov ecx,0
+ 0000000E  83 F8 00	      C 	cmp eax,0
+ 00000011  7F 0C	      C 	jg DigitsNumberLOOP
+ 00000013  BA 00000000	      C 	mov edx, 0
+ 00000018  BB FFFFFFFF	      C 	mov ebx, -1
+ 0000001D  F7 EB	      C 	imul ebx
+ 0000001F		      C 	DigitsNumberLOOP:
+			      C 	.IF eax !=0
+ 00000023  41		      C 		inc ecx
+ 00000024  BA 00000000	      C 		mov edx, 0
+ 00000029  BB 0000000A	      C 		mov ebx, 10
+ 0000002E  F7 FB	      C 		idiv ebx
+ 00000030  EB ED	      C 		jmp DigitsNumberLOOP
+			      C 	.EndIF
+ 00000032  8B C1	      C 	mov eax, ecx
+			      C ret
+ 0000003B		      C DigitsNumber ENDP
+			      C 
+			      C logc Macro val
+			      C 	push ax
+			      C 	mov al, val
+			      C 	call writeChar
+			      C 	pop ax
+			      C EndM
+			      C 
+			      C log Macro val
+			      C 	push eax
+			      C 	mov eax, val
+			      C 	call writeInt
+			      C 	call crlf
+			      C 	pop eax
+			      C ENDM
+			      C 
+			      C fixLog Macro val, len
+			      C 	local @@end, @@loop
+			      C 	push eax
+			      C 	push ecx
+			      C 	INVOKE DigitsNumber, val
+			      C 	mov ecx, len
+			      C 	sub ecx, eax
+			      C 	mov eax, val
+			      C 	call writeInt
+			      C 	.IF eax == 0
+			      C 		dec ecx
+			      C 	.EndIF
+			      C 	cmp ecx,0
+			      C 	jle @@end
+			      C 	mov al, " "
+			      C 	@@loop:
+			      C 		call writeChar
+			      C 		loop @@loop
+			      C 	@@end:
+			      C 	pop ecx
+			      C 	pop eax
+			      C ENDM
+			      C 
+			      C logf Macro val
+			      C 	push eax
+			      C 	push edx
+			      C 	dive val, 1000
+			      C 	call writeInt
+			      C 	logc "."
+			      C 	mov eax, edx
+			      C 	call writeDec
+			      C 	call crlf
+			      C 	pop edx
+			      C 	pop eax
+			      C ENDM
+			      C 
+			      C logCor Macro cor
+			      C 	push eax
+			      C 	logc "("
+			      C 	mov ax, cor.x
+			      C 	call writeInt
+			      C 	logc ","
+			      C 	logc " "
+			      C 	mov ax, cor.y
+			      C 	call writeInt
+			      C 	logc ")"
+			      C 	call crlf
+			      C 	pop eax
+			      C ENDM
+			      C 
+			      C logv Macro vector
+			      C 	push eax
+			      C 	logc "("
+			      C 	mov eax, vector.x
+			      C 	call writeInt
+			      C 	logc ","
+			      C 	logc " "
+			      C 	mov eax, vector.y
+			      C 	call writeInt
+			      C 	logc ","
+			      C 	logc " "
+			      C 	mov eax, vector.z
+			      C 	call writeInt
+			      C 	logc ")"
+			      C 	call crlf
+			      C 	pop eax
+			      C ENDM
+			      C 
+			      C logvPtr Macro vectorPtr
+			      C 	push eax
+			      C 	push esi
+			      C 	mov esi, vectorPtr
+			      C 	logc "("
+			      C 	mov eax, [esi]
+			      C 	call writeInt
+			      C 	logc ","
+			      C 	logc " "
+			      C 	mov eax, [esi+4]
+			      C 	call writeInt
+			      C 	logc ","
+			      C 	logc " "
+			      C 	mov eax, [esi+8]
+			      C 	call writeInt
+			      C 	logc ")"
+			      C 	call crlf
+			      C 	pop esi
+			      C 	pop eax
+			      C ENDM
+			      C 
+ 0000003B		      C logm3Proc Proc uses eax ebx edi, matrix:dword
+			      C 	local fix:vector
+ 00000044  8B 7D 08	      C 	mov edi,matrix
+			      C 
+			      C 	Invoke DigitsNumber, [edi]
+ 0000004E  8B D8	      C 	mov ebx, eax
+			      C 	Invoke DigitsNumber, [edi+12]
+			      C 	.IF eax > ebx
+ 0000005C  8B D8	      C 		mov ebx, eax
+			      C 	.EndIF
+			      C 	Invoke DigitsNumber, [edi+24]
+			      C 	.IF eax > ebx
+ 0000006A  8B D8	      C 		mov ebx, eax
+			      C 	.EndIF
+ 0000006C  43		      C 	inc ebx
+ 0000006D  89 5D F4	      C 	mov fix.x, ebx
+			      C 	
+			      C 	Invoke DigitsNumber, [edi+4]
+ 00000078  8B D8	      C 	mov ebx, eax
+			      C 	Invoke DigitsNumber, [edi+16]
+			      C 	.IF eax > ebx
+ 00000086  8B D8	      C 		mov ebx, eax
+			      C 	.EndIF
+			      C 	Invoke DigitsNumber, [edi+28]
+			      C 	.IF eax > ebx
+ 00000094  8B D8	      C 		mov ebx, eax
+			      C 	.EndIF	
+ 00000096  43		      C 	inc ebx
+ 00000097  89 5D F8	      C 	mov fix.y, ebx
+			      C 	
+			      C 	Invoke DigitsNumber, [edi+8]
+ 000000A2  8B D8	      C 	mov ebx, eax
+			      C 	Invoke DigitsNumber, [edi+20]
+			      C 	.IF eax > ebx
+ 000000B0  8B D8	      C 		mov ebx, eax
+			      C 	.EndIF
+			      C 	Invoke DigitsNumber, [edi+32]
+			      C 	.IF eax > ebx
+ 000000BE  8B D8	      C 		mov ebx, eax
+			      C 	.EndIF
+ 000000C0  89 5D FC	      C 	mov fix.z, ebx
+ 000000C3  43		      C 	inc ebx
+			      C 
+			      C 	logc "|"
+ 000000C4  66| 50	     1C 	push ax
+ 000000C6  B0 7C	     1C 	mov al, "|"
+ 000000C8  E8 00000000 E     1C 	call writeChar
+ 000000CD  66| 58	     1C 	pop ax
+ 000000CF  8B 5D F4	      C 	mov ebx, fix.x
+			      C 	fixlog [edi], ebx
+ 000000D2  50		     1C 	push eax
+ 000000D3  51		     1C 	push ecx
+ 000000DB  8B CB	     1C 	mov ecx, ebx
+ 000000DD  2B C8	     1C 	sub ecx, eax
+ 000000DF  8B 07	     1C 	mov eax, [edi]
+ 000000E1  E8 00000000 E     1C 	call writeInt
+ 000000EA  49		     1C 		dec ecx
+ 000000EB  83 F9 00	     1C 	cmp ecx,0
+ 000000EE  7E 09	     1C 	jle ??0000
+ 000000F0  B0 20	     1C 	mov al, " "
+ 000000F2		     1C 	??0001:
+ 000000F2  E8 00000000 E     1C 		call writeChar
+ 000000F7  E2 F9	     1C 		loop ??0001
+ 000000F9		     1C 	??0000:
+ 000000F9  59		     1C 	pop ecx
+ 000000FA  58		     1C 	pop eax
+ 000000FB  8B 5D F8	      C 	mov ebx, fix.y
+			      C 	fixlog [edi+4], ebx
+ 000000FE  50		     1C 	push eax
+ 000000FF  51		     1C 	push ecx
+ 00000108  8B CB	     1C 	mov ecx, ebx
+ 0000010A  2B C8	     1C 	sub ecx, eax
+ 0000010C  8B 47 04	     1C 	mov eax, [edi+4]
+ 0000010F  E8 00000000 E     1C 	call writeInt
+ 00000118  49		     1C 		dec ecx
+ 00000119  83 F9 00	     1C 	cmp ecx,0
+ 0000011C  7E 09	     1C 	jle ??0002
+ 0000011E  B0 20	     1C 	mov al, " "
+ 00000120		     1C 	??0003:
+ 00000120  E8 00000000 E     1C 		call writeChar
+ 00000125  E2 F9	     1C 		loop ??0003
+ 00000127		     1C 	??0002:
+ 00000127  59		     1C 	pop ecx
+ 00000128  58		     1C 	pop eax
+ 00000129  8B 5D FC	      C 	mov ebx, fix.z
+			      C 	fixlog [edi+8], ebx
+ 0000012C  50		     1C 	push eax
+ 0000012D  51		     1C 	push ecx
+ 00000136  8B CB	     1C 	mov ecx, ebx
+ 00000138  2B C8	     1C 	sub ecx, eax
+ 0000013A  8B 47 08	     1C 	mov eax, [edi+8]
+ 0000013D  E8 00000000 E     1C 	call writeInt
+ 00000146  49		     1C 		dec ecx
+ 00000147  83 F9 00	     1C 	cmp ecx,0
+ 0000014A  7E 09	     1C 	jle ??0004
+ 0000014C  B0 20	     1C 	mov al, " "
+ 0000014E		     1C 	??0005:
+ 0000014E  E8 00000000 E     1C 		call writeChar
+ 00000153  E2 F9	     1C 		loop ??0005
+ 00000155		     1C 	??0004:
+ 00000155  59		     1C 	pop ecx
+ 00000156  58		     1C 	pop eax
+			      C 	logc "|"
+ 00000157  66| 50	     1C 	push ax
+ 00000159  B0 7C	     1C 	mov al, "|"
+ 0000015B  E8 00000000 E     1C 	call writeChar
+ 00000160  66| 58	     1C 	pop ax
+ 00000162  E8 00000000 E      C 	call crlf
+			      C 
+			      C 	logc "|"
+ 00000167  66| 50	     1C 	push ax
+ 00000169  B0 7C	     1C 	mov al, "|"
+ 0000016B  E8 00000000 E     1C 	call writeChar
+ 00000170  66| 58	     1C 	pop ax
+ 00000172  8B 5D F4	      C 	mov ebx, fix.x
+			      C 	fixlog [edi+12], ebx
+ 00000175  50		     1C 	push eax
+ 00000176  51		     1C 	push ecx
+ 0000017F  8B CB	     1C 	mov ecx, ebx
+ 00000181  2B C8	     1C 	sub ecx, eax
+ 00000183  8B 47 0C	     1C 	mov eax, [edi+12]
+ 00000186  E8 00000000 E     1C 	call writeInt
+ 0000018F  49		     1C 		dec ecx
+ 00000190  83 F9 00	     1C 	cmp ecx,0
+ 00000193  7E 09	     1C 	jle ??0006
+ 00000195  B0 20	     1C 	mov al, " "
+ 00000197		     1C 	??0007:
+ 00000197  E8 00000000 E     1C 		call writeChar
+ 0000019C  E2 F9	     1C 		loop ??0007
+ 0000019E		     1C 	??0006:
+ 0000019E  59		     1C 	pop ecx
+ 0000019F  58		     1C 	pop eax
+ 000001A0  8B 5D F8	      C 	mov ebx, fix.y
+			      C 	fixlog [edi+16], ebx
+ 000001A3  50		     1C 	push eax
+ 000001A4  51		     1C 	push ecx
+ 000001AD  8B CB	     1C 	mov ecx, ebx
+ 000001AF  2B C8	     1C 	sub ecx, eax
+ 000001B1  8B 47 10	     1C 	mov eax, [edi+16]
+ 000001B4  E8 00000000 E     1C 	call writeInt
+ 000001BD  49		     1C 		dec ecx
+ 000001BE  83 F9 00	     1C 	cmp ecx,0
+ 000001C1  7E 09	     1C 	jle ??0008
+ 000001C3  B0 20	     1C 	mov al, " "
+ 000001C5		     1C 	??0009:
+ 000001C5  E8 00000000 E     1C 		call writeChar
+ 000001CA  E2 F9	     1C 		loop ??0009
+ 000001CC		     1C 	??0008:
+ 000001CC  59		     1C 	pop ecx
+ 000001CD  58		     1C 	pop eax
+ 000001CE  8B 5D FC	      C 	mov ebx, fix.z
+			      C 	fixlog [edi+20], ebx
+ 000001D1  50		     1C 	push eax
+ 000001D2  51		     1C 	push ecx
+ 000001DB  8B CB	     1C 	mov ecx, ebx
+ 000001DD  2B C8	     1C 	sub ecx, eax
+ 000001DF  8B 47 14	     1C 	mov eax, [edi+20]
+ 000001E2  E8 00000000 E     1C 	call writeInt
+ 000001EB  49		     1C 		dec ecx
+ 000001EC  83 F9 00	     1C 	cmp ecx,0
+ 000001EF  7E 09	     1C 	jle ??000A
+ 000001F1  B0 20	     1C 	mov al, " "
+ 000001F3		     1C 	??000B:
+ 000001F3  E8 00000000 E     1C 		call writeChar
+ 000001F8  E2 F9	     1C 		loop ??000B
+ 000001FA		     1C 	??000A:
+ 000001FA  59		     1C 	pop ecx
+ 000001FB  58		     1C 	pop eax
+			      C 	logc "|"
+ 000001FC  66| 50	     1C 	push ax
+ 000001FE  B0 7C	     1C 	mov al, "|"
+ 00000200  E8 00000000 E     1C 	call writeChar
+ 00000205  66| 58	     1C 	pop ax
+ 00000207  E8 00000000 E      C 	call crlf
+			      C 
+			      C 	logc "|"
+ 0000020C  66| 50	     1C 	push ax
+ 0000020E  B0 7C	     1C 	mov al, "|"
+ 00000210  E8 00000000 E     1C 	call writeChar
+ 00000215  66| 58	     1C 	pop ax
+ 00000217  8B 5D F4	      C 	mov ebx, fix.x
+			      C 	fixlog [edi+24], ebx
+ 0000021A  50		     1C 	push eax
+ 0000021B  51		     1C 	push ecx
+ 00000224  8B CB	     1C 	mov ecx, ebx
+ 00000226  2B C8	     1C 	sub ecx, eax
+ 00000228  8B 47 18	     1C 	mov eax, [edi+24]
+ 0000022B  E8 00000000 E     1C 	call writeInt
+ 00000234  49		     1C 		dec ecx
+ 00000235  83 F9 00	     1C 	cmp ecx,0
+ 00000238  7E 09	     1C 	jle ??000C
+ 0000023A  B0 20	     1C 	mov al, " "
+ 0000023C		     1C 	??000D:
+ 0000023C  E8 00000000 E     1C 		call writeChar
+ 00000241  E2 F9	     1C 		loop ??000D
+ 00000243		     1C 	??000C:
+ 00000243  59		     1C 	pop ecx
+ 00000244  58		     1C 	pop eax
+ 00000245  8B 5D F8	      C 	mov ebx, fix.y
+			      C 	fixlog [edi+28], ebx
+ 00000248  50		     1C 	push eax
+ 00000249  51		     1C 	push ecx
+ 00000252  8B CB	     1C 	mov ecx, ebx
+ 00000254  2B C8	     1C 	sub ecx, eax
+ 00000256  8B 47 1C	     1C 	mov eax, [edi+28]
+ 00000259  E8 00000000 E     1C 	call writeInt
+ 00000262  49		     1C 		dec ecx
+ 00000263  83 F9 00	     1C 	cmp ecx,0
+ 00000266  7E 09	     1C 	jle ??000E
+ 00000268  B0 20	     1C 	mov al, " "
+ 0000026A		     1C 	??000F:
+ 0000026A  E8 00000000 E     1C 		call writeChar
+ 0000026F  E2 F9	     1C 		loop ??000F
+ 00000271		     1C 	??000E:
+ 00000271  59		     1C 	pop ecx
+ 00000272  58		     1C 	pop eax
+ 00000273  8B 5D FC	      C 	mov ebx, fix.z
+			      C 	fixlog [edi+32], ebx
+ 00000276  50		     1C 	push eax
+ 00000277  51		     1C 	push ecx
+ 00000280  8B CB	     1C 	mov ecx, ebx
+ 00000282  2B C8	     1C 	sub ecx, eax
+ 00000284  8B 47 20	     1C 	mov eax, [edi+32]
+ 00000287  E8 00000000 E     1C 	call writeInt
+ 00000290  49		     1C 		dec ecx
+ 00000291  83 F9 00	     1C 	cmp ecx,0
+ 00000294  7E 09	     1C 	jle ??0010
+ 00000296  B0 20	     1C 	mov al, " "
+ 00000298		     1C 	??0011:
+ 00000298  E8 00000000 E     1C 		call writeChar
+ 0000029D  E2 F9	     1C 		loop ??0011
+ 0000029F		     1C 	??0010:
+ 0000029F  59		     1C 	pop ecx
+ 000002A0  58		     1C 	pop eax
+			      C 	logc "|"
+ 000002A1  66| 50	     1C 	push ax
+ 000002A3  B0 7C	     1C 	mov al, "|"
+ 000002A5  E8 00000000 E     1C 	call writeChar
+ 000002AA  66| 58	     1C 	pop ax
+ 000002AC  E8 00000000 E      C 	call crlf
+			      C 
+			      C ret
+ 000002B8		      C logm3Proc EndP
+			      C logm3 Macro val
+			      C 	Invoke logm3Proc, val
+			      C ENDM
+			      C 
+				INCLUDE MathMethod/bool.asm
+			      C ; And
+			      C ; =============================================================
+ 000002B8		      C and2Proc Proc, val1:BYTE, val2:BYTE
+			      C 	.IF val1 == T
+			      C 	.IF val2 == T
+ 000002C7  C6 05 0000FAF6 R   C 		mov BF, T
+	   01
+			      C 		ret
+			      C 	.EndIF
+			      C 	.EndIF
+ 000002D2  C6 05 0000FAF6 R   C 	mov BF, F
+	   00
+			      C ret
+ 000002DD		      C and2Proc EndP
+			      C and2 MACRO val1, val2
+			      C 	INVOKE and2Proc, val1, val2
+			      C ENDM
+ 000002DD		      C and3Proc Proc, val1:BYTE, val2:BYTE, val3:BYTE
+			      C 	.IF val1 == T
+			      C 	.IF val2 == T
+			      C 	.IF val3 == T
+ 000002F2  C6 05 0000FAF6 R   C 		mov BF, T
+	   01
+			      C 		ret
+			      C 	.EndIF
+			      C 	.EndIF
+			      C 	.EndIF
+ 000002FD  C6 05 0000FAF6 R   C 	mov BF, F
+	   00
+			      C ret
+ 00000308		      C and3Proc EndP
+			      C and3 MACRO val1, val2, val3
+			      C 	INVOKE and3Proc, val1, val2, val3
+			      C ENDM
+			      C 
+			      C ; Or
+			      C ; =============================================================
+ 00000308		      C or2Proc Proc, val1:BYTE, val2:BYTE
+			      C 	.IF val1 == F
+			      C 	.IF val2 == F
+ 00000317  C6 05 0000FAF6 R   C 		mov BF, F
+	   00
+			      C 		ret
+			      C 	.EndIF
+			      C 	.EndIF
+ 00000322  C6 05 0000FAF6 R   C 	mov BF, T
+	   01
+			      C ret
+ 0000032D		      C or2Proc EndP
+			      C or2 MACRO val1, val2
+			      C 	INVOKE or2Proc, val1, val2
+			      C ENDM
+ 0000032D		      C or3Proc Proc, val1:BYTE, val2:BYTE, val3:BYTE
+			      C 	.IF val1 == F
+			      C 	.IF val2 == F
+			      C 	.IF val3 == F
+ 00000342  C6 05 0000FAF6 R   C 		mov BF, F
+	   00
+			      C 		ret
+			      C 	.EndIF
+			      C 	.EndIF
+			      C 	.EndIF
+ 0000034D  C6 05 0000FAF6 R   C 	mov BF, T
+	   01
+			      C ret
+ 00000358		      C or3Proc EndP
+			      C or3 MACRO val1, val2, val3
+			      C 	INVOKE or3Proc, val1, val2, val3
+			      C ENDM
+			      C 
+			      C ; Jump
+			      C ; =============================================================
+			      C JT Macro target
+			      C 	cmp BF, T
+			      C 	je target
+			      C EndM
+			      C 
+			      C JF Macro target
+			      C 	cmp BF, F
+			      C 	je target
+			      C EndM
+			      C 
+			      C 
+ 00000358		      C isEProc Proc val1:dword, val2:dword
+ 0000035B  50		      C push eax
+ 0000035C  8B 45 08	      C 	mov eax, val1
+ 0000035F  3B 45 0C	      C 	cmp eax, val2
+ 00000362  75 09	      C 	jne isEfalsePart
+ 00000364  C6 05 0000FAF6 R   C 		mov BF, T
+	   01
+ 0000036B  EB 07	      C 	jmp isEendProc
+ 0000036D		      C 	isEfalsePart:
+ 0000036D  C6 05 0000FAF6 R   C 		mov BF, F
+	   00
+ 00000374		      C 	isEendProc:
+ 00000374  58		      C pop eax
+			      C ret
+ 00000379		      C isEProc EndP
+			      C isE MACRO v1, v2
+			      C 	INVOKE isEProc, v1, v2
+			      C EndM
+			      C 
+ 00000379		      C isAProc Proc val1:dword, val2:dword
+ 0000037C  50		      C push eax
+ 0000037D  8B 45 08	      C 	mov eax, val1
+ 00000380  3B 45 0C	      C 	cmp eax, val2
+ 00000383  7E 09	      C 	jle isAfalsePart
+ 00000385  C6 05 0000FAF6 R   C 		mov BF, T
+	   01
+ 0000038C  EB 07	      C 	jmp isAendProc
+ 0000038E		      C 	isAfalsePart:
+ 0000038E  C6 05 0000FAF6 R   C 		mov BF, F
+	   00
+ 00000395		      C 	isAendProc:
+ 00000395  58		      C pop eax
+			      C ret
+ 0000039A		      C isAProc EndP
+			      C isA MACRO v1, v2
+			      C 	INVOKE isAProc, v1, v2
+			      C EndM
+			      C 
+ 0000039A		      C isAEProc Proc val1:dword, val2:dword
+ 0000039D  50		      C push eax
+ 0000039E  8B 45 08	      C 	mov eax, val1
+ 000003A1  3B 45 0C	      C 	cmp eax, val2
+ 000003A4  7C 09	      C 	jl isAEfalsePart
+ 000003A6  C6 05 0000FAF6 R   C 		mov BF, T
+	   01
+ 000003AD  EB 07	      C 	jmp isAEendProc
+ 000003AF		      C 	isAEfalsePart:
+ 000003AF  C6 05 0000FAF6 R   C 		mov BF, F
+	   00
+ 000003B6		      C 	isAEendProc:
+ 000003B6  58		      C pop eax
+			      C ret
+ 000003BB		      C isAEProc EndP
+			      C isAE MACRO v1, v2
+			      C 	INVOKE isAEProc, v1, v2
+			      C EndM
+			      C 
+ 000003BB		      C isBProc Proc val1:dword, val2:dword
+ 000003BE  50		      C push eax
+ 000003BF  8B 45 08	      C 	mov eax, val1
+ 000003C2  3B 45 0C	      C 	cmp eax, val2
+ 000003C5  7D 09	      C 	jge isBfalsePart
+ 000003C7  C6 05 0000FAF6 R   C 		mov BF, T
+	   01
+ 000003CE  EB 07	      C 	jmp isBendProc
+ 000003D0		      C 	isBfalsePart:
+ 000003D0  C6 05 0000FAF6 R   C 		mov BF, F
+	   00
+ 000003D7		      C 	isBendProc:
+ 000003D7  58		      C pop eax
+			      C ret
+ 000003DC		      C isBProc EndP
+			      C isB MACRO v1, v2
+			      C 	INVOKE isBProc, v1, v2
+			      C EndM
+			      C 
+ 000003DC		      C isBEProc Proc val1:dword, val2:dword
+ 000003DF  50		      C push eax
+ 000003E0  8B 45 08	      C 	mov eax, val1
+ 000003E3  3B 45 0C	      C 	cmp eax, val2
+ 000003E6  7F 09	      C 	jg isBEfalsePart
+ 000003E8  C6 05 0000FAF6 R   C 		mov BF, T
+	   01
+ 000003EF  EB 07	      C 	jmp isBEendProc
+ 000003F1		      C 	isBEfalsePart:
+ 000003F1  C6 05 0000FAF6 R   C 		mov BF, F
+	   00
+ 000003F8		      C 	isBEendProc:
+ 000003F8  58		      C pop eax
+			      C ret
+ 000003FD		      C isBEProc EndP
+			      C isBE MACRO v1, v2
+			      C 	INVOKE isBEProc, v1, v2
+			      C EndM
+			      C 
+				INCLUDE MathMethod/MathCore.asm
+			      C IsNeg MACRO val
+			      C 	isB val, 0
+			      C ENDM
+			      C 
+			      C ; Abs
+			      C ;=============================================================================
+			      C Abs MACRO val
+			      C 	isNeg val
+			      C 	.IF BF == T
+			      C 		push ebx
+			      C 		mov eax, val
+			      C 		mov ebx, -1
+			      C 		imul ebx
+			      C 		pop ebx
+			      C 	.EndIF
+			      C ENDM
+			      C 
+			      C ; Max Min, the result will in eax
+			      C ;=============================================================================
+ 000003FD		      C Max2Proc Proc, val1:DWORD, val2:DWORD
+ 00000400  8B 45 08	      C 	mov eax, val1
+ 00000403  3B 45 0C	      C 	cmp eax, val2
+ 00000406  7F 03	      C 	jg Max2ProcCheck
+ 00000408  8B 45 0C	      C 		mov eax, val2
+ 0000040B		      C 	Max2ProcCheck:
+			      C ret
+ 0000040F		      C Max2Proc EndP
+			      C Max2 Macro val1, val2
+			      C 	INVOKE Max2Proc, val1,val2
+			      C EndM
+			      C 
+ 0000040F		      C Max3Proc Proc, val1:DWORD, val2:DWORD, val3:DWORD
+ 00000412  8B 45 08	      C 	mov eax, val1
+ 00000415  3B 45 0C	      C 	cmp eax, val2
+ 00000418  7F 03	      C 	jg Max3ProcCheck1
+ 0000041A  8B 45 0C	      C 		mov eax, val2
+ 0000041D		      C 	Max3ProcCheck1:
+ 0000041D  3B 45 10	      C 	cmp eax, val3
+ 00000420  7F 03	      C 	jg Max3ProcCheck2
+ 00000422  8B 45 10	      C 		mov eax, val3
+ 00000425		      C 	Max3ProcCheck2:
+			      C ret
+ 00000429		      C Max3Proc EndP
+			      C Max3 Macro val1, val2, val3
+			      C 	INVOKE Max3Proc, val1,val2,val3
+			      C EndM
+			      C 
+ 00000429		      C Min2Proc Proc, val1:DWORD, val2:DWORD
+ 0000042C  8B 45 08	      C 	mov eax, val1
+ 0000042F  3B 45 0C	      C 	cmp eax, val2
+ 00000432  7C 03	      C 	jl Min2ProcCheck
+ 00000434  8B 45 0C	      C 		mov eax, val2
+ 00000437		      C 	Min2ProcCheck:
+			      C ret
+ 0000043B		      C Min2Proc EndP
+			      C Min2 Macro val1, val2
+			      C 	INVOKE Min2Proc, val1,val2
+			      C EndM
+			      C 
+ 0000043B		      C Min3Proc Proc, val1:DWORD, val2:DWORD, val3:DWORD
+ 0000043E  8B 45 08	      C 	mov eax, val1
+ 00000441  3B 45 0C	      C 	cmp eax, val2
+ 00000444  7C 03	      C 	jl Min3ProcCheck1
+ 00000446  8B 45 0C	      C 		mov eax, val2
+ 00000449		      C 	Min3ProcCheck1:
+ 00000449  3B 45 10	      C 	cmp eax, val3
+ 0000044C  7C 03	      C 	jl Min3ProcCheck2
+ 0000044E  8B 45 10	      C 		mov eax, val3
+ 00000451		      C 	Min3ProcCheck2:
+			      C ret
+ 00000455		      C Min3Proc EndP
+			      C Min3 Macro val1, val2, val3
+			      C 	INVOKE Min3Proc, val1,val2,val3
+			      C EndM
+			      C 
+			      C ; Clamp
+			      C ;=============================================================================
+ 00000455		      C ClampProc Proc  val:DWORD, min:DWORD, max:DWORD
+			      C 	isA val, max
+			      C 	.IF BF == T
+ 0000046C  8B 45 10	      C 		mov eax, max
+			      C 		ret
+			      C 	.EndIF
+			      C 	isB val, min
+			      C 	.IF BF == T
+ 00000487  8B 45 0C	      C 		mov eax, min
+			      C 		ret
+			      C 	.EndIF
+			      C 
+ 0000048E  8B 45 08	      C 	mov eax, val
+			      C ret
+ 00000495		      C ClampProc EndP
+			      C Clamp MACRO val, min, max
+			      C 	INVOKE ClampProc, val, min, max
+			      C ENDM
+			      C 
+			      C ; Mult and Dive (double word)
+			      C ;=============================================================================
+ 00000495		      C MultProc Proc uses ebx edx, val1:dword, val2:dword
+ 0000049A  BA 00000000	      C 	mov edx, 0
+ 0000049F  8B 45 08	      C 	mov eax, val1
+ 000004A2  8B 5D 0C	      C 	mov ebx, val2
+ 000004A5  F7 EB	      C 	imul ebx
+			      C 
+ 000004A7  83 FA 00	      C 	cmp edx, 0
+ 000004AA  74 22	      C 	je MultProcNotOverflow
+ 000004AC  83 FA FF	      C 	cmp edx, 0FFFFFFFFh
+ 000004AF  74 1D	      C 	je MultProcNotOverflow
+ 000004B1		      C 	MultProcOverflow:
+			      C 	IsNeg edx
+			      C 	jt MultProcNegOverflow
+ 000004B9  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 000004C0  74 07	     1C 	je MultProcNegOverflow
+ 000004C2  B8 7FFFFFFF	      C 	mov eax, 7FFFFFFFh
+ 000004C7  EB 05	      C 	jmp MultProcNotOverflow
+ 000004C9		      C 	MultProcNegOverflow:
+ 000004C9  B8 80000000	      C 	mov eax, 80000000h
+ 000004CE		      C 	MultProcNotOverflow:
+			      C ret
+ 000004D4		      C MultProc ENDP
+			      C Mult Macro val1, val2
+			      C 	INVOKE MultProc, val1, val2
+			      C EndM
+			      C ; last 3 digit is float
+			      C MultF Macro val1, val2
+			      C 	INVOKE MultProc, val1, val2
+			      C 	dive eax, 1000
+			      C EndM
+			      C 
+ 000004D4		      C DiveProc Proc uses ebx, val1:dword, val2:dword
+ 000004D8  BA 00000000	      C 	mov edx, 0
+ 000004DD  8B 45 08	      C 	mov eax, val1
+ 000004E0  8B 5D 0C	      C 	mov ebx, val2
+			      C 
+ 000004E3  83 F8 00	      C 	cmp eax,0
+ 000004E6  74 36	      C 	je DiveProcEnd
+ 000004E8  83 FB 00	      C 	cmp ebx,0
+ 000004EB  74 31	      C 	je DiveProcEnd
+			      C 	
+			      C 	isNeg eax
+			      C 	jf  DiveProcNotNeg
+ 000004F5  80 3D 0000FAF6 R  1C 	cmp BF, F
+	   00
+ 000004FC  74 1E	     1C 	je DiveProcNotNeg
+ 000004FE  50		      C 	push eax
+ 000004FF  BA FFFFFFFF	      C 	mov edx, -1
+ 00000504  8B C3	      C 	mov eax, ebx
+			      C 	mult eax,edx
+ 0000050D  8B D8	      C 	mov ebx, eax
+ 0000050F  58		      C 	pop eax
+			      C 	mult eax, edx
+ 00000517  BA 00000000	      C 	mov edx, 0
+			      C 
+ 0000051C		      C 	DiveProcNotNeg:
+ 0000051C  F7 FB	      C 	idiv ebx
+ 0000051E		      C 	DiveProcEnd:
+			      C ret
+ 00000523		      C DiveProc ENDP
+			      C Dive Macro val1, val2
+			      C 	INVOKE DiveProc, val1, val2
+			      C EndM
+			      C 
+			      C ; Sqrt
+			      C ;=============================================================================
+ 00000523		      C SqrtProc Proc uses ebx ecx edx, val:dword
+ 00000529  C7 05 0000FAF7 R   C 	mov i, 1
+	   00000001
+ 00000533  B9 00000000	      C 	mov ecx,0
+ 00000538  8B 55 08	      C 	mov edx, val
+ 0000053B		      C 	SqrtProcLoop:
+			      C 		mult i, i	; now -> ax
+ 0000054C  8B DA	      C 		mov ebx, edx ; target
+ 0000054E  2B D8	      C 		sub ebx, eax	; target - now
+			      C 		isAE eax, edx
+			      C 		jt SqrtProcEndLoop
+ 00000557  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 0000055E  74 0A	     1C 	je SqrtProcEndLoop
+ 00000560  FF 05 0000FAF7 R   C 		inc i
+ 00000566  8B CB	      C 		mov ecx, ebx
+ 00000568  EB D1	      C 		jmp SqrtProcLoop
+ 0000056A		      C 	SqrtProcEndLoop:
+ 0000056A  F7 DB	      C 	neg ebx
+			      C 	isB ebx, ecx
+ 00000573  A1 0000FAF7 R      C 	mov eax, i
+			      C 	jt SqrtProcEnd
+ 00000578  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 0000057F  74 01	     1C 	je SqrtProcEnd
+ 00000581  48		      C 	dec eax
+ 00000582		      C 	SqrtProcEnd:
+			      C ret
+ 00000589		      C SqrtProc ENDP
+			      C Sqrt Macro val
+			      C 	INVOKE SqrtProc, val
+			      C EndM
+			      C 
+ 00000589		      C SetSphereProc Proc uses eax esi, spherePtr:DWORD, posX:DWORD, posY:DWORD, posZ:DWORD, r:DWORD
+ 0000058E  8B 75 08	      C 	mov esi, spherePtr
+ 00000591  8B 45 0C	      C 	mov eax, posX
+ 00000594  89 06	      C 	mov [esi] ,eax
+ 00000596  8B 45 10	      C 	mov eax, posY
+ 00000599  89 46 04	      C 	mov [esi+4] ,eax
+ 0000059C  8B 45 14	      C 	mov eax, posZ
+ 0000059F  89 46 08	      C 	mov [esi+8] ,eax
+ 000005A2  8B 45 18	      C 	mov eax, r
+ 000005A5  89 46 0C	      C 	mov [esi+12] ,eax
+			      C ret
+ 000005AE		      C SetSphereProc ENDP
+			      C SetSphere MACRO spherePtr, posX, posY, posZ, r
+			      C 	INVOKE SetSphereProc, spherePtr, posX, posY, posZ, r
+			      C ENDM
+			      C 
+				INCLUDE MathMethod/SinCos.asm
+			      C ; last 3 digit is float
+			      C 
+			      C ; degree normalize
+ 000005AE		      C degNorProc Proc, deg:Dword
+ 000005B1  8B 45 08	      C 	mov eax, deg
+ 000005B4		      C 	degNorCheckA:
+			      C 	isa eax, 360
+			      C 	jf degNorCheckB
+ 000005BF  80 3D 0000FAF6 R  1C 	cmp BF, F
+	   00
+ 000005C6  74 07	     1C 	je degNorCheckB
+ 000005C8  2D 00000168	      C 	sub eax, 360
+ 000005CD  EB E5	      C 	jmp degNorCheckA
+			      C 
+ 000005CF		      C 	degNorCheckB:
+			      C 	isb eax, 0
+			      C 	jf degNorEnd
+ 000005D7  80 3D 0000FAF6 R  1C 	cmp BF, F
+	   00
+ 000005DE  74 07	     1C 	je degNorEnd
+ 000005E0  05 00000168	      C 	add eax, 360
+ 000005E5  EB E8	      C 	jmp degNorCheckB
+			      C 
+ 000005E7		      C 	degNorEnd:
+			      C ret
+ 000005EB		      C degNorProc EndP
+			      C degNor MACRO val
+			      C 	INVOKE degNorProc, val
+			      C ENDM
+			      C 
+			      C ; 近似值 sin
+ 000005EB		      C sinProc Proc uses ebx ecx edx, deg:Dword
+			      C 	degNor deg
+			      C 	isA eax, 180
+			      C 	.IF BF == T
+ 0000060D  2D 000000B4	      C 		sub eax, 180
+ 00000612  B9 FFFFFFFF	      C 		mov ecx, -1
+			      C 	.ElseIF
+ 00000619  B9 00000001	      C 		mov ecx, 1
+			      C 	.EndIF
+			      C 
+			      C 	isA eax, 90
+			      C 	.IF BF == T
+ 0000062F  2D 000000B4	      C 		sub eax, 180
+			      C 		Abs eax
+ 00000645  53		     1C 		push ebx
+ 00000646  8B C0	     1C 		mov eax, eax
+ 00000648  BB FFFFFFFF	     1C 		mov ebx, -1
+ 0000064D  F7 EB	     1C 		imul ebx
+ 0000064F  5B		     1C 		pop ebx
+			      C 	.EndIF
+			      C 	isBE eax, 45
+			      C 	.IF BF == T
+ 00000661  E8 00000048	      C 		call sinProc45
+			      C 	.ELSE
+ 00000668  83 E8 5A	      C 		sub eax, 90
+			      C 		Abs eax
+ 0000067C  53		     1C 		push ebx
+ 0000067D  8B C0	     1C 		mov eax, eax
+ 0000067F  BB FFFFFFFF	     1C 		mov ebx, -1
+ 00000684  F7 EB	     1C 		imul ebx
+ 00000686  5B		     1C 		pop ebx
+ 00000687  E8 00000022	      C 		call sinProc45
+			      C 		mult eax,eax
+ 00000693  BB 000F4240	      C 		mov ebx, 1000000 ; 1.000000
+ 00000698  2B D8	      C 		sub ebx, eax
+			      C 		sqrt ebx
+			      C 	.EndIF
+			      C 	mult eax, ecx
+			      C ret
+ 000006AE		      C sinProc EndP
+			      C sin MACRO val
+			      C 	Invoke sinProc,val
+			      C ENDM
+			      C 
+			      C ; do sin between 0~45 deg
+			      C ; use eax as input and output
+ 000006AE		      C sinProc45 Proc
+			      C 	isBE eax, 15
+			      C 	.IF BF == T
+			      C 		mult eax, 1000
+			      C 		mult eax, PI
+			      C 		dive eax, 180000 ; 180 * 1000
+			      C 	.ELSE
+			      C 		isBE eax, 30
+			      C 		.IF BF == T
+ 000006F3  83 E8 0F	      C 			sub eax, 15
+			      C 			mult eax, 016 ; sin(15-30) 每度近似值為 0.016
+ 000006FE  05 00000103	      C 			add eax, 259  ; sin(15) ~= 0.259
+			      C 		.Else
+ 00000705  83 E8 1E	      C 			sub eax, 30
+			      C 			mult eax, 014 ; sin(30-45) 每度近似值為 0.016
+ 00000710  05 000001F4	      C 			add eax, 500  ; sin(30) ~= 0.5
+			      C 		.EndIF
+			      C 	.EndIF
+ 00000715  C3		      C ret
+ 00000716		      C sinProc45 EndP
+			      C 
+			      C ; con(θ) = sin(90- θ)
+ 00000716		      C cosProc Proc deg:dword
+ 00000719  B8 0000005A	      C 	mov eax,90
+ 0000071E  2B 45 08	      C 	sub eax, deg
+			      C 	sin eax 
+			      C ret
+ 0000072B		      C cosProc EndP
+			      C cos MACRO deg
+			      C 	INVOKE cosProc, deg
+			      C ENDM
+			      C 
+				INCLUDE MathMethod/Vector.asm
+			      C setVector MACRO vec, val1, val2, val3
+			      C push eax
+			      C 	mov eax,val1
+			      C 	mov vec.x, eax
+			      C 	mov eax,val2
+			      C 	mov vec.y, eax
+			      C 	mov eax,val3
+			      C 	mov vec.z, eax
+			      C pop eax
+			      C ENDM
+			      C 
+ 0000072B		      C addVectorProc Proc uses eax esi edi, v1:DWORD, v2:DWORD 
+ 00000731  8B 75 0C	      C 	mov esi, v2
+ 00000734  8B 7D 08	      C 	mov edi, v1
+ 00000737  8B 06	      C 	mov eax, [esi]
+ 00000739  01 07	      C 	add [edi], eax
+ 0000073B  8B 46 04	      C 	mov eax, [esi+4]
+ 0000073E  01 47 04	      C 	add [edi+4], eax
+ 00000741  8B 46 08	      C 	mov eax, [esi+8]
+ 00000744  01 47 08	      C 	add [edi+8], eax
+			      C ret
+ 0000074E		      C addVectorProc ENDP
+			      C addVector MACRO v1, v2
+			      C 	INVOKE addVectorProc, v1 ,v2
+			      C ENDM
+			      C 
+ 0000074E		      C mulVectorProc Proc uses eax edi, v1:DWORD, k:DWORD 
+ 00000753  8B 7D 08	      C 	mov edi, v1
+			      C 	mult [edi], k
+ 00000760  89 07	      C 	mov [edi], eax
+			      C 	mult [edi+4], k
+ 0000076D  89 47 04	      C 	mov [edi+4], eax
+			      C 	mult [edi+8], k
+ 0000077B  89 47 08	      C 	mov [edi+8], eax
+			      C ret
+ 00000784		      C mulVectorProc ENDP
+			      C mulVector MACRO v1, k
+			      C 	INVOKE mulVectorProc, v1 ,k
+			      C ENDM
+			      C 
+ 00000784		      C divVectorProc Proc uses eax edi, v1:DWORD, k:DWORD 
+ 00000789  8B 7D 08	      C 	mov edi, v1
+			      C 	dive [edi], k
+ 00000796  89 07	      C 	mov [edi], eax
+			      C 	dive [edi+4], k
+ 000007A3  89 47 04	      C 	mov [edi+4], eax
+			      C 	dive [edi+8], k
+ 000007B1  89 47 08	      C 	mov [edi+8], eax
+			      C ret
+ 000007BA		      C divVectorProc ENDP
+			      C divVector MACRO v1, k
+			      C 	INVOKE divVectorProc, v1 ,k
+			      C ENDM
+			      C 
+ 000007BA		      C subVectorProc Proc uses eax esi edi, v1:DWORD, v2:DWORD 
+ 000007C0  8B 75 0C	      C 	mov esi, v2
+ 000007C3  8B 7D 08	      C 	mov edi, v1
+ 000007C6  8B 06	      C 	mov eax, [esi]
+ 000007C8  29 07	      C 	sub [edi], eax
+ 000007CA  8B 46 04	      C 	mov eax, [esi+4]
+ 000007CD  29 47 04	      C 	sub [edi+4], eax
+ 000007D0  8B 46 08	      C 	mov eax, [esi+8]
+ 000007D3  29 47 08	      C 	sub [edi+8], eax
+			      C ret
+ 000007DD		      C subVectorProc ENDP
+			      C subVector MACRO v1, v2
+			      C 	INVOKE subVectorProc, v1 ,v2
+			      C ENDM
+			      C 
+ 000007DD		      C copyVectorProc Proc uses eax esi edi, v1:DWORD, v2:DWORD 
+ 000007E3  8B 75 0C	      C 	mov esi, v2
+ 000007E6  8B 7D 08	      C 	mov edi, v1
+ 000007E9  8B 06	      C 	mov eax, [esi]
+ 000007EB  89 07	      C 	mov [edi], eax
+ 000007ED  8B 46 04	      C 	mov eax, [esi+4]
+ 000007F0  89 47 04	      C 	mov [edi+4], eax
+ 000007F3  8B 46 08	      C 	mov eax, [esi+8]
+ 000007F6  89 47 08	      C 	mov [edi+8], eax
+			      C ret
+ 00000800		      C copyVectorProc ENDP
+			      C copyVector MACRO v1, v2
+			      C 	INVOKE copyVectorProc, v1 ,v2
+			      C ENDM
+			      C 
+ 00000800		      C VectorLenProc Proc uses esi, vec:DWORD
+ 00000804  8B 75 08	      C 	mov esi, vec
+			      C 	mult [esi], [esi]
+ 00000810  8B D8	      C 	mov ebx, eax
+			      C 	mult [esi+4], [esi+4]
+ 0000081D  03 D8	      C 	add ebx, eax
+			      C 	mult [esi+8], [esi+8]
+ 0000082A  03 C3	      C 	add eax, ebx
+			      C 	sqrt eax
+			      C ret
+ 00000837		      C VectorLenProc ENDP
+			      C VectorLen MACRO vec
+			      C 	INVOKE VectorLenProc, vec
+			      C 	ENDM
+			      C 
+				INCLUDE MathMethod/Matrix.asm
+ 00000837		      C Matrix3Mult Proc uses eax ebx esi edi, result:DWORD ,m1:DWORD, m2:DWORD
+ 0000083E  8B 75 0C	      C 	mov esi, m1
+ 00000841  8B 7D 10	      C 	mov edi, m2
+			      C 
+			      C 	; 00 ~ 02
+ 00000844  8B 06	      C 	mov eax, [esi] 
+			      C 	mult eax, [edi] ; s00 * d00
+ 0000084E  8B D8	      C 	mov ebx, eax
+ 00000850  8B 46 04	      C 	mov eax, [esi+4] 
+			      C 	mult eax, [edi+12] ; s01 * d10
+ 0000085C  03 D8	      C 	add ebx, eax
+ 0000085E  8B 46 08	      C 	mov eax, [esi+8] 
+			      C 	mult eax, [edi+24] ; s02 * d20
+ 0000086A  03 D8	      C 	add ebx, eax
+			      C 	
+ 0000086C  8B 75 08	      C 	mov esi, result
+ 0000086F  89 1E	      C 	mov [esi], ebx
+ 00000871  8B 75 0C	      C 	mov esi, m1
+			      C 
+ 00000874  8B 06	      C 	mov eax, [esi] 
+			      C 	mult eax, [edi+4] ; s00 * d01
+ 0000087F  8B D8	      C 	mov ebx, eax
+ 00000881  8B 46 04	      C 	mov eax, [esi+4] 
+			      C 	mult eax, [edi+16] ; s01 * d11
+ 0000088D  03 D8	      C 	add ebx, eax
+ 0000088F  8B 46 08	      C 	mov eax, [esi+8] 
+			      C 	mult eax, [edi+28] ; s02 * d21
+ 0000089B  03 D8	      C 	add ebx, eax
+			      C 	
+ 0000089D  8B 75 08	      C 	mov esi, result
+ 000008A0  89 5E 04	      C 	mov [esi+4], ebx
+ 000008A3  8B 75 0C	      C 	mov esi, m1
+			      C 
+ 000008A6  8B 06	      C 	mov eax, [esi] 
+			      C 	mult eax, [edi+8] ; s00 * d01
+ 000008B1  8B D8	      C 	mov ebx, eax
+ 000008B3  8B 46 04	      C 	mov eax, [esi+4] 
+			      C 	mult eax, [edi+20] ; s01 * d11
+ 000008BF  03 D8	      C 	add ebx, eax
+ 000008C1  8B 46 08	      C 	mov eax, [esi+8] 
+			      C 	mult eax, [edi+32] ; s02 * d21
+ 000008CD  03 D8	      C 	add ebx, eax
+			      C 	
+ 000008CF  8B 75 08	      C 	mov esi, result
+ 000008D2  89 5E 08	      C 	mov [esi+8], ebx
+ 000008D5  8B 75 0C	      C 	mov esi, m1
+			      C 
+			      C 	
+			      C 	; 10 ~ 12
+ 000008D8  8B 46 0C	      C 	mov eax, [esi+12] 
+			      C 	mult eax, [edi] ; s00 * d00
+ 000008E3  8B D8	      C 	mov ebx, eax
+ 000008E5  8B 46 10	      C 	mov eax, [esi+16] 
+			      C 	mult eax, [edi+12] ; s01 * d10
+ 000008F1  03 D8	      C 	add ebx, eax
+ 000008F3  8B 46 14	      C 	mov eax, [esi+20] 
+			      C 	mult eax, [edi+24] ; s02 * d20
+ 000008FF  03 D8	      C 	add ebx, eax
+			      C 	
+ 00000901  8B 75 08	      C 	mov esi, result
+ 00000904  89 5E 0C	      C 	mov [esi+12], ebx
+ 00000907  8B 75 0C	      C 	mov esi, m1
+			      C 
+ 0000090A  8B 46 0C	      C 	mov eax, [esi+12] 
+			      C 	mult eax, [edi+4] ; s00 * d01
+ 00000916  8B D8	      C 	mov ebx, eax
+ 00000918  8B 46 10	      C 	mov eax, [esi+16] 
+			      C 	mult eax, [edi+16] ; s01 * d11
+ 00000924  03 D8	      C 	add ebx, eax
+ 00000926  8B 46 14	      C 	mov eax, [esi+20] 
+			      C 	mult eax, [edi+28] ; s02 * d21
+ 00000932  03 D8	      C 	add ebx, eax
+			      C 	
+ 00000934  8B 75 08	      C 	mov esi, result
+ 00000937  89 5E 10	      C 	mov [esi+16], ebx
+ 0000093A  8B 75 0C	      C 	mov esi, m1
+			      C 
+ 0000093D  8B 46 0C	      C 	mov eax, [esi+12] 
+			      C 	mult eax, [edi+8] ; s00 * d01
+ 00000949  8B D8	      C 	mov ebx, eax
+ 0000094B  8B 46 10	      C 	mov eax, [esi+16] 
+			      C 	mult eax, [edi+20] ; s01 * d11
+ 00000957  03 D8	      C 	add ebx, eax
+ 00000959  8B 46 14	      C 	mov eax, [esi+20] 
+			      C 	mult eax, [edi+32] ; s02 * d21
+ 00000965  03 D8	      C 	add ebx, eax
+			      C 	
+ 00000967  8B 75 08	      C 	mov esi, result
+ 0000096A  89 5E 14	      C 	mov [esi+20], ebx
+ 0000096D  8B 75 0C	      C 	mov esi, m1
+			      C 	
+			      C 
+			      C 	; 20 ~ 22
+ 00000970  8B 46 18	      C 	mov eax, [esi+24] 
+			      C 	mult eax, [edi] ; s00 * d00
+ 0000097B  8B D8	      C 	mov ebx, eax
+ 0000097D  8B 46 1C	      C 	mov eax, [esi+28] 
+			      C 	mult eax, [edi+12] ; s01 * d10
 
- 00000024			START:
- 00000024  E8 00000000 E		call ClrScr
-					INVOKE SetConsoleCursorPosition, consoleHandle, xyPos
- 0000003A  E8 00000000 E		call ReadChar
-					.IF ax == 4800h ;UP
- 00000045  66| 83 2D				sub xyPos.y,1
-	   0000000E R 01
-					.ENDIF
-					.IF ax == 5000h ;DOWN
- 00000053  66| 83 05				add xyPos.y,1
-	   0000000E R 01
-					.ENDIF
-					.IF ax == 4B00h ;LEFT
- 00000061  66| 83 2D				sub xyPos.x,1
-	   0000000C R 01
-					.ENDIF
-					.IF ax == 4d00h ;RIGHT
- 0000006F  66| 83 05				add xyPos.x,1
-	   0000000C R 01
-					.ENDIF
-					.IF ax == 011Bh ;ESC
- 0000007D  EB 53				jmp END_FUNC
-					.ENDIF
-					
-					; examine if each directions are over the border.
-					.IF xyPos.x == 0h ;x lowerbound
- 00000089  66| FF 05				inc xyPos.x
-	   0000000C R
-					.ENDIF
- 00000090  66| A1			mov ax,xyBound.x 
-	   00000008 R
-					.IF xyPos.x == ax ;x upperbound
- 0000009F  66| FF 0D				dec xyPos.x
-	   0000000C R
-					.ENDIF
-					
-					.IF xyPos.y == 0h ;y lowerbound
- 000000B0  66| FF 05				inc xyPos.y
-	   0000000E R
-					.ENDIF
- 000000B7  66| A1			mov ax,xyBound.y
-	   0000000A R
-					.IF xyPos.y == ax ;y upperbound
- 000000C6  66| FF 0D				dec xyPos.y
-	   0000000E R
-					.ENDIF
-					
- 000000CD  E9 FFFFFF52			jmp START
- 000000D2			END_FUNC:
-					exit
- 000000D9			main ENDP
+ 00000989  03 D8	      C 	add ebx, eax
+ 0000098B  8B 46 20	      C 	mov eax, [esi+32] 
+			      C 	mult eax, [edi+24] ; s02 * d20
+ 00000997  03 D8	      C 	add ebx, eax
+			      C 	
+ 00000999  8B 75 08	      C 	mov esi, result
+ 0000099C  89 5E 18	      C 	mov [esi+24], ebx
+ 0000099F  8B 75 0C	      C 	mov esi, m1
+			      C 
+ 000009A2  8B 46 18	      C 	mov eax, [esi+24] 
+			      C 	mult eax, [edi+4] ; s00 * d01
+ 000009AE  8B D8	      C 	mov ebx, eax
+ 000009B0  8B 46 1C	      C 	mov eax, [esi+28] 
+			      C 	mult eax, [edi+16] ; s01 * d11
+ 000009BC  03 D8	      C 	add ebx, eax
+ 000009BE  8B 46 20	      C 	mov eax, [esi+32] 
+			      C 	mult eax, [edi+28] ; s02 * d21
+ 000009CA  03 D8	      C 	add ebx, eax
+			      C 	
+ 000009CC  8B 75 08	      C 	mov esi, result
+ 000009CF  89 5E 1C	      C 	mov [esi+28], ebx
+ 000009D2  8B 75 0C	      C 	mov esi, m1
+			      C 
+ 000009D5  8B 46 18	      C 	mov eax, [esi+24] 
+			      C 	mult eax, [edi+8] ; s00 * d01
+ 000009E1  8B D8	      C 	mov ebx, eax
+ 000009E3  8B 46 1C	      C 	mov eax, [esi+28] 
+			      C 	mult eax, [edi+20] ; s01 * d11
+ 000009EF  03 D8	      C 	add ebx, eax
+ 000009F1  8B 46 20	      C 	mov eax, [esi+32] 
+			      C 	mult eax, [edi+32] ; s02 * d21
+ 000009FD  03 D8	      C 	add ebx, eax
+ 000009FF  8B 75 08	      C 	mov esi, result
+ 00000A02  89 5E 20	      C 	mov [esi+32], ebx
+			      C 
+			      C ret
+ 00000A0D		      C Matrix3Mult EndP
+			      C 
+ 00000A0D		      C Matrix3MultKProc Proc uses eax ecx edi, mat:DWORD, K:DWORD
+ 00000A13  8B 7D 08	      C 	mov edi, mat
+ 00000A16  B9 00000009	      C 	mov ecx, 9
+ 00000A1B		      C 	Matrix3MultKLoop:
+			      C 		mult [edi], K
+ 00000A25  89 07	      C 		mov [edi], eax
+ 00000A27  83 C7 04	      C 		add edi, 4
+ 00000A2A  E2 EF	      C 	loop Matrix3MultKLoop
+			      C ret
+ 00000A33		      C Matrix3MultKProc EndP
+			      C Matrix3MultK Macro mat, k
+			      C 	INVOKE Matrix3MultKProc, mat, k
+			      C ENDM
+			      C 
+ 00000A33		      C Matrix3DiveKProc Proc uses eax ecx edi, mat:DWORD, K:DWORD
+ 00000A39  8B 7D 08	      C 	mov edi, mat
+ 00000A3C  B9 00000009	      C 	mov ecx, 9
+ 00000A41		      C 	Matrix3DiveKLoop:
+			      C 		dive [edi], K
+ 00000A4B  89 07	      C 		mov [edi], eax
+ 00000A4D  83 C7 04	      C 		add edi, 4
+ 00000A50  E2 EF	      C 	loop Matrix3DiveKLoop
+			      C ret
+ 00000A59		      C Matrix3DiveKProc EndP
+			      C Matrix3DiveK Macro mat, k
+			      C 	INVOKE Matrix3DiveKProc, mat, k
+			      C ENDM
+			      C 
+				INCLUDE MathMethod/RotationMatrix.asm
+			      C ; here we use zYX rotation
+ 00000A59		      C EulerToRotMatrixProc Proc matrix:DWORD, euler:DWORD
+			      C 	local xm:matrix3, ym:matrix3, zm:matrix3 ; rotation matrix
+			      C 	local zxm:matrix3
+ 00000A62  8B 7D 0C	      C 	mov edi, euler
+			      C 	; here is float 1.000
+			      C 	; x axis
+			      C 	;	1		0		0
+			      C 	;	0		cos		sin
+			      C 	;	0	   -sin	    cos
+ 00000A65  C7 45 DC	      C 	mov xm.n00, 1000
+	   000003E8
+ 00000A6C  C7 45 E0	      C 	mov xm.n01, 0
+	   00000000
+ 00000A73  C7 45 E4	      C 	mov xm.n02, 0
+	   00000000
+ 00000A7A  C7 45 E8	      C 	mov xm.n10, 0
+	   00000000
+ 00000A81  C7 45 F4	      C 	mov xm.n20, 0
+	   00000000
+			      C 	cos [edi]
+ 00000A8F  89 45 EC	      C 	mov xm.n11, eax
+ 00000A92  89 45 FC	      C 	mov xm.n22, eax
+			      C 	sin [edi]
+ 00000A9C  89 45 F8	      C 	mov xm.n21, eax
+ 00000A9F  F7 D8	      C 	neg eax
+ 00000AA1  89 45 F0	      C 	mov xm.n12, eax
+			      C 	
+			      C 	; y axis
+			      C 	;	cos		0		sin
+			      C 	;	0		1		0
+			      C 	;  -sin		0		cos
+ 00000AA4  C7 45 BC	      C 	mov ym.n01, 0
+	   00000000
+ 00000AAB  C7 45 C4	      C 	mov ym.n10, 0
+	   00000000
+ 00000AB2  C7 45 C8	      C 	mov ym.n11, 1000
+	   000003E8
+ 00000AB9  C7 45 CC	      C 	mov ym.n12, 0
+	   00000000
+ 00000AC0  C7 45 D4	      C 	mov ym.n21, 0
+	   00000000
+			      C 	cos [edi+4]
+ 00000ACF  89 45 B8	      C 	mov ym.n00, eax
+ 00000AD2  89 45 D8	      C 	mov ym.n22, eax
+			      C 	sin [edi+4]
+ 00000ADD  89 45 C0	      C 	mov ym.n02, eax
+ 00000AE0  F7 D8	      C 	neg eax
+ 00000AE2  89 45 D0	      C 	mov ym.n20, eax
+			      C 
+			      C 	; z axis
+			      C 	;	cos	   -sin		0
+			      C 	;	sin		cos		0
+			      C 	;	0		0		1
+ 00000AE5  C7 45 9C	      C 	mov zm.n02, 0
+	   00000000
+ 00000AEC  C7 45 A8	      C 	mov zm.n12, 0
+	   00000000
+ 00000AF3  C7 45 AC	      C 	mov zm.n20, 0
+	   00000000
+ 00000AFA  C7 45 B0	      C 	mov zm.n21, 0
+	   00000000
+ 00000B01  C7 45 B4	      C 	mov zm.n22, 1000
+	   000003E8
+			      C 	cos [edi+8]
+ 00000B10  89 45 94	      C 	mov zm.n00, eax
+ 00000B13  89 45 A4	      C 	mov zm.n11, eax
+			      C 	sin [edi+8]
+ 00000B1E  89 45 98	      C 	mov zm.n01, eax
+ 00000B21  F7 D8	      C 	neg eax
+ 00000B23  89 45 A0	      C 	mov zm.n10, eax
+			      C 	; 專案中 EulerAngle 的表達式為 zYX
+			      C 	; 此時要倒推坐標系則反過來做 : zXY
+			      C 	INVOKE Matrix3Mult, ADDR zxm, ADDR zm, ADDR xm
+			      C 	Matrix3diveK ADDR zxm, 1000 ; 消去乘法倍率
+			      C 	INVOKE Matrix3Mult, matrix, ADDR zxm, ADDR ym
+			      C 	Matrix3diveK matrix, 1000	 
+			      C ret
+ 00000B6F		      C EulerToRotMatrixProc EndP
+			      C EulerToRotMatrix MACRO matrix, euler
+			      C 	INVOKE EulerToRotMatrixProc, matrix, euler
+			      C ENDM
+			      C 
+			      C 
+			      C ; vector, rotationMatrix
+ 00000B6F		      C RotVectorProc PROC uses eax ebx esi edi, vec:DWORD, rotMat:DWORD 
+			      C 	local result:Vector
+ 00000B79  8B 75 08	      C 	mov esi, vec
+ 00000B7C  8B 7D 0C	      C 	mov edi, rotMat
+			      C 
+			      C 	; x pos = x,y,z * 00,01,02
+			      C 	mult [esi], [edi]
+ 00000B88  8B D8	      C 	mov ebx, eax
+			      C 	mult [esi+4], [edi+4]
+ 00000B95  03 D8	      C 	add ebx, eax
+			      C 	mult [esi+8], [edi+8]
+ 00000BA2  03 C3	      C 	add eax, ebx
+			      C 	dive eax, 1000
+ 00000BAF  89 45 F4	      C 	mov result.x, eax
+			      C 
+			      C 	; y pos = x,y,z * 10,11,12
+			      C 	mult [esi], [edi+12]
+ 00000BBC  8B D8	      C 	mov ebx, eax
+			      C 	mult [esi+4], [edi+16]
+ 00000BC9  03 D8	      C 	add ebx, eax
+			      C 	mult [esi+8], [edi+20]
+ 00000BD6  03 C3	      C 	add eax, ebx
+			      C 	dive eax, 1000
+ 00000BE3  89 45 F8	      C 	mov result.y, eax
+			      C 
+			      C 	; y pos = x,y,z * 20,21,22
+			      C 	mult [esi], [edi+24]
+ 00000BF0  8B D8	      C 	mov ebx, eax
+			      C 	mult [esi+4], [edi+28]
+ 00000BFD  03 D8	      C 	add ebx, eax
+			      C 	mult [esi+8], [edi+32]
+ 00000C0A  03 C3	      C 	add eax, ebx
+			      C 	dive eax, 1000
+ 00000C17  89 45 FC	      C 	mov result.z, eax
+			      C 
+ 00000C1A  8B 45 F4	      C 	mov eax,result.x
+ 00000C1D  89 06	      C 	mov [esi], eax
+ 00000C1F  8B 45 F8	      C 	mov eax,result.y
+ 00000C22  89 46 04	      C 	mov [esi+4], eax
+ 00000C25  8B 45 FC	      C 	mov eax,result.z
+ 00000C28  89 46 08	      C 	mov [esi+8], eax
+			      C ret
+ 00000C33		      C RotVectorProc ENDP
+			      C RotVector MACRO vec, rotMat
+			      C 	INVOKE RotVectorProc, vec, rotMat
+			      C ENDM
+			      C 
+			      C ; world position, screen output {pos.X, pos.Y, scale if need (1.000)}
+			      C ; { -1, -1, -1 } means not in screen
+ 00000C33		      C World2CameraProc Proc uses eax ebx esi, pos:DWORD, cor:DWORD
+			      C 	local position:vector, posOffset:vector, tempVec:vector, vLen:Dword
+ 00000C3C  8B 75 08	      C 	mov esi, pos
+			      C 	copyvector ADDR position, pos
+			      C 	copyvector ADDR posOffset, ADDR camera.pos
+			      C 	rotVector ADDR position, ADDR cameraRotMat
+			      C 	rotVector ADDR posOffset, ADDR cameraRotMat
+			      C 	subVector ADDR position, ADDR posOffset
+			      C 	isBE position.z, 0
+			      C 	.IF BF == T
+			      C 		setVector position, -1, -1, -1
+ 00000C95  50		     1C push eax
+ 00000C96  B8 FFFFFFFF	     1C 	mov eax,-1
+ 00000C9B  89 45 F4	     1C 	mov position.x, eax
+ 00000C9E  B8 FFFFFFFF	     1C 	mov eax,-1
+ 00000CA3  89 45 F8	     1C 	mov position.y, eax
+ 00000CA6  B8 FFFFFFFF	     1C 	mov eax,-1
+ 00000CAB  89 45 FC	     1C 	mov position.z, eax
+ 00000CAE  58		     1C pop eax
+ 00000CAF  EB 56	      C 		jmp World2CameraProcEnd
+			      C 	.EndIF
+ 00000CB1  8B 75 0C	      C 	mov esi, cor
+			      C 
+			      C 	mult cameraDepth, 1000
+			      C 	dive eax, position.z
+			      C 
+			      C 	mulVector ADDR position, eax
+			      C 	divVector ADDR position, 1000
+			      C 
+			      C 
+			      C 	
+			      C 
+ 00000CE5  89 46 08	      C 	mov [esi+8], eax ;output z as scale
+			      C 	
+			      C 	; screen offset to mid
+ 00000CE8  8B 45 F4	      C 	mov eax, position.x
+ 00000CEB  83 C0 50	      C 	add eax, 80
+ 00000CEE  89 45 F4	      C 	mov position.x, eax
+ 00000CF1  8B 45 F8	      C 	mov eax, position.y
+ 00000CF4  F7 D8	      C 	neg eax
+ 00000CF6  83 C0 32	      C 	add eax, 50
+ 00000CF9  89 45 F8	      C 	mov position.y, eax
+			      C 
+ 00000CFC  8B 45 F4	      C 	mov eax, position.x
+ 00000CFF  89 06	      C 	mov [esi], eax
+ 00000D01  8B 45 F8	      C 	mov eax, position.y
+ 00000D04  89 46 04	      C 	mov [esi+4], eax
+ 00000D07		      C 	World2CameraProcEnd:
+			      C ret
+ 00000D0E		      C World2CameraProc ENDP
+FinalProject\MathMethod/RotationMatrix.asm(161) : warning A6004:procedure argument or local not referenced : tempVec
+FinalProject\MathMethod/RotationMatrix.asm(161) : warning A6004:procedure argument or local not referenced : vLen
+			      C World2Camera MACRO pos, cor
+			      C 	INVOKE World2CameraProc, pos, cor
+			      C ENDM
+			      C 
+				INCLUDE DrawMethod/DrawCore.asm
+ 00000D0E		      C SetScreen Proc uses esi ecx ax, color:word
+ 00000D15  66| 8B 45 08	      C mov ax, color
+ 00000D19  BE 00000014 R      C 	mov esi, OFFSET layoutAttributes
+ 00000D1E  B9 00003E80	      C 	mov ecx, 16000
+ 00000D23		      C 	SetScreenLoop:
+ 00000D23  66| 89 06	      C 		mov [esi], ax
+ 00000D26  83 C6 02	      C 		add esi,2
+ 00000D29  E2 F8	      C 	loop SetScreenLoop
+			      C ret
+ 00000D33		      C SetScreen EndP
+			      C 
+ 00000D33		      C SetPixelProc Proc uses eax ebx, x:dword,y:dword, color:WORD
+ 00000D38  8B 45 0C	      C 	mov eax, y
+ 00000D3B  BB 00000140	      C 	mov ebx, 320
+ 00000D40  F7 E3	      C 	mul ebx
+ 00000D42  03 45 08	      C 	add eax, x
+ 00000D45  03 45 08	      C 	add eax, x
+ 00000D48  BE 00000014 R      C 	mov esi, OFFSET layoutAttributes
+ 00000D4D  03 F0	      C 	add esi, eax
+ 00000D4F  66| 8B 5D 10	      C 	mov bx, color
+ 00000D53  66| 89 1E	      C 	mov [esi], bx
+			      C ret
+ 00000D5C		      C SetPixelProc ENDP
+			      C SetPixel Macro x,y,color
+			      C 	Invoke SetPixelProc, x, y, color
+			      C EndM
+			      C 
+			      C 
+ 00000D5C		      C RePaint Proc uses esi ecx
+			      C 	local writeCount:word, pos:COORD
+			      C 
+ 00000D64  66| B8 0000	      C 	mov ax, 0
+ 00000D68  66| 89 45 F8	      C 	mov pos.x, ax
+ 00000D6C  66| B8 0000	      C 	mov ax, 0
+ 00000D70  66| 89 45 FA	      C 	mov pos.y, ax
+			      C 
+ 00000D74  8D 35 00000014 R   C 	lea esi, layoutAttributes
+ 00000D7A  B9 00000064	      C 	mov ecx, 100
+ 00000D7F		      C 	RePaintLoop:
+ 00000D7F  51		      C 	push ecx
+			      C 	INVOKE WriteConsoleOutputAttribute, ; change cell setting
+			      C 		consoleHandle,
+			      C 		esi,
+			      C 		160,
+			      C 		pos,
+			      C 		ADDR writeCount
+ 00000D98  66| FF 45 FA	      C 	inc pos.y
+ 00000D9C  81 C6 00000140     C 	add esi, 320
+ 00000DA2  59		      C 	pop ecx
+ 00000DA3  E2 DA	      C 	loop RePaintLoop
+			      C ret
+ 00000DA9		      C RePaint ENDP
+			      C 
+ 00000DA9		      C ShowColor Proc uses ax bx ecx 
+ 00000DAE  B9 0000000F	      C 	mov ecx, 15
+ 00000DB3  66| BB 0000	      C 	mov bx ,00h
+ 00000DB7		      C 	ShowColorLoop:
+			      C 	INVOKE setScreen, bx
+ 00000DC1  E8 FFFFFF96	      C 	call repaint
+ 00000DC6  E8 00000000 E      C 	call readChar
+ 00000DCB  66| 83 C3 10	      C 	add bx, 010h
+ 00000DCF  E2 E6	      C 	loop ShowColorLoop
+			      C ret
+ 00000DD7		      C ShowColor EndP
+			      C 
+				INCLUDE DrawMethod/DrawSphere.asm
+			      C ; info is ptr of a vector
+			      C ; { coord.x, coord.y, r }
+ 00000DD7		      C DrawSphereProc Proc uses eax ebx ecx edx esi, infoPtr:DWORD, color:WORD
+			      C 	local maxX:DWORD,maxY:DWORD,minX:DWORD,minY:DWORD
+			      C 	local originPos:vector, targetPos:vector
+			      C 	local iLoop:DWORD, jLoop:DWORD, limit:DWORD
+ 00000DE2  8B 75 08	      C 	mov esi, infoPtr
+			      C 	isE [esi], -1
+ 00000DEE  A0 0000FAF6 R      C 	mov al,BF
+			      C 	isE [esi+4], -1
+ 00000DFD  8A 25 0000FAF6 R   C 	mov ah,BF
+			      C 	and2 ah, bl
+			      C 	.IF BF == T
+ 00000E17  E9 00000150	      C 		jmp DrawSphereProcEnd
+			      C 	.EndIF
+			      C 
+ 00000E1C  8B 46 08	      C 	mov eax, [esi+8]
+ 00000E1F  89 45 CC	      C 	mov limit, eax
+			      C 	copyVector ADDR originPos, infoPtr
+ 00000E2E  C7 45 EC	      C 	mov originPos.z, 0
+	   00000000
+ 00000E35  C7 45 E0	      C 	mov targetPos.z, 0
+	   00000000
+			      C 
+ 00000E3C  8B 06	      C 	mov eax, [esi]
+ 00000E3E  03 46 08	      C 	add eax, [esi+8]
+			      C 	isB eax, 0
+			      C 	jt DrawSphereProcEnd
+ 00000E49  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000E50  0F 84 00000116    1C 	je DrawSphereProcEnd
+			      C 	clamp eax, 0, 159
+ 00000E63  89 45 FC	      C 	mov maxX, eax
+ 00000E66  8B 75 08	      C 	mov esi, infoPtr
+ 00000E69  8B 06	      C 	mov eax, [esi]
+ 00000E6B  2B 46 08	      C 	sub eax, [esi+8]
+			      C 	isA eax, 159
+			      C 	jt DrawSphereProcEnd
+ 00000E79  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000E80  0F 84 000000E6    1C 	je DrawSphereProcEnd
+			      C 	clamp eax, 0, 159
+ 00000E93  89 45 F4	      C 	mov minX, eax
+			      C 
+ 00000E96  8B 75 08	      C 	mov esi, infoPtr
+ 00000E99  8B 46 04	      C 	mov eax, [esi+4]
+ 00000E9C  03 46 08	      C 	add eax, [esi+8]
+			      C 	isB eax, 0
+			      C 	jt DrawSphereProcEnd
+ 00000EA7  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000EAE  0F 84 000000B8    1C 	je DrawSphereProcEnd
+			      C 	clamp eax, 0, 99
+ 00000EBE  89 45 F8	      C 	mov maxY, eax
+ 00000EC1  8B 75 08	      C 	mov esi, infoPtr
+ 00000EC4  8B 46 04	      C 	mov eax, [esi+4]
+ 00000EC7  2B 46 08	      C 	sub eax, [esi+8]
+			      C 	isA eax, 99
+			      C 	jt DrawSphereProcEnd
+ 00000ED2  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000ED9  0F 84 0000008D    1C 	je DrawSphereProcEnd
+			      C 	clamp eax, 0, 99
+ 00000EE9  89 45 F0	      C 	mov minY, eax
+ 00000EEC  8B 45 F4	      C 	mov eax, minX
+ 00000EEF  89 45 D4	      C 	mov iLoop, eax
+ 00000EF2		      C 	DrawSphereProcLoopI:
+ 00000EF2  8B 45 F0	      C 		mov eax, minY
+ 00000EF5  89 45 D0	      C 		mov jLoop, eax
+ 00000EF8		      C 		DrawSphereProcLoopJ:
+ 00000EF8  8B 45 D4	      C 			mov eax, iLoop
+ 00000EFB  89 45 D8	      C 			mov targetPos.x, eax
+ 00000EFE  8B 45 D0	      C 			mov eax, jLoop
+ 00000F01  89 45 DC	      C 			mov targetPos.y, eax
+			      C 			subVector ADDR targetPos, ADDR originPos
+			      C 			vectorLen ADDR targetPos
+			      C 			isBE eax, limit
+			      C 			jf DrawSphereProcDontDraw
+ 00000F23  80 3D 0000FAF6 R  1C 	cmp BF, F
+	   00
+ 00000F2A  74 12	     1C 	je DrawSphereProcDontDraw
+			      C 				setPixel iLoop, jLoop, color
+ 00000F3E		      C 			DrawSphereProcDontDraw:
+ 00000F3E  FF 45 D0	      C 		inc jLoop
+			      C 		isBE jLoop, maxY
+			      C 		jt DrawSphereProcLoopJ
+ 00000F4C  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000F53  74 A3	     1C 	je DrawSphereProcLoopJ
+ 00000F55  FF 45 D4	      C 	inc iLoop
+			      C 	isBE iLoop, maxX
+			      C 	jt DrawSphereProcLoopI
+ 00000F63  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000F6A  74 86	     1C 	je DrawSphereProcLoopI
+ 00000F6C		      C 	DrawSphereProcEnd:
+			      C ret
+ 00000F75		      C DrawSphereProc ENDP
+			      C 
+				INCLUDE Core/Movement.asm
+ 00000F75		      C CameraMovement Proc uses eax ebx
+			      C 	local moveVec:vector
+ 00000F7D  66| A1	      C 	mov ax, keyDownCode
+	   0000FAF4 R
+			      C 	.IF ax == 01177h ; W
+			      C 		setVector moveVec,0 ,0 ,moveSpeed
+ 00000F89  50		     1C push eax
+ 00000F8A  B8 00000000	     1C 	mov eax,0
+ 00000F8F  89 45 F4	     1C 	mov moveVec.x, eax
+ 00000F92  B8 00000000	     1C 	mov eax,0
+ 00000F97  89 45 F8	     1C 	mov moveVec.y, eax
+ 00000F9A  A1 0000FAF0 R     1C 	mov eax,moveSpeed
+ 00000F9F  89 45 FC	     1C 	mov moveVec.z, eax
+ 00000FA2  58		     1C pop eax
+			      C 		rotVector ADDR moveVec, ADDR neg_cameraRotMat
+ 00000FB1  C7 45 F8	      C 		mov moveVec.y, 0
+	   00000000
+			      C 		addVector ADDR camera.pos, ADDR moveVec
+			      C 	.EndIF
+			      C 	.IF ax == 01E61h ; A
+ 00000FCC  8B 1D 0000FAF0 R   C 		mov ebx, moveSpeed
+ 00000FD2  F7 DB	      C 		neg ebx
+			      C 		setVector moveVec,ebx ,0 ,0
+ 00000FD4  50		     1C push eax
+ 00000FD5  8B C3	     1C 	mov eax,ebx
+ 00000FD7  89 45 F4	     1C 	mov moveVec.x, eax
+ 00000FDA  B8 00000000	     1C 	mov eax,0
+ 00000FDF  89 45 F8	     1C 	mov moveVec.y, eax
+ 00000FE2  B8 00000000	     1C 	mov eax,0
+ 00000FE7  89 45 FC	     1C 	mov moveVec.z, eax
+ 00000FEA  58		     1C pop eax
+			      C 		rotVector ADDR moveVec, ADDR neg_cameraRotMat
+ 00000FF9  C7 45 F8	      C 		mov moveVec.y, 0
+	   00000000
+			      C 		addVector ADDR camera.pos, ADDR moveVec
+			      C 	.EndIF
+			      C 	.IF ax == 01F73h ; S
+ 00001014  8B 1D 0000FAF0 R   C 		mov ebx, moveSpeed
+ 0000101A  F7 DB	      C 		neg ebx
+			      C 		setVector moveVec,0 ,0 ,ebx
+ 0000101C  50		     1C push eax
+ 0000101D  B8 00000000	     1C 	mov eax,0
+ 00001022  89 45 F4	     1C 	mov moveVec.x, eax
+ 00001025  B8 00000000	     1C 	mov eax,0
+ 0000102A  89 45 F8	     1C 	mov moveVec.y, eax
+ 0000102D  8B C3	     1C 	mov eax,ebx
+ 0000102F  89 45 FC	     1C 	mov moveVec.z, eax
+ 00001032  58		     1C pop eax
+			      C 		rotVector ADDR moveVec, ADDR neg_cameraRotMat
+ 00001041  C7 45 F8	      C 		mov moveVec.y, 0
+	   00000000
+			      C 		addVector ADDR camera.pos, ADDR moveVec
+			      C 	.EndIF
+			      C 	.IF ax == 02064h ; D
+			      C 		setVector moveVec,moveSpeed ,0 ,0
+ 0000105C  50		     1C push eax
+ 0000105D  A1 0000FAF0 R     1C 	mov eax,moveSpeed
+ 00001062  89 45 F4	     1C 	mov moveVec.x, eax
+ 00001065  B8 00000000	     1C 	mov eax,0
+ 0000106A  89 45 F8	     1C 	mov moveVec.y, eax
+ 0000106D  B8 00000000	     1C 	mov eax,0
+ 00001072  89 45 FC	     1C 	mov moveVec.z, eax
+ 00001075  58		     1C pop eax
+			      C 		rotVector ADDR moveVec, ADDR neg_cameraRotMat
+ 00001084  C7 45 F8	      C 		mov moveVec.y, 0 
+	   00000000
+			      C 		addVector ADDR camera.pos, ADDR moveVec
+			      C 	.EndIF
+			      C 
+			      C 	.IF ax == 01769h ; I
+ 0000109F  A1 0000FA20 R      C 		mov eax, camera.euler.x
+ 000010A4  83 E8 01	      C 		sub eax, 1
+			      C 		degNor eax
+ 000010AD  A3 0000FA20 R      C 		mov camera.euler.x, eax
+			      C 	.EndIF
+			      C 	.IF ax == 0256Bh ; K
+ 000010B8  A1 0000FA20 R      C 		mov eax, camera.euler.x
+ 000010BD  83 C0 01	      C 		add eax, 1
+			      C 		degNor eax
+ 000010C6  A3 0000FA20 R      C 		mov camera.euler.x, eax
+			      C 	.EndIF
+			      C 	.IF ax == 9322 ; J
+ 000010D1  A1 0000FA24 R      C 		mov eax, camera.euler.y
+ 000010D6  83 E8 01	      C 		sub eax, 1
+			      C 		degNor eax
+ 000010DF  A3 0000FA24 R      C 		mov camera.euler.y, eax
+			      C 	.EndIF
+			      C 	.IF ax == 9836 ; L
+ 000010EA  A1 0000FA24 R      C 		mov eax, camera.euler.y
+ 000010EF  83 C0 01	      C 		add eax, 1
+			      C 		degNor eax
+ 000010F8  A3 0000FA24 R      C 		mov camera.euler.y, eax
+			      C 	.EndIF
+			      C ret
+ 00001101		      C CameraMovement EndP
+			      C 
+				INCLUDE Core/System.asm
+ 00001101		      C init Proc
+			      C ; Get HANDLE
+			      C ;=============================================================================
+			      C 	INVOKE GetStdHandle, STD_OUTPUT_HANDLE
+ 00001108  A3 00000000 R      C 	mov consoleHandle,eax
+			      C 	
+			      C ; Set Display rect
+			      C ;=============================================================================
+			      C 	INVOKE SetConsoleWindowInfo,      ; set position of console window
+			      C 		consoleHandle,            ; screen buffer handle
+			      C 		TRUE,             ; coordinate type
+			      C 		ADDR windowRect  ; ptr to window rectangle
+ 0000111F  C3		      C ret
+ 00001120		      C init ENDP
+			      C 
+ 00001120		      C updateSystemValue Proc
+			      C local Euler:Vector
+			      C 	; camera
+			      C 	copyVector ADDR Euler, ADDR camera.euler
+			      C 	EulerToRotMatrix ADDR neg_cameraRotMat, ADDR Euler
+			      C 	mulVector ADDR Euler, -1
+			      C 	EulerToRotMatrix ADDR cameraRotMat, ADDR Euler
+			      C 	setVector cameraFacing, 0, 0 ,1000 ; 1.000
+ 0000115B  50		     1C push eax
+ 0000115C  B8 00000000	     1C 	mov eax,0
+ 00001161  A3 0000FA2C R     1C 	mov cameraFacing.x, eax
+ 00001166  B8 00000000	     1C 	mov eax,0
+ 0000116B  A3 0000FA30 R     1C 	mov cameraFacing.y, eax
+ 00001170  B8 000003E8	     1C 	mov eax,1000
+ 00001175  A3 0000FA34 R     1C 	mov cameraFacing.z, eax
+ 0000117A  58		     1C pop eax
+			      C 	RotVector ADDR cameraFacing, ADDR cameraRotMat
+			      C ret
+ 0000118C		      C updateSystemValue EndP
+			      C 
+ 0000118C		      C logSystem Proc uses eax
+			      C 	logc "C"
+ 0000118D  66| 50	     1C 	push ax
+ 0000118F  B0 43	     1C 	mov al, "C"
+ 00001191  E8 00000000 E     1C 	call writeChar
+ 00001196  66| 58	     1C 	pop ax
+			      C 	logc "a"
+ 00001198  66| 50	     1C 	push ax
+ 0000119A  B0 61	     1C 	mov al, "a"
+ 0000119C  E8 00000000 E     1C 	call writeChar
+ 000011A1  66| 58	     1C 	pop ax
+			      C 	logc "m"
+ 000011A3  66| 50	     1C 	push ax
+ 000011A5  B0 6D	     1C 	mov al, "m"
+ 000011A7  E8 00000000 E     1C 	call writeChar
+ 000011AC  66| 58	     1C 	pop ax
+			      C 	logc "e"
+ 000011AE  66| 50	     1C 	push ax
+ 000011B0  B0 65	     1C 	mov al, "e"
+ 000011B2  E8 00000000 E     1C 	call writeChar
+ 000011B7  66| 58	     1C 	pop ax
+			      C 	logc "r"
+ 000011B9  66| 50	     1C 	push ax
+ 000011BB  B0 72	     1C 	mov al, "r"
+ 000011BD  E8 00000000 E     1C 	call writeChar
+ 000011C2  66| 58	     1C 	pop ax
+			      C 	logc "a"
+ 000011C4  66| 50	     1C 	push ax
+ 000011C6  B0 61	     1C 	mov al, "a"
+ 000011C8  E8 00000000 E     1C 	call writeChar
+ 000011CD  66| 58	     1C 	pop ax
+			      C 	logc " "
+ 000011CF  66| 50	     1C 	push ax
+ 000011D1  B0 20	     1C 	mov al, " "
+ 000011D3  E8 00000000 E     1C 	call writeChar
+ 000011D8  66| 58	     1C 	pop ax
+			      C 	logc ":"
+ 000011DA  66| 50	     1C 	push ax
+ 000011DC  B0 3A	     1C 	mov al, ":"
+ 000011DE  E8 00000000 E     1C 	call writeChar
+ 000011E3  66| 58	     1C 	pop ax
+ 000011E5  E8 00000000 E      C 	call crlf
+			      C 	logc "P"
+ 000011EA  66| 50	     1C 	push ax
+ 000011EC  B0 50	     1C 	mov al, "P"
+ 000011EE  E8 00000000 E     1C 	call writeChar
+ 000011F3  66| 58	     1C 	pop ax
+			      C 	logc "o"
+ 000011F5  66| 50	     1C 	push ax
+ 000011F7  B0 6F	     1C 	mov al, "o"
+ 000011F9  E8 00000000 E     1C 	call writeChar
+ 000011FE  66| 58	     1C 	pop ax
+			      C 	logc "s"
+ 00001200  66| 50	     1C 	push ax
+ 00001202  B0 73	     1C 	mov al, "s"
+ 00001204  E8 00000000 E     1C 	call writeChar
+ 00001209  66| 58	     1C 	pop ax
+			      C 	logc " "
+ 0000120B  66| 50	     1C 	push ax
+ 0000120D  B0 20	     1C 	mov al, " "
+ 0000120F  E8 00000000 E     1C 	call writeChar
+ 00001214  66| 58	     1C 	pop ax
+			      C 	logc ":"
+ 00001216  66| 50	     1C 	push ax
+ 00001218  B0 3A	     1C 	mov al, ":"
+ 0000121A  E8 00000000 E     1C 	call writeChar
+ 0000121F  66| 58	     1C 	pop ax
+			      C 	logv camera.pos
+ 00001221  50		     1C 	push eax
+ 00001222  66| 50	     2C 	push ax
+ 00001224  B0 28	     2C 	mov al, "("
+ 00001226  E8 00000000 E     2C 	call writeChar
+ 0000122B  66| 58	     2C 	pop ax
+ 0000122D  A1 0000FA14 R     1C 	mov eax, camera.pos.x
+ 00001232  E8 00000000 E     1C 	call writeInt
+ 00001237  66| 50	     2C 	push ax
+ 00001239  B0 2C	     2C 	mov al, ","
+ 0000123B  E8 00000000 E     2C 	call writeChar
+ 00001240  66| 58	     2C 	pop ax
+ 00001242  66| 50	     2C 	push ax
+ 00001244  B0 20	     2C 	mov al, " "
+ 00001246  E8 00000000 E     2C 	call writeChar
+ 0000124B  66| 58	     2C 	pop ax
+ 0000124D  A1 0000FA18 R     1C 	mov eax, camera.pos.y
+ 00001252  E8 00000000 E     1C 	call writeInt
+ 00001257  66| 50	     2C 	push ax
+ 00001259  B0 2C	     2C 	mov al, ","
+ 0000125B  E8 00000000 E     2C 	call writeChar
+ 00001260  66| 58	     2C 	pop ax
+ 00001262  66| 50	     2C 	push ax
+ 00001264  B0 20	     2C 	mov al, " "
+ 00001266  E8 00000000 E     2C 	call writeChar
+ 0000126B  66| 58	     2C 	pop ax
+ 0000126D  A1 0000FA1C R     1C 	mov eax, camera.pos.z
+ 00001272  E8 00000000 E     1C 	call writeInt
+ 00001277  66| 50	     2C 	push ax
+ 00001279  B0 29	     2C 	mov al, ")"
+ 0000127B  E8 00000000 E     2C 	call writeChar
+ 00001280  66| 58	     2C 	pop ax
+ 00001282  E8 00000000 E     1C 	call crlf
+ 00001287  58		     1C 	pop eax
+			      C 	logc "R"
+ 00001288  66| 50	     1C 	push ax
+ 0000128A  B0 52	     1C 	mov al, "R"
+ 0000128C  E8 00000000 E     1C 	call writeChar
+ 00001291  66| 58	     1C 	pop ax
+			      C 	logc "o"
+ 00001293  66| 50	     1C 	push ax
+ 00001295  B0 6F	     1C 	mov al, "o"
+ 00001297  E8 00000000 E     1C 	call writeChar
+ 0000129C  66| 58	     1C 	pop ax
+			      C 	logc "t"
+ 0000129E  66| 50	     1C 	push ax
+ 000012A0  B0 74	     1C 	mov al, "t"
+ 000012A2  E8 00000000 E     1C 	call writeChar
+ 000012A7  66| 58	     1C 	pop ax
+			      C 	logc " "
+ 000012A9  66| 50	     1C 	push ax
+ 000012AB  B0 20	     1C 	mov al, " "
+ 000012AD  E8 00000000 E     1C 	call writeChar
+ 000012B2  66| 58	     1C 	pop ax
+			      C 	logc ":"
+ 000012B4  66| 50	     1C 	push ax
+ 000012B6  B0 3A	     1C 	mov al, ":"
+ 000012B8  E8 00000000 E     1C 	call writeChar
+ 000012BD  66| 58	     1C 	pop ax
+			      C 	logv camera.euler
+ 000012BF  50		     1C 	push eax
+ 000012C0  66| 50	     2C 	push ax
+ 000012C2  B0 28	     2C 	mov al, "("
+ 000012C4  E8 00000000 E     2C 	call writeChar
+ 000012C9  66| 58	     2C 	pop ax
+ 000012CB  A1 0000FA20 R     1C 	mov eax, camera.euler.x
+ 000012D0  E8 00000000 E     1C 	call writeInt
+ 000012D5  66| 50	     2C 	push ax
+ 000012D7  B0 2C	     2C 	mov al, ","
+ 000012D9  E8 00000000 E     2C 	call writeChar
+ 000012DE  66| 58	     2C 	pop ax
+ 000012E0  66| 50	     2C 	push ax
+ 000012E2  B0 20	     2C 	mov al, " "
+ 000012E4  E8 00000000 E     2C 	call writeChar
+ 000012E9  66| 58	     2C 	pop ax
+ 000012EB  A1 0000FA24 R     1C 	mov eax, camera.euler.y
+ 000012F0  E8 00000000 E     1C 	call writeInt
+ 000012F5  66| 50	     2C 	push ax
+ 000012F7  B0 2C	     2C 	mov al, ","
+ 000012F9  E8 00000000 E     2C 	call writeChar
+ 000012FE  66| 58	     2C 	pop ax
+ 00001300  66| 50	     2C 	push ax
+ 00001302  B0 20	     2C 	mov al, " "
+ 00001304  E8 00000000 E     2C 	call writeChar
+ 00001309  66| 58	     2C 	pop ax
+ 0000130B  A1 0000FA28 R     1C 	mov eax, camera.euler.z
+ 00001310  E8 00000000 E     1C 	call writeInt
+ 00001315  66| 50	     2C 	push ax
+ 00001317  B0 29	     2C 	mov al, ")"
+ 00001319  E8 00000000 E     2C 	call writeChar
+ 0000131E  66| 58	     2C 	pop ax
+ 00001320  E8 00000000 E     1C 	call crlf
+ 00001325  58		     1C 	pop eax
+ 00001326  E8 00000000 E      C 	call crlf
+			      C 	logc "K"
+ 0000132B  66| 50	     1C 	push ax
+ 0000132D  B0 4B	     1C 	mov al, "K"
+ 0000132F  E8 00000000 E     1C 	call writeChar
+ 00001334  66| 58	     1C 	pop ax
+			      C 	logc "e"
+ 00001336  66| 50	     1C 	push ax
+ 00001338  B0 65	     1C 	mov al, "e"
+ 0000133A  E8 00000000 E     1C 	call writeChar
+ 0000133F  66| 58	     1C 	pop ax
+			      C 	logc "y"
+ 00001341  66| 50	     1C 	push ax
+ 00001343  B0 79	     1C 	mov al, "y"
+ 00001345  E8 00000000 E     1C 	call writeChar
+ 0000134A  66| 58	     1C 	pop ax
+			      C 	logc "C"
+ 0000134C  66| 50	     1C 	push ax
+ 0000134E  B0 43	     1C 	mov al, "C"
+ 00001350  E8 00000000 E     1C 	call writeChar
+ 00001355  66| 58	     1C 	pop ax
+			      C 	logc "o"
+ 00001357  66| 50	     1C 	push ax
+ 00001359  B0 6F	     1C 	mov al, "o"
+ 0000135B  E8 00000000 E     1C 	call writeChar
+ 00001360  66| 58	     1C 	pop ax
+			      C 	logc "d"
+ 00001362  66| 50	     1C 	push ax
+ 00001364  B0 64	     1C 	mov al, "d"
+ 00001366  E8 00000000 E     1C 	call writeChar
+ 0000136B  66| 58	     1C 	pop ax
+			      C 	logc "e"
+ 0000136D  66| 50	     1C 	push ax
+ 0000136F  B0 65	     1C 	mov al, "e"
+ 00001371  E8 00000000 E     1C 	call writeChar
+ 00001376  66| 58	     1C 	pop ax
+			      C 	logc " "
+ 00001378  66| 50	     1C 	push ax
+ 0000137A  B0 20	     1C 	mov al, " "
+ 0000137C  E8 00000000 E     1C 	call writeChar
+ 00001381  66| 58	     1C 	pop ax
+			      C 	logc ":"
+ 00001383  66| 50	     1C 	push ax
+ 00001385  B0 3A	     1C 	mov al, ":"
+ 00001387  E8 00000000 E     1C 	call writeChar
+ 0000138C  66| 58	     1C 	pop ax
+			      C 	logc " "
+ 0000138E  66| 50	     1C 	push ax
+ 00001390  B0 20	     1C 	mov al, " "
+ 00001392  E8 00000000 E     1C 	call writeChar
+ 00001397  66| 58	     1C 	pop ax
+ 00001399  0F BF 05	      C 	movsx eax, keyDownCode
+	   0000FAF4 R
+			      C 	log eax
+ 000013A0  50		     1C 	push eax
+ 000013A1  8B C0	     1C 	mov eax, eax
+ 000013A3  E8 00000000 E     1C 	call writeInt
+ 000013A8  E8 00000000 E     1C 	call crlf
+ 000013AD  58		     1C 	pop eax
+			      C 	
+			      C ret
+ 000013B0		      C logSystem EndP
+			      C 
+				 
+				 temp MACRO oo, color
+					VectorLen ADDR oo
+					world2camera ADDR oo, ADDR sc
+					mov eax, sc.z
+					dive eax, 300000000  
+					mult eax, 2 
+					inc eax     
+					mov sc.z, eax
+					INVOKE DrawSphereproc, ADDR sc, color
+				 ENDM
+				      
+ 000013B0			main PROC
+ 000013B0  E8 FFFFFD4C		call init
+ 000013B5  5E			pop esi
+ 000013B6  E8 00000000 E	call ClrScr
+ 000013BB			appLoop:    
+ 000013BB  E8 FFFFFD60			call UpdateSystemValue
+					INVOKE SetConsoleCursorPosition, consoleHandle, cursorPos  
+					Invoke SetScreen, 070h
 
+					; draw ground
+ 000013D8  B8 00000032			mov eax, 50
+ 000013DD  8B 1D 0000FA20 R		mov ebx, camera.euler.x
+					isA ebx, 180
+					.IF BF == T
+ 000013F7  81 EB 00000168			sub ebx, 360
+					.EndIF 
+					mult ebx, 10
+					mult eax, 40 ; 4.0
+					dive eax, 100
+ 00001415  8B D8			mov ebx, eax
+ 00001417  B8 00000032			mov eax, 50
+ 0000141C  2B C3			sub eax, ebx
+					
+					isB eax, 100
+					jf groundEnd
+ 00001426  80 3D 0000FAF6 R  1		cmp BF, F
+	   00
+ 0000142D  74 39	     1		je groundEnd
+					isAE eax, 0
+					jf groundEnd
+ 00001437  80 3D 0000FAF6 R  1		cmp BF, F
+	   00
+ 0000143E  74 28	     1		je groundEnd
+ 00001440				testLoopA:
+ 00001440  B9 000000A0				mov ecx, 160
+ 00001445					testLoopB:
+ 00001445  8B D9					mov ebx, ecx
+ 00001447  4B						dec ebx
+							setPixel ebx, eax, 080h
+ 00001454  E2 EF					loop testLoopB
+ 00001456  40					inc eax
+						isB eax, 100
+						jt testLoopA
+ 0000145F  80 3D 0000FAF6 R  1		cmp BF, T
+	   01
+ 00001466  74 D8	     1		je testLoopA
+ 00001468				groundEnd:
+
+
+					; draw sphere
+					temp obj1, 010h
+ 00001481  A1 0000FB8F R     1		mov eax, sc.z
+ 00001499  40		     1		inc eax     
+ 0000149A  A3 0000FB8F R     1		mov sc.z, eax
+					temp obj2, 020h
+ 000014C4  A1 0000FB8F R     1		mov eax, sc.z
+ 000014DC  40		     1		inc eax     
+ 000014DD  A3 0000FB8F R     1		mov sc.z, eax
+					temp obj3, 030h
+ 00001507  A1 0000FB8F R     1		mov eax, sc.z
+ 0000151F  40		     1		inc eax     
+ 00001520  A3 0000FB8F R     1		mov sc.z, eax
+					temp obj4, 040h
+ 0000154A  A1 0000FB8F R     1		mov eax, sc.z
+ 00001562  40		     1		inc eax     
+ 00001563  A3 0000FB8F R     1		mov sc.z, eax
+					temp obj5, 050h
+ 0000158D  A1 0000FB8F R     1		mov eax, sc.z
+ 000015A5  40		     1		inc eax     
+ 000015A6  A3 0000FB8F R     1		mov sc.z, eax
+					temp obj6, 0A0h
+ 000015D0  A1 0000FB8F R     1		mov eax, sc.z
+ 000015E8  40		     1		inc eax     
+ 000015E9  A3 0000FB8F R     1		mov sc.z, eax
+					temp obj7, 0B0h
+ 00001616  A1 0000FB8F R     1		mov eax, sc.z
+ 0000162E  40		     1		inc eax     
+ 0000162F  A3 0000FB8F R     1		mov sc.z, eax
+					temp obj8, 090h  
+ 0000165C  A1 0000FB8F R     1		mov eax, sc.z
+ 00001674  40		     1		inc eax     
+ 00001675  A3 0000FB8F R     1		mov sc.z, eax
+					setPixel 80, 50, 040h
+					 
+ 00001694  E8 FFFFF6C3			call repaint  
+ 00001699  E8 FFFFFAEE			call logSystem   
+ 0000169E  E8 00000000 E		call ReadChar
+ 000016A3  66| A3			mov keyDownCode, ax
+	   0000FAF4 R
+ 000016A9  E8 FFFFF8C7			call cameraMovement
+					.IF keyDownCode != 283
+ 000016B9  E9 FFFFFCFD				jmp appLoop
+					.ENDIF
+					exit     
+ 000016C5			main ENDP
 				END main
 
-Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/13/22 02:15:35
-lab\week12\lab12_group65.asm				     Symbols 2 - 1
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/22/22 08:39:46
+FinalProject\main.asm					     Symbols 2 - 1
 
 
+
+
+Macros:
+
+                N a m e                 Type
+
+Abs  . . . . . . . . . . . . . .	Proc
+Clamp  . . . . . . . . . . . . .	Proc
+Dive . . . . . . . . . . . . . .	Proc
+EulerToRotMatrix . . . . . . . .	Proc
+IsNeg  . . . . . . . . . . . . .	Proc
+JF . . . . . . . . . . . . . . .	Proc
+JT . . . . . . . . . . . . . . .	Proc
+Matrix3DiveK . . . . . . . . . .	Proc
+Matrix3MultK . . . . . . . . . .	Proc
+Max2 . . . . . . . . . . . . . .	Proc
+Max3 . . . . . . . . . . . . . .	Proc
+Min2 . . . . . . . . . . . . . .	Proc
+Min3 . . . . . . . . . . . . . .	Proc
+MultF  . . . . . . . . . . . . .	Proc
+Mult . . . . . . . . . . . . . .	Proc
+RotVector  . . . . . . . . . . .	Proc
+SetPixel . . . . . . . . . . . .	Proc
+SetSphere  . . . . . . . . . . .	Proc
+Sqrt . . . . . . . . . . . . . .	Proc
+VectorLen  . . . . . . . . . . .	Proc
+World2Camera . . . . . . . . . .	Proc
+addVector  . . . . . . . . . . .	Proc
+and2 . . . . . . . . . . . . . .	Proc
+and3 . . . . . . . . . . . . . .	Proc
+copyVector . . . . . . . . . . .	Proc
+cos  . . . . . . . . . . . . . .	Proc
+degNor . . . . . . . . . . . . .	Proc
+divVector  . . . . . . . . . . .	Proc
+fixLog . . . . . . . . . . . . .	Proc
+isAE . . . . . . . . . . . . . .	Proc
+isA  . . . . . . . . . . . . . .	Proc
+isBE . . . . . . . . . . . . . .	Proc
+isB  . . . . . . . . . . . . . .	Proc
+isE  . . . . . . . . . . . . . .	Proc
+logCor . . . . . . . . . . . . .	Proc
+logc . . . . . . . . . . . . . .	Proc
+logf . . . . . . . . . . . . . .	Proc
+logm3  . . . . . . . . . . . . .	Proc
+logvPtr  . . . . . . . . . . . .	Proc
+logv . . . . . . . . . . . . . .	Proc
+log  . . . . . . . . . . . . . .	Proc
+mulVector  . . . . . . . . . . .	Proc
+or2  . . . . . . . . . . . . . .	Proc
+or3  . . . . . . . . . . . . . .	Proc
+setVector  . . . . . . . . . . .	Proc
+sin  . . . . . . . . . . . . . .	Proc
+subVector  . . . . . . . . . . .	Proc
+temp . . . . . . . . . . . . . .	Proc
 
 
 Structures and Unions:
@@ -157,6 +2281,9 @@ KEY_EVENT_RECORD . . . . . . . .	 00000010
   UnicodeChar  . . . . . . . . .	 00000000	 Word
   AsciiChar  . . . . . . . . . .	 00000000	 Byte
   dwControlKeyState  . . . . . .	 0000000C	 DWord
+Line . . . . . . . . . . . . . .	 00000018
+  b  . . . . . . . . . . . . . .	 00000000	 
+  e  . . . . . . . . . . . . . .	 0000000C	 
 MENU_EVENT_RECORD  . . . . . . .	 00000004
   dwCommandId  . . . . . . . . .	 00000000	 DWord
 MOUSE_EVENT_RECORD . . . . . . .	 00000010
@@ -164,6 +2291,16 @@ MOUSE_EVENT_RECORD . . . . . . .	 00000010
   dwButtonState  . . . . . . . .	 00000004	 DWord
   dwMouseControlKeyState . . . .	 00000008	 DWord
   dwEventFlags . . . . . . . . .	 0000000C	 DWord
+Matrix3  . . . . . . . . . . . .	 00000024
+  n00  . . . . . . . . . . . . .	 00000000	 DWord
+  n01  . . . . . . . . . . . . .	 00000004	 DWord
+  n02  . . . . . . . . . . . . .	 00000008	 DWord
+  n10  . . . . . . . . . . . . .	 0000000C	 DWord
+  n11  . . . . . . . . . . . . .	 00000010	 DWord
+  n12  . . . . . . . . . . . . .	 00000014	 DWord
+  n20  . . . . . . . . . . . . .	 00000018	 DWord
+  n21  . . . . . . . . . . . . .	 0000001C	 DWord
+  n22  . . . . . . . . . . . . .	 00000020	 DWord
 SMALL_RECT . . . . . . . . . . .	 00000008
   Left . . . . . . . . . . . . .	 00000000	 Word
   Top  . . . . . . . . . . . . .	 00000002	 Word
@@ -178,6 +2315,16 @@ SYSTEMTIME . . . . . . . . . . .	 00000010
   wMinute  . . . . . . . . . . .	 0000000A	 Word
   wSecond  . . . . . . . . . . .	 0000000C	 Word
   wMilliseconds  . . . . . . . .	 0000000E	 Word
+SphereData . . . . . . . . . . .	 00000010
+  pos  . . . . . . . . . . . . .	 00000000	 
+  r  . . . . . . . . . . . . . .	 0000000C	 DWord
+Transform  . . . . . . . . . . .	 00000018
+  pos  . . . . . . . . . . . . .	 00000000	 
+  euler  . . . . . . . . . . . .	 0000000C	 
+Vector . . . . . . . . . . . . .	 0000000C
+  x  . . . . . . . . . . . . . .	 00000000	 DWord
+  y  . . . . . . . . . . . . . .	 00000004	 DWord
+  z  . . . . . . . . . . . . . .	 00000008	 DWord
 WINDOW_BUFFER_SIZE_RECORD  . . .	 00000004
   dwSize . . . . . . . . . . . .	 00000000	 DWord
 
@@ -188,14 +2335,20 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000010 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000000D9 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000FB93 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000016C5 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
 
                 N a m e                 Type     Value    Attr
 
+CameraMovement . . . . . . . . .	P Near	 00000F75 _TEXT	Length= 0000018C Public STDCALL
+  moveVec  . . . . . . . . . . .		 bp - 0000000C
+ClampProc  . . . . . . . . . . .	P Near	 00000455 _TEXT	Length= 00000040 Public STDCALL
+  val  . . . . . . . . . . . . .	DWord	 bp + 00000008
+  min  . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  max  . . . . . . . . . . . . .	DWord	 bp + 00000010
 CloseFile  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 CloseHandle  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Clrscr . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -203,8 +2356,39 @@ CreateFileA  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 CreateOutputFile . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Crlf . . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Delay  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+DigitsNumber . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000003B Public STDCALL
+  val  . . . . . . . . . . . . .	DWord	 bp + 00000008
+  DigitsNumberLOOP . . . . . . .	L Near	 0000001F _TEXT	
+DiveProc . . . . . . . . . . . .	P Near	 000004D4 _TEXT	Length= 0000004F Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  DiveProcNotNeg . . . . . . . .	L Near	 0000051C _TEXT	
+  DiveProcEnd  . . . . . . . . .	L Near	 0000051E _TEXT	
+DrawSphereProc . . . . . . . . .	P Near	 00000DD7 _TEXT	Length= 0000019E Public STDCALL
+  infoPtr  . . . . . . . . . . .	DWord	 bp + 00000008
+  color  . . . . . . . . . . . .	Word	 bp + 0000000C
+  maxX . . . . . . . . . . . . .	DWord	 bp - 00000004
+  maxY . . . . . . . . . . . . .	DWord	 bp - 00000008
+  minX . . . . . . . . . . . . .	DWord	 bp - 0000000C
+  minY . . . . . . . . . . . . .	DWord	 bp - 00000010
+  originPos  . . . . . . . . . .		 bp - 0000001C
+  targetPos  . . . . . . . . . .		 bp - 00000028
+  iLoop  . . . . . . . . . . . .	DWord	 bp - 0000002C
+  jLoop  . . . . . . . . . . . .	DWord	 bp - 00000030
+  limit  . . . . . . . . . . . .	DWord	 bp - 00000034
+  DrawSphereProcLoopI  . . . . .	L Near	 00000EF2 _TEXT	
+  DrawSphereProcLoopJ  . . . . .	L Near	 00000EF8 _TEXT	
+  DrawSphereProcDontDraw . . . .	L Near	 00000F3E _TEXT	
+  DrawSphereProcEnd  . . . . . .	L Near	 00000F6C _TEXT	
 DumpMem  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 DumpRegs . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+EulerToRotMatrixProc . . . . . .	P Near	 00000A59 _TEXT	Length= 00000116 Public STDCALL
+  matrix . . . . . . . . . . . .	DWord	 bp + 00000008
+  euler  . . . . . . . . . . . .	DWord	 bp + 0000000C
+  xm . . . . . . . . . . . . . .		 bp - 00000024
+  ym . . . . . . . . . . . . . .		 bp - 00000048
+  zm . . . . . . . . . . . . . .		 bp - 0000006C
+  zxm  . . . . . . . . . . . . .		 bp - 00000090
 ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 FileTimeToDosDateTime  . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 FileTimeToSystemTime . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -237,9 +2421,47 @@ HeapFree . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 HeapSize . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 IsDigit  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 LocalFree  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Matrix3DiveKProc . . . . . . . .	P Near	 00000A33 _TEXT	Length= 00000026 Public STDCALL
+  mat  . . . . . . . . . . . . .	DWord	 bp + 00000008
+  K  . . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  Matrix3DiveKLoop . . . . . . .	L Near	 00000A41 _TEXT	
+Matrix3MultKProc . . . . . . . .	P Near	 00000A0D _TEXT	Length= 00000026 Public STDCALL
+  mat  . . . . . . . . . . . . .	DWord	 bp + 00000008
+  K  . . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  Matrix3MultKLoop . . . . . . .	L Near	 00000A1B _TEXT	
+Matrix3Mult  . . . . . . . . . .	P Near	 00000837 _TEXT	Length= 000001D6 Public STDCALL
+  result . . . . . . . . . . . .	DWord	 bp + 00000008
+  m1 . . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  m2 . . . . . . . . . . . . . .	DWord	 bp + 00000010
+Max2Proc . . . . . . . . . . . .	P Near	 000003FD _TEXT	Length= 00000012 Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  Max2ProcCheck  . . . . . . . .	L Near	 0000040B _TEXT	
+Max3Proc . . . . . . . . . . . .	P Near	 0000040F _TEXT	Length= 0000001A Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  val3 . . . . . . . . . . . . .	DWord	 bp + 00000010
+  Max3ProcCheck1 . . . . . . . .	L Near	 0000041D _TEXT	
+  Max3ProcCheck2 . . . . . . . .	L Near	 00000425 _TEXT	
 MessageBoxA  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+Min2Proc . . . . . . . . . . . .	P Near	 00000429 _TEXT	Length= 00000012 Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  Min2ProcCheck  . . . . . . . .	L Near	 00000437 _TEXT	
+Min3Proc . . . . . . . . . . . .	P Near	 0000043B _TEXT	Length= 0000001A Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  val3 . . . . . . . . . . . . .	DWord	 bp + 00000010
+  Min3ProcCheck1 . . . . . . . .	L Near	 00000449 _TEXT	
+  Min3ProcCheck2 . . . . . . . .	L Near	 00000451 _TEXT	
 MsgBoxAsk  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 MsgBox . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+MultProc . . . . . . . . . . . .	P Near	 00000495 _TEXT	Length= 0000003F Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  MultProcOverflow . . . . . . .	L Near	 000004B1 _TEXT	
+  MultProcNegOverflow  . . . . .	L Near	 000004C9 _TEXT	
+  MultProcNotOverflow  . . . . .	L Near	 000004CE _TEXT	
 OpenInputFile  . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 ParseDecimal32 . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 ParseInteger32 . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -247,6 +2469,10 @@ PeekConsoleInputA  . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 Random32 . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 RandomRange  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Randomize  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+RePaint  . . . . . . . . . . . .	P Near	 00000D5C _TEXT	Length= 0000004D Public STDCALL
+  writeCount . . . . . . . . . .	Word	 bp - 00000002
+  pos  . . . . . . . . . . . . .	DWord	 bp - 00000008
+  RePaintLoop  . . . . . . . . .	L Near	 00000D7F _TEXT	
 ReadChar . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 ReadConsoleA . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 ReadConsoleInputA  . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -259,6 +2485,10 @@ ReadInt  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 ReadKeyFlush . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 ReadKey  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 ReadString . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+RotVectorProc  . . . . . . . . .	P Near	 00000B6F _TEXT	Length= 000000C4 Public STDCALL
+  vec  . . . . . . . . . . . . .	DWord	 bp + 00000008
+  rotMat . . . . . . . . . . . .	DWord	 bp + 0000000C
+  result . . . . . . . . . . . .		 bp - 0000000C
 SetConsoleCursorInfo . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 SetConsoleCursorPosition . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 SetConsoleMode . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -268,9 +2498,29 @@ SetConsoleTitleA . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 SetConsoleWindowInfo . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 SetFilePointer . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 SetLocalTime . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SetPixelProc . . . . . . . . . .	P Near	 00000D33 _TEXT	Length= 00000029 Public STDCALL
+  x  . . . . . . . . . . . . . .	DWord	 bp + 00000008
+  y  . . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  color  . . . . . . . . . . . .	Word	 bp + 00000010
+SetScreen  . . . . . . . . . . .	P Near	 00000D0E _TEXT	Length= 00000025 Public STDCALL
+  color  . . . . . . . . . . . .	Word	 bp + 00000008
+  SetScreenLoop  . . . . . . . .	L Near	 00000D23 _TEXT	
+SetSphereProc  . . . . . . . . .	P Near	 00000589 _TEXT	Length= 00000025 Public STDCALL
+  spherePtr  . . . . . . . . . .	DWord	 bp + 00000008
+  posX . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  posY . . . . . . . . . . . . .	DWord	 bp + 00000010
+  posZ . . . . . . . . . . . . .	DWord	 bp + 00000014
+  r  . . . . . . . . . . . . . .	DWord	 bp + 00000018
 SetTextColor . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+ShowColor  . . . . . . . . . . .	P Near	 00000DA9 _TEXT	Length= 0000002E Public STDCALL
+  ShowColorLoop  . . . . . . . .	L Near	 00000DB7 _TEXT	
 ShowFPUStack . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Sleep  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+SqrtProc . . . . . . . . . . . .	P Near	 00000523 _TEXT	Length= 00000066 Public STDCALL
+  val  . . . . . . . . . . . . .	DWord	 bp + 00000008
+  SqrtProcLoop . . . . . . . . .	L Near	 0000053B _TEXT	
+  SqrtProcEndLoop  . . . . . . .	L Near	 0000056A _TEXT	
+  SqrtProcEnd  . . . . . . . . .	L Near	 00000582 _TEXT	
 StrLength  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Str_compare  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Str_copy . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -278,7 +2528,17 @@ Str_length . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 Str_trim . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Str_ucase  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 SystemTimeToFileTime . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+VectorLenProc  . . . . . . . . .	P Near	 00000800 _TEXT	Length= 00000037 Public STDCALL
+  vec  . . . . . . . . . . . . .	DWord	 bp + 00000008
 WaitMsg  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+World2CameraProc . . . . . . . .	P Near	 00000C33 _TEXT	Length= 000000DB Public STDCALL
+  pos  . . . . . . . . . . . . .	DWord	 bp + 00000008
+  cor  . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  position . . . . . . . . . . .		 bp - 0000000C
+  posOffset  . . . . . . . . . .		 bp - 00000018
+  tempVec  . . . . . . . . . . .		 bp - 00000024
+  vLen . . . . . . . . . . . . .	DWord	 bp - 00000028
+  World2CameraProcEnd  . . . . .	L Near	 00000D07 _TEXT	
 WriteBinB  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteBin . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteChar  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -296,12 +2556,102 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+addVectorProc  . . . . . . . . .	P Near	 0000072B _TEXT	Length= 00000023 Public STDCALL
+  v1 . . . . . . . . . . . . . .	DWord	 bp + 00000008
+  v2 . . . . . . . . . . . . . .	DWord	 bp + 0000000C
+and2Proc . . . . . . . . . . . .	P Near	 000002B8 _TEXT	Length= 00000025 Public STDCALL
+  val1 . . . . . . . . . . . . .	Byte	 bp + 00000008
+  val2 . . . . . . . . . . . . .	Byte	 bp + 0000000C
+and3Proc . . . . . . . . . . . .	P Near	 000002DD _TEXT	Length= 0000002B Public STDCALL
+  val1 . . . . . . . . . . . . .	Byte	 bp + 00000008
+  val2 . . . . . . . . . . . . .	Byte	 bp + 0000000C
+  val3 . . . . . . . . . . . . .	Byte	 bp + 00000010
+copyVectorProc . . . . . . . . .	P Near	 000007DD _TEXT	Length= 00000023 Public STDCALL
+  v1 . . . . . . . . . . . . . .	DWord	 bp + 00000008
+  v2 . . . . . . . . . . . . . .	DWord	 bp + 0000000C
+cosProc  . . . . . . . . . . . .	P Near	 00000716 _TEXT	Length= 00000015 Public STDCALL
+  deg  . . . . . . . . . . . . .	DWord	 bp + 00000008
+degNorProc . . . . . . . . . . .	P Near	 000005AE _TEXT	Length= 0000003D Public STDCALL
+  deg  . . . . . . . . . . . . .	DWord	 bp + 00000008
+  degNorCheckA . . . . . . . . .	L Near	 000005B4 _TEXT	
+  degNorCheckB . . . . . . . . .	L Near	 000005CF _TEXT	
+  degNorEnd  . . . . . . . . . .	L Near	 000005E7 _TEXT	
+divVectorProc  . . . . . . . . .	P Near	 00000784 _TEXT	Length= 00000036 Public STDCALL
+  v1 . . . . . . . . . . . . . .	DWord	 bp + 00000008
+  k  . . . . . . . . . . . . . .	DWord	 bp + 0000000C
+init . . . . . . . . . . . . . .	P Near	 00001101 _TEXT	Length= 0000001F Public STDCALL
+isAEProc . . . . . . . . . . . .	P Near	 0000039A _TEXT	Length= 00000021 Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  isAEfalsePart  . . . . . . . .	L Near	 000003AF _TEXT	
+  isAEendProc  . . . . . . . . .	L Near	 000003B6 _TEXT	
+isAProc  . . . . . . . . . . . .	P Near	 00000379 _TEXT	Length= 00000021 Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  isAfalsePart . . . . . . . . .	L Near	 0000038E _TEXT	
+  isAendProc . . . . . . . . . .	L Near	 00000395 _TEXT	
+isBEProc . . . . . . . . . . . .	P Near	 000003DC _TEXT	Length= 00000021 Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  isBEfalsePart  . . . . . . . .	L Near	 000003F1 _TEXT	
+  isBEendProc  . . . . . . . . .	L Near	 000003F8 _TEXT	
+isBProc  . . . . . . . . . . . .	P Near	 000003BB _TEXT	Length= 00000021 Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  isBfalsePart . . . . . . . . .	L Near	 000003D0 _TEXT	
+  isBendProc . . . . . . . . . .	L Near	 000003D7 _TEXT	
+isEProc  . . . . . . . . . . . .	P Near	 00000358 _TEXT	Length= 00000021 Public STDCALL
+  val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
+  val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  isEfalsePart . . . . . . . . .	L Near	 0000036D _TEXT	
+  isEendProc . . . . . . . . . .	L Near	 00000374 _TEXT	
+logSystem  . . . . . . . . . . .	P Near	 0000118C _TEXT	Length= 00000224 Public STDCALL
+logm3Proc  . . . . . . . . . . .	P Near	 0000003B _TEXT	Length= 0000027D Public STDCALL
+  matrix . . . . . . . . . . . .	DWord	 bp + 00000008
+  fix  . . . . . . . . . . . . .		 bp - 0000000C
+  ??0001 . . . . . . . . . . . .	L Near	 000000F2 _TEXT	
+  ??0000 . . . . . . . . . . . .	L Near	 000000F9 _TEXT	
+  ??0003 . . . . . . . . . . . .	L Near	 00000120 _TEXT	
+  ??0002 . . . . . . . . . . . .	L Near	 00000127 _TEXT	
+  ??0005 . . . . . . . . . . . .	L Near	 0000014E _TEXT	
+  ??0004 . . . . . . . . . . . .	L Near	 00000155 _TEXT	
+  ??0007 . . . . . . . . . . . .	L Near	 00000197 _TEXT	
+  ??0006 . . . . . . . . . . . .	L Near	 0000019E _TEXT	
+  ??0009 . . . . . . . . . . . .	L Near	 000001C5 _TEXT	
+  ??0008 . . . . . . . . . . . .	L Near	 000001CC _TEXT	
+  ??000B . . . . . . . . . . . .	L Near	 000001F3 _TEXT	
+  ??000A . . . . . . . . . . . .	L Near	 000001FA _TEXT	
+  ??000D . . . . . . . . . . . .	L Near	 0000023C _TEXT	
+  ??000C . . . . . . . . . . . .	L Near	 00000243 _TEXT	
+  ??000F . . . . . . . . . . . .	L Near	 0000026A _TEXT	
+  ??000E . . . . . . . . . . . .	L Near	 00000271 _TEXT	
+  ??0011 . . . . . . . . . . . .	L Near	 00000298 _TEXT	
+  ??0010 . . . . . . . . . . . .	L Near	 0000029F _TEXT	
+mulVectorProc  . . . . . . . . .	P Near	 0000074E _TEXT	Length= 00000036 Public STDCALL
+  v1 . . . . . . . . . . . . . .	DWord	 bp + 00000008
+  k  . . . . . . . . . . . . . .	DWord	 bp + 0000000C
+or2Proc  . . . . . . . . . . . .	P Near	 00000308 _TEXT	Length= 00000025 Public STDCALL
+  val1 . . . . . . . . . . . . .	Byte	 bp + 00000008
+  val2 . . . . . . . . . . . . .	Byte	 bp + 0000000C
+or3Proc  . . . . . . . . . . . .	P Near	 0000032D _TEXT	Length= 0000002B Public STDCALL
+  val1 . . . . . . . . . . . . .	Byte	 bp + 00000008
+  val2 . . . . . . . . . . . . .	Byte	 bp + 0000000C
+  val3 . . . . . . . . . . . . .	Byte	 bp + 00000010
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-start@0  . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 000000D9 Public STDCALL
-  INITIAL  . . . . . . . . . . .	L Near	 0000000C _TEXT	
-  START  . . . . . . . . . . . .	L Near	 00000024 _TEXT	
-  END_FUNC . . . . . . . . . . .	L Near	 000000D2 _TEXT	
+sinProc45  . . . . . . . . . . .	P Near	 000006AE _TEXT	Length= 00000068 Public STDCALL
+sinProc  . . . . . . . . . . . .	P Near	 000005EB _TEXT	Length= 000000C3 Public STDCALL
+  deg  . . . . . . . . . . . . .	DWord	 bp + 00000008
+start@0  . . . . . . . . . . . .	P Near	 000013B0 _TEXT	Length= 00000315 Public STDCALL
+  appLoop  . . . . . . . . . . .	L Near	 000013BB _TEXT	
+  testLoopA  . . . . . . . . . .	L Near	 00001440 _TEXT	
+  testLoopB  . . . . . . . . . .	L Near	 00001445 _TEXT	
+  groundEnd  . . . . . . . . . .	L Near	 00001468 _TEXT	
+subVectorProc  . . . . . . . . .	P Near	 000007BA _TEXT	Length= 00000023 Public STDCALL
+  v1 . . . . . . . . . . . . . .	DWord	 bp + 00000008
+  v2 . . . . . . . . . . . . . .	DWord	 bp + 0000000C
+updateSystemValue  . . . . . . .	P Near	 00001120 _TEXT	Length= 0000006C Public STDCALL
+  Euler  . . . . . . . . . . . .		 bp - 0000000C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -319,12 +2669,15 @@ Symbols:
 @fardata . . . . . . . . . . . .	Text   	 FLAT
 @stack . . . . . . . . . . . . .	Text   	 FLAT
 ALT_MASK . . . . . . . . . . . .	Number	 00000003h   
+BF . . . . . . . . . . . . . . .	Byte	 0000FAF6 _DATA	
 CAPSLOCK_ON  . . . . . . . . . .	Number	 00000080h   
+CONST_E  . . . . . . . . . . . .	Number	 00000A96h   
 CREATE_ALWAYS  . . . . . . . . .	Number	 00000002h   
 CREATE_NEW . . . . . . . . . . .	Number	 00000001h   
 CTRL_MASK  . . . . . . . . . . .	Number	 0000000Ch   
 CreateFile . . . . . . . . . . .	Text   	 CreateFileA
 DO_NOT_SHARE . . . . . . . . . .	Number	 00000000h   
+Deg2Rag  . . . . . . . . . . . .	Number	 00000011h   
 ENABLE_ECHO_INPUT  . . . . . . .	Number	 00000004h   
 ENABLE_LINE_INPUT  . . . . . . .	Number	 00000002h   
 ENABLE_MOUSE_INPUT . . . . . . .	Number	 00000010h   
@@ -362,6 +2715,7 @@ FOCUS_EVENT  . . . . . . . . . .	Number	 00000010h
 FORMAT_MESSAGE_ALLOCATE_BUFFER .	Number	 00000100h   
 FORMAT_MESSAGE_FROM_SYSTEM . . .	Number	 00001000h   
 FormatMessage  . . . . . . . . .	Text   	 FormatMessageA
+F  . . . . . . . . . . . . . . .	Number	 00000000h   
 GENERIC_ALL  . . . . . . . . . .	Number	 10000000h   
 GENERIC_EXECUTE  . . . . . . . .	Number	 20000000h   
 GENERIC_READ . . . . . . . . . .	Number	 -80000000h   
@@ -420,11 +2774,14 @@ MOUSE_EVENT  . . . . . . . . . .	Number	 00000002h
 MessageBox . . . . . . . . . . .	Text   	 MessageBoxA
 NULL . . . . . . . . . . . . . .	Number	 00000000h   
 NUMLOCK_ON . . . . . . . . . . .	Number	 00000020h   
+N_PI . . . . . . . . . . . . . .	Number	 -00000C45h   
 OPEN_ALWAYS  . . . . . . . . . .	Number	 00000004h   
 OPEN_EXISTING  . . . . . . . . .	Number	 00000003h   
+PI . . . . . . . . . . . . . . .	Number	 00000C45h   
 PeekConsoleInput . . . . . . . .	Text   	 PeekConsoleInputA
 RIGHT_ALT_PRESSED  . . . . . . .	Number	 00000001h   
 RIGHT_CTRL_PRESSED . . . . . . .	Number	 00000004h   
+Rad2Deg  . . . . . . . . . . . .	Number	 0000DFCFh   
 ReadConsoleInput . . . . . . . .	Text   	 ReadConsoleInputA
 ReadConsole  . . . . . . . . . .	Text   	 ReadConsoleA
 SCROLLLOCK_ON  . . . . . . . . .	Number	 00000040h   
@@ -437,6 +2794,7 @@ SetConsoleTitle  . . . . . . . .	Text   	 SetConsoleTitleA
 TAB  . . . . . . . . . . . . . .	Number	 00000009h   
 TRUE . . . . . . . . . . . . . .	Number	 00000001h   
 TRUNCATE_EXISTING  . . . . . . .	Number	 00000005h   
+T  . . . . . . . . . . . . . . .	Number	 00000001h   
 VK_11  . . . . . . . . . . . . .	Number	 000000BDh   
 VK_12  . . . . . . . . . . . . .	Number	 000000BBh   
 VK_ADD . . . . . . . . . . . . .	Number	 0000006Bh   
@@ -521,11 +2879,23 @@ WriteConsole . . . . . . . . . .	Text   	 WriteConsoleA
 black  . . . . . . . . . . . . .	Number	 00000000h   
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
+cameraDepth  . . . . . . . . . .	DWord	 0000FAEC _DATA	
+cameraFacing . . . . . . . . . .	Vector	 0000FA2C _DATA	
+cameraRotMatX  . . . . . . . . .	Matrix3	 0000FA80 _DATA	
+cameraRotMatY  . . . . . . . . .	Matrix3	 0000FAA4 _DATA	
+cameraRotMatZ  . . . . . . . . .	Matrix3	 0000FAC8 _DATA	
+cameraRotMat . . . . . . . . . .	Matrix3	 0000FA38 _DATA	
+camera . . . . . . . . . . . . .	Transform  0000FA14 _DATA	
 consoleHandle  . . . . . . . . .	DWord	 00000000 _DATA	
+cursorPos  . . . . . . . . . . .	COORD	 00000004 _DATA	
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
+i  . . . . . . . . . . . . . . .	DWord	 0000FAF7 _DATA	
+j  . . . . . . . . . . . . . . .	DWord	 0000FAFB _DATA	
+keyDownCode  . . . . . . . . . .	Word	 0000FAF4 _DATA	
+layoutAttributes . . . . . . . .	Word	 00000014 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -534,13 +2904,25 @@ lightMagenta . . . . . . . . . .	Number	 0000000Dh
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
 main . . . . . . . . . . . . . .	Text   	 start@0
+moveSpeed  . . . . . . . . . . .	DWord	 0000FAF0 _DATA	
+m  . . . . . . . . . . . . . . .	DWord	 0000FB03 _DATA	
+neg_cameraRotMat . . . . . . . .	Matrix3	 0000FA5C _DATA	
+n  . . . . . . . . . . . . . . .	DWord	 0000FAFF _DATA	
+obj1 . . . . . . . . . . . . . .	SphereData  0000FB07 _DATA	
+obj2 . . . . . . . . . . . . . .	SphereData  0000FB17 _DATA	
+obj3 . . . . . . . . . . . . . .	SphereData  0000FB27 _DATA	
+obj4 . . . . . . . . . . . . . .	SphereData  0000FB37 _DATA	
+obj5 . . . . . . . . . . . . . .	SphereData  0000FB47 _DATA	
+obj6 . . . . . . . . . . . . . .	SphereData  0000FB57 _DATA	
+obj7 . . . . . . . . . . . . . .	SphereData  0000FB67 _DATA	
+obj8 . . . . . . . . . . . . . .	SphereData  0000FB77 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+screenSize . . . . . . . . . . .	COORD	 00000008 _DATA	
+sc . . . . . . . . . . . . . . .	Vector	 0000FB87 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
+windowRect . . . . . . . . . . .	SMALL_RECT  0000000C _DATA	
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
-xyBound  . . . . . . . . . . . .	COORD	 00000008 _DATA	
-xyInit . . . . . . . . . . . . .	COORD	 00000004 _DATA	
-xyPos  . . . . . . . . . . . . .	COORD	 0000000C _DATA	
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
-	   0 Warnings
+	   2 Warnings
 	   0 Errors

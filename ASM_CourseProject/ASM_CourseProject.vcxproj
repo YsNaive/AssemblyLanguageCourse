@@ -23,7 +23,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
     <MASM Include="110504517HW\HW#2\HW_2_110504517.asm">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
     <MASM Include="110504517HW\HW#3\Bonus\HW_3_110504517_Bonus.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -31,40 +31,44 @@
     <MASM Include="110504517HW\HW#3\HW_3_110504517.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\main.asm">
+    <MASM Include="FinalProject\Core\Debug.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\include.asm">
+    <MASM Include="FinalProject\Core\system.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Bool.asm">
+    <MASM Include="FinalProject\Core\movement.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Debug.asm">
+    <MASM Include="FinalProject\Core\struct.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Draw\Draw4Pole.asm">
+    <MASM Include="FinalProject\Core\variable.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Draw\DrawCore.asm">
+    <MASM Include="FinalProject\DrawMethod\DrawCore.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Init.asm">
+    <MASM Include="FinalProject\DrawMethod\DrawSphere.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Math\IsLineIntersection.asm">
+    <MASM Include="FinalProject\main.asm" />
+    <MASM Include="FinalProject\MathMethod\bool.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Math\MathCoreMethods.asm">
+    <MASM Include="FinalProject\MathMethod\MathCore.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\PROC\Math\SinCos.asm">
+    <MASM Include="FinalProject\MathMethod\Matrix.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\structure.asm">
+    <MASM Include="FinalProject\MathMethod\RotationMatrix.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="DosBox\variable.asm">
+    <MASM Include="FinalProject\MathMethod\SinCos.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="FinalProject\MathMethod\Vector.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
     <MASM Include="lab\week 1\Lab1_65.asm">
@@ -103,7 +107,9 @@
     <MASM Include="lab\week11\lab11_group65.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </MASM>
-    <MASM Include="lab\week12\lab12_group65.asm" />
+    <MASM Include="lab\week12\lab12_group65.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="110504517HW\HW#1\111_HW1-Arithmetic.pptx" />
@@ -112,8 +118,6 @@
     <None Include="110504517HW\HW#2\HW_2_110504517.docx" />
     <None Include="110504517HW\HW#3\Bonus\HW_3_110504517_Bonus.docx" />
     <None Include="110504517HW\HW#3\HW_3_110504517.docx" />
-    <None Include="DosBox\Run.bat" />
-    <None Include="DosBox\WorkSpace.bat" />
     <None Include="lab\week 1\Lab1_65.docx" />
     <None Include="lab\week 1\Lab1_English.pptx" />
     <None Include="lab\week 2\Lab2_65.docx" />
