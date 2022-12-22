@@ -1,24 +1,3 @@
-IsNeg MACRO val
-	local @@end
-	mov BF, FALSE
-	test val, 1000000000000000b
-	jz @@end
-	mov BF, TRUE
-	@@end:
-ENDM
-
-mAbs MACRO val
-	local @@end
-	mov ax, val
-	IsNeg ax
-	jf @@end
-	push bx
-	mov bx, -1
-	imul bx
-	pop bx
-	@@end:
-ENDM
-
 ; val1 will equal the bigger one
 Max MACRO val1, val2
 	local @@endMacro
@@ -39,72 +18,51 @@ Min MACRO val1, val2
 ENDM
 
 Mult MACRO val1, val2
-	local @@overflow,@@notOverflow,@@negOverflow
-	push dx
-	mov dx, 0
-	mov ax, val1
-	imul val2
-
-	cmp dx, 0
-	je @@notOverflow
-	cmp dx, -1
-	je @@notOverflow
-	@@overflow:
-	IsNeg dx
-	jt @@negOverflow
-	mov ax, 7FFFh
-	jmp @@notOverflow
-	@@negOverflow:
-	mov ax, 08000h
-	@@notOverflow:
-	pop dx
-ENDM
-
-Dive MACRO val1, val2
-	local @@notNeg, @@end
-	push bx
-	mov dx, 0
+	local @@notOverflow,@@neg
 	mov ax, val1
 	mov bx, val2
+	mul bx
+	jnc @@notOverflow
+	jno @@notOverflow
 
-	cmp ax,0
-	je @@end
-	cmp bx,0
-	je @@end
-
-	IsNeg ax
-	jf  @@notNeg
-	imul ax, -1
-	imul bx, -1
-	@@notNeg:
-	idiv bx
-	@@end:
-	pop bx
+	cmp ax, 0
+	jb @@neg
+	mov ax, 7FFFh
+	jmp @@notOverflow
+	@@neg:
+	mov ax, 0FFFFh
+	@@notOverflow:
 ENDM
 
-Sqrt MACRO val
-	local @@loop, @@endloop, @@end
-	push bx cx dx i
-	mov i, 1
-	mov cx,0
-	mov dx, val
-	@@loop:
-		mult i, i	; now -> ax
-		mov bx, dx ; target
-		sub bx, ax	; target - now
-		isAE ax, dx
-		jt @@endloop
-		inc i
-		mov cx, bx
-		jmp @@loop
-	@@endloop:
-	neg bx
-	isB bx, cx
-	mov ax, i
-	jt @@end
-	dec ax
+; todo : boundary check
+; Mult_d MACRO val1 val2
+; 	mov ax, val1
+; 	mov bx, val2
+; 	imul bx
+; ENDM
+
+; Div_d MACRO val1_1 val1_2 val2
+; 	mov dx, val1_1
+; 	mov ax, val1_2
+; 	mov cx, val2
+; 	IDIV cx
+; ENDM
+
+; todo :  boundary check. push pop register
+mDiv MACRO dividend, divisor
+    MOV dx, 0		
+    MOV ax, dividend
+    MOV bx, divisor
+    IDIV bx		;dx:ax = q:ax, r:dx
+ENDM
+
+IsNeg MACRO val
+	local @@end
+	mov BF, FALSE
+	test val, 1000000000000000b
+	jz @@end
+	mov BF, TRUE
 	@@end:
-	pop i dx cx bx
 ENDM
 
 CrossProduct2 MACRO pointA, pointB, other
@@ -124,6 +82,7 @@ push bx cx
 	
 	sub bx, ax
 	mov ax, bx
+
 pop cx bx
 ENDM
 
@@ -137,15 +96,29 @@ pop ax
 ENDM
 
 SetVector3 MACRO Vector, val1, val2, val3
+push ax
 	mov ax, val1
 	mov Vector.x, ax
 	mov ax, val2
 	mov Vector.y, ax
 	mov ax, val3
 	mov Vector.z, ax
+pop ax
+ENDM
+
+AddVector3 MACRO Vector, val1, val2, val3
+push ax
+	mov ax, val1
+	ADD Vector.x, ax
+	mov ax, val2
+	ADD Vector.y, ax
+	mov ax, val3
+	ADD Vector.z, ax
+pop ax
 ENDM
 
 SetCubeData MACRO CubeData, pos, euler, extend
+push ax
 	mov ax, pos.x
 	mov CubeData.pos.x, ax
 	mov ax, pos.y
@@ -166,9 +139,11 @@ SetCubeData MACRO CubeData, pos, euler, extend
 	mov CubeData.extend.y, ax
 	mov ax, extend.z
 	mov CubeData.extend.z, ax
+pop ax
 ENDM
 
 SetSphereData MACRO SphereData, pos, euler, radius
+push ax
 	mov ax, pos.x
 	mov SphereData.pos.x, ax
 	mov ax, pos.y
@@ -185,9 +160,11 @@ SetSphereData MACRO SphereData, pos, euler, radius
 
 	mov ax, radius
 	mov SphereData.radius, ax
+pop ax
 ENDM
 
 SetCamera MACRO pos, euler
+push ax
 	mov ax, pos.x
 	mov camera.pos.x, ax
 	mov ax, pos.y
@@ -201,7 +178,9 @@ SetCamera MACRO pos, euler
 	mov camera.euler.y, ax
 	mov ax, euler.z
 	mov camera.euler.z, ax
+pop ax
 ENDM
+
 SetLine MACRO Line, p1x, p1y, p2x, p2y
 push ax
 	mov ax, p1x
