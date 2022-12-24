@@ -65,10 +65,10 @@ DrawSphereProc Proc uses eax ebx ecx edx esi, infoPtr:DWORD, color:WORD
 				setPixel iLoop, jLoop, color
 			DrawSphereProcDontDraw:
 		inc jLoop
-		isBE jLoop, maxY
+		isB jLoop, maxY
 		jt DrawSphereProcLoopJ
 	inc iLoop
-	isBE iLoop, maxX
+	isB iLoop, maxX
 	jt DrawSphereProcLoopI
 	DrawSphereProcEnd:
 ret

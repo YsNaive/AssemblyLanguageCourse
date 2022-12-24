@@ -171,6 +171,9 @@
     <MASM Include="FinalProject\DrawMethod\DrawSphere.asm">
       <Filter>資源檔\FinalProject\DrawMethod</Filter>
     </MASM>
+    <MASM Include="FinalProject\DrawMethod\DrawLine.asm">
+      <Filter>資源檔\FinalProject\DrawMethod</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="lab\week 1\Lab1_65.docx">

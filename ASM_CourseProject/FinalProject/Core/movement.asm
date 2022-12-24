@@ -54,5 +54,15 @@ CameraMovement Proc uses eax ebx
 		degNor eax
 		mov camera.euler.y, eax
 	.EndIF
+	.IF ax == 14624 ; space
+		mov eax, camera.pos.y
+		add eax, moveSpeed
+		mov camera.pos.y, eax
+	.EndIF
+	.IF ax == 11386 ; z
+		mov eax, camera.pos.y
+		sub eax, moveSpeed
+		mov camera.pos.y, eax
+	.EndIF
 ret
 CameraMovement EndP

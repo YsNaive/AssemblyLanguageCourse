@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/22/22 08:39:46
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/24/22 17:46:22
 FinalProject\main.asm					     Page 1 - 1
 
 
@@ -180,7 +180,7 @@ FinalProject\main.asm					     Page 1 - 1
 	   00000000
 	   000007D0
 	   00000000
- 0000FB47 000007D0		obj5 SphereData < < 2000,2000,0 >,0 >   
+ 0000FB47 000007D0		obj5 SphereData < < 2000,2000,0 >,0 >
 	   000007D0
 	   00000000
 	   00000000
@@ -196,7 +196,13 @@ FinalProject\main.asm					     Page 1 - 1
 	   000007D0
 	   000007D0
 	   00000000
- 0000FB87 00000000		sc vector <> 
+ 0000FB87 00000000		p1 Vector < 0,50,0 >
+	   00000032
+	   00000000
+ 0000FB93 0000000A		p2 Vector < 10,0,0 >        
+	   00000000
+	   00000000
+ 0000FB9F 00000000		sc vector <> 
 	   00000000
 	   00000000
  00000000			.code  
@@ -1052,6 +1058,7 @@ FinalProject\main.asm					     Page 1 - 1
 			      C 		dive eax, 180000 ; 180 * 1000
 			      C 	.ELSE
 			      C 		isBE eax, 30
+
 			      C 		.IF BF == T
  000006F3  83 E8 0F	      C 			sub eax, 15
 			      C 			mult eax, 016 ; sin(15-30) 每度近似值為 0.016
@@ -1275,7 +1282,6 @@ FinalProject\main.asm					     Page 1 - 1
  0000097B  8B D8	      C 	mov ebx, eax
  0000097D  8B 46 1C	      C 	mov eax, [esi+28] 
 			      C 	mult eax, [edi+12] ; s01 * d10
-
  00000989  03 D8	      C 	add ebx, eax
  0000098B  8B 46 20	      C 	mov eax, [esi+32] 
 			      C 	mult eax, [edi+24] ; s02 * d20
@@ -1485,48 +1491,48 @@ FinalProject\main.asm					     Page 1 - 1
 			      C 	rotVector ADDR position, ADDR cameraRotMat
 			      C 	rotVector ADDR posOffset, ADDR cameraRotMat
 			      C 	subVector ADDR position, ADDR posOffset
-			      C 	isBE position.z, 0
+			      C 	isBE position.z, CameraDepth
 			      C 	.IF BF == T
 			      C 		setVector position, -1, -1, -1
- 00000C95  50		     1C push eax
- 00000C96  B8 FFFFFFFF	     1C 	mov eax,-1
- 00000C9B  89 45 F4	     1C 	mov position.x, eax
- 00000C9E  B8 FFFFFFFF	     1C 	mov eax,-1
- 00000CA3  89 45 F8	     1C 	mov position.y, eax
- 00000CA6  B8 FFFFFFFF	     1C 	mov eax,-1
- 00000CAB  89 45 FC	     1C 	mov position.z, eax
- 00000CAE  58		     1C pop eax
- 00000CAF  EB 56	      C 		jmp World2CameraProcEnd
+ 00000C99  50		     1C push eax
+ 00000C9A  B8 FFFFFFFF	     1C 	mov eax,-1
+ 00000C9F  89 45 F4	     1C 	mov position.x, eax
+ 00000CA2  B8 FFFFFFFF	     1C 	mov eax,-1
+ 00000CA7  89 45 F8	     1C 	mov position.y, eax
+ 00000CAA  B8 FFFFFFFF	     1C 	mov eax,-1
+ 00000CAF  89 45 FC	     1C 	mov position.z, eax
+ 00000CB2  58		     1C pop eax
+ 00000CB3  EB 56	      C 		jmp World2CameraProcEnd
 			      C 	.EndIF
- 00000CB1  8B 75 0C	      C 	mov esi, cor
+ 00000CB5  8B 75 0C	      C 	mov esi, cor
 			      C 
 			      C 	mult cameraDepth, 1000
 			      C 	dive eax, position.z
 			      C 
 			      C 	mulVector ADDR position, eax
 			      C 	divVector ADDR position, 1000
-			      C 
+			      C 	; toDo z as scale
 			      C 
 			      C 	
 			      C 
- 00000CE5  89 46 08	      C 	mov [esi+8], eax ;output z as scale
+ 00000CE9  89 46 08	      C 	mov [esi+8], eax ;output z as scale
 			      C 	
 			      C 	; screen offset to mid
- 00000CE8  8B 45 F4	      C 	mov eax, position.x
- 00000CEB  83 C0 50	      C 	add eax, 80
- 00000CEE  89 45 F4	      C 	mov position.x, eax
- 00000CF1  8B 45 F8	      C 	mov eax, position.y
- 00000CF4  F7 D8	      C 	neg eax
- 00000CF6  83 C0 32	      C 	add eax, 50
- 00000CF9  89 45 F8	      C 	mov position.y, eax
+ 00000CEC  8B 45 F4	      C 	mov eax, position.x
+ 00000CEF  83 C0 50	      C 	add eax, 80
+ 00000CF2  89 45 F4	      C 	mov position.x, eax
+ 00000CF5  8B 45 F8	      C 	mov eax, position.y
+ 00000CF8  F7 D8	      C 	neg eax
+ 00000CFA  83 C0 32	      C 	add eax, 50
+ 00000CFD  89 45 F8	      C 	mov position.y, eax
 			      C 
- 00000CFC  8B 45 F4	      C 	mov eax, position.x
- 00000CFF  89 06	      C 	mov [esi], eax
- 00000D01  8B 45 F8	      C 	mov eax, position.y
- 00000D04  89 46 04	      C 	mov [esi+4], eax
- 00000D07		      C 	World2CameraProcEnd:
+ 00000D00  8B 45 F4	      C 	mov eax, position.x
+ 00000D03  89 06	      C 	mov [esi], eax
+ 00000D05  8B 45 F8	      C 	mov eax, position.y
+ 00000D08  89 46 04	      C 	mov [esi+4], eax
+ 00000D0B		      C 	World2CameraProcEnd:
 			      C ret
- 00000D0E		      C World2CameraProc ENDP
+ 00000D12		      C World2CameraProc ENDP
 FinalProject\MathMethod/RotationMatrix.asm(161) : warning A6004:procedure argument or local not referenced : tempVec
 FinalProject\MathMethod/RotationMatrix.asm(161) : warning A6004:procedure argument or local not referenced : vLen
 			      C World2Camera MACRO pos, cor
@@ -1534,274 +1540,356 @@ FinalProject\MathMethod/RotationMatrix.asm(161) : warning A6004:procedure argume
 			      C ENDM
 			      C 
 				INCLUDE DrawMethod/DrawCore.asm
- 00000D0E		      C SetScreen Proc uses esi ecx ax, color:word
- 00000D15  66| 8B 45 08	      C mov ax, color
- 00000D19  BE 00000014 R      C 	mov esi, OFFSET layoutAttributes
- 00000D1E  B9 00003E80	      C 	mov ecx, 16000
- 00000D23		      C 	SetScreenLoop:
- 00000D23  66| 89 06	      C 		mov [esi], ax
- 00000D26  83 C6 02	      C 		add esi,2
- 00000D29  E2 F8	      C 	loop SetScreenLoop
+ 00000D12		      C SetScreen Proc uses esi ecx ax, color:word
+ 00000D19  66| 8B 45 08	      C mov ax, color
+ 00000D1D  BE 00000014 R      C 	mov esi, OFFSET layoutAttributes
+ 00000D22  B9 00003E80	      C 	mov ecx, 16000
+ 00000D27		      C 	SetScreenLoop:
+ 00000D27  66| 89 06	      C 		mov [esi], ax
+ 00000D2A  83 C6 02	      C 		add esi,2
+ 00000D2D  E2 F8	      C 	loop SetScreenLoop
 			      C ret
- 00000D33		      C SetScreen EndP
+ 00000D37		      C SetScreen EndP
 			      C 
- 00000D33		      C SetPixelProc Proc uses eax ebx, x:dword,y:dword, color:WORD
- 00000D38  8B 45 0C	      C 	mov eax, y
- 00000D3B  BB 00000140	      C 	mov ebx, 320
- 00000D40  F7 E3	      C 	mul ebx
- 00000D42  03 45 08	      C 	add eax, x
- 00000D45  03 45 08	      C 	add eax, x
- 00000D48  BE 00000014 R      C 	mov esi, OFFSET layoutAttributes
- 00000D4D  03 F0	      C 	add esi, eax
- 00000D4F  66| 8B 5D 10	      C 	mov bx, color
- 00000D53  66| 89 1E	      C 	mov [esi], bx
+ 00000D37		      C SetPixelProc Proc uses eax ebx, x:dword,y:dword, color:WORD
+ 00000D3C  8B 45 0C	      C 	mov eax, y
+ 00000D3F  BB 00000140	      C 	mov ebx, 320
+ 00000D44  F7 E3	      C 	mul ebx
+ 00000D46  03 45 08	      C 	add eax, x
+ 00000D49  03 45 08	      C 	add eax, x
+ 00000D4C  BE 00000014 R      C 	mov esi, OFFSET layoutAttributes
+ 00000D51  03 F0	      C 	add esi, eax
+ 00000D53  66| 8B 5D 10	      C 	mov bx, color
+ 00000D57  66| 89 1E	      C 	mov [esi], bx
 			      C ret
- 00000D5C		      C SetPixelProc ENDP
+ 00000D60		      C SetPixelProc ENDP
 			      C SetPixel Macro x,y,color
 			      C 	Invoke SetPixelProc, x, y, color
 			      C EndM
 			      C 
 			      C 
- 00000D5C		      C RePaint Proc uses esi ecx
+ 00000D60		      C RePaint Proc uses esi ecx
 			      C 	local writeCount:word, pos:COORD
 			      C 
- 00000D64  66| B8 0000	      C 	mov ax, 0
- 00000D68  66| 89 45 F8	      C 	mov pos.x, ax
- 00000D6C  66| B8 0000	      C 	mov ax, 0
- 00000D70  66| 89 45 FA	      C 	mov pos.y, ax
+ 00000D68  66| B8 0000	      C 	mov ax, 0
+ 00000D6C  66| 89 45 F8	      C 	mov pos.x, ax
+ 00000D70  66| B8 0000	      C 	mov ax, 0
+ 00000D74  66| 89 45 FA	      C 	mov pos.y, ax
 			      C 
- 00000D74  8D 35 00000014 R   C 	lea esi, layoutAttributes
- 00000D7A  B9 00000064	      C 	mov ecx, 100
- 00000D7F		      C 	RePaintLoop:
- 00000D7F  51		      C 	push ecx
+ 00000D78  8D 35 00000014 R   C 	lea esi, layoutAttributes
+ 00000D7E  B9 00000064	      C 	mov ecx, 100
+ 00000D83		      C 	RePaintLoop:
+ 00000D83  51		      C 	push ecx
 			      C 	INVOKE WriteConsoleOutputAttribute, ; change cell setting
 			      C 		consoleHandle,
 			      C 		esi,
 			      C 		160,
 			      C 		pos,
 			      C 		ADDR writeCount
- 00000D98  66| FF 45 FA	      C 	inc pos.y
- 00000D9C  81 C6 00000140     C 	add esi, 320
- 00000DA2  59		      C 	pop ecx
- 00000DA3  E2 DA	      C 	loop RePaintLoop
+ 00000D9C  66| FF 45 FA	      C 	inc pos.y
+ 00000DA0  81 C6 00000140     C 	add esi, 320
+ 00000DA6  59		      C 	pop ecx
+ 00000DA7  E2 DA	      C 	loop RePaintLoop
 			      C ret
- 00000DA9		      C RePaint ENDP
+ 00000DAD		      C RePaint ENDP
 			      C 
- 00000DA9		      C ShowColor Proc uses ax bx ecx 
- 00000DAE  B9 0000000F	      C 	mov ecx, 15
- 00000DB3  66| BB 0000	      C 	mov bx ,00h
- 00000DB7		      C 	ShowColorLoop:
+ 00000DAD		      C ShowColor Proc uses ax bx ecx 
+ 00000DB2  B9 0000000F	      C 	mov ecx, 15
+ 00000DB7  66| BB 0000	      C 	mov bx ,00h
+ 00000DBB		      C 	ShowColorLoop:
 			      C 	INVOKE setScreen, bx
- 00000DC1  E8 FFFFFF96	      C 	call repaint
- 00000DC6  E8 00000000 E      C 	call readChar
- 00000DCB  66| 83 C3 10	      C 	add bx, 010h
- 00000DCF  E2 E6	      C 	loop ShowColorLoop
+ 00000DC5  E8 FFFFFF96	      C 	call repaint
+ 00000DCA  E8 00000000 E      C 	call readChar
+ 00000DCF  66| 83 C3 10	      C 	add bx, 010h
+ 00000DD3  E2 E6	      C 	loop ShowColorLoop
 			      C ret
- 00000DD7		      C ShowColor EndP
+ 00000DDB		      C ShowColor EndP
+			      C 
+				INCLUDE DrawMethod/DrawLine.asm
+			      C ; point is ptr of a vector {x, y, not use}
+ 00000DDB		      C DrawLineProc Proc uses eax ebx ecx edx esi edi, fromPtr:DWORD, toPtr:DWORD, color:WORD
+			      C 	local from:vector, to:vector, posOffset:vector
+			      C 	local iLoop:DWORD, len:DWORD
+ 00000DE7  8B 75 08	      C 	mov esi, fromPtr
+ 00000DEA  8B 7D 0C	      C 	mov edi, toPtr
+ 00000DED  8B 06	      C 	mov eax, [esi]
+ 00000DEF  89 45 F4	      C 	mov from.x, eax
+ 00000DF2  8B 46 04	      C 	mov eax, [esi+4]
+ 00000DF5  89 45 F8	      C 	mov from.y, eax
+ 00000DF8  8B 07	      C 	mov eax, [edi]
+ 00000DFA  89 45 E8	      C 	mov to.x, eax
+ 00000DFD  8B 47 04	      C 	mov eax, [edi+4]
+ 00000E00  89 45 EC	      C 	mov to.y, eax
+			      C 
+			      C 	copyVector ADDR posOffset, ADDR to
+			      C 	subVector ADDR posOffset, ADDR from
+ 00000E1D  C7 45 E4	      C 	mov posOffset.z, 0
+	   00000000
+			      C 	VectorLen ADDR posOffset
+ 00000E2D  89 45 D4	      C 	mov len, eax
+			      C 	mulVector ADDR from, 1000
+			      C 	mulVector ADDR posOffset, 1000
+			      C 	divVector ADDR posOffset, len
+			      C 
+ 00000E58  C7 45 D8	      C 	mov iLoop, 0
+	   00000000
+ 00000E5F		      C 	DrawLineProcLoopI:
+ 00000E5F  FF 45 D8	      C 		inc iLoop
+			      C 		isBE iLoop, len
+			      C 		jf DrawLineProcEnd
+ 00000E6D  80 3D 0000FAF6 R  1C 	cmp BF, F
+	   00
+ 00000E74  0F 84 00000096    1C 	je DrawLineProcEnd
+			      C 
+			      C 		mult posOffset.x, iLoop
+ 00000E85  03 45 F4	      C 		add eax, from.x
+			      C 		dive eax, 1000
+ 00000E93  8B D8	      C 		mov ebx, eax
+			      C 		mult posOffset.y, iLoop
+ 00000EA0  03 45 F8	      C 		add eax, from.y
+			      C 		dive eax, 1000
+			      C 
+			      C 		isB ebx, 0
+			      C 		jt DrawLineProcLoopI
+ 00000EB6  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000EBD  74 A0	     1C 	je DrawLineProcLoopI
+			      C 		isA ebx, 159
+			      C 		jt DrawLineProcLoopI
+ 00000ECA  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000ED1  74 8C	     1C 	je DrawLineProcLoopI
+			      C 		isB eax, 0
+			      C 		jt DrawLineProcLoopI
+ 00000EDB  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000EE2  0F 84 FFFFFF77    1C 	je DrawLineProcLoopI
+			      C 		isA eax, 99
+			      C 		jt DrawLineProcLoopI
+ 00000EF0  80 3D 0000FAF6 R  1C 	cmp BF, T
+	   01
+ 00000EF7  0F 84 FFFFFF62    1C 	je DrawLineProcLoopI
+			      C 
+			      C 		setPixel ebx, eax, color
+			      C 
+ 00000F0B  E9 FFFFFF4F	      C 		jmp DrawLineProcLoopI
+ 00000F10		      C 	DrawLineProcEnd:
+			      C ret
+ 00000F1A		      C DrawLineProc ENDP
 			      C 
 				INCLUDE DrawMethod/DrawSphere.asm
 			      C ; info is ptr of a vector
 			      C ; { coord.x, coord.y, r }
- 00000DD7		      C DrawSphereProc Proc uses eax ebx ecx edx esi, infoPtr:DWORD, color:WORD
+ 00000F1A		      C DrawSphereProc Proc uses eax ebx ecx edx esi, infoPtr:DWORD, color:WORD
 			      C 	local maxX:DWORD,maxY:DWORD,minX:DWORD,minY:DWORD
 			      C 	local originPos:vector, targetPos:vector
 			      C 	local iLoop:DWORD, jLoop:DWORD, limit:DWORD
- 00000DE2  8B 75 08	      C 	mov esi, infoPtr
+ 00000F25  8B 75 08	      C 	mov esi, infoPtr
 			      C 	isE [esi], -1
- 00000DEE  A0 0000FAF6 R      C 	mov al,BF
+ 00000F31  A0 0000FAF6 R      C 	mov al,BF
 			      C 	isE [esi+4], -1
- 00000DFD  8A 25 0000FAF6 R   C 	mov ah,BF
+ 00000F40  8A 25 0000FAF6 R   C 	mov ah,BF
 			      C 	and2 ah, bl
 			      C 	.IF BF == T
- 00000E17  E9 00000150	      C 		jmp DrawSphereProcEnd
+ 00000F5A  E9 00000150	      C 		jmp DrawSphereProcEnd
 			      C 	.EndIF
 			      C 
- 00000E1C  8B 46 08	      C 	mov eax, [esi+8]
- 00000E1F  89 45 CC	      C 	mov limit, eax
+ 00000F5F  8B 46 08	      C 	mov eax, [esi+8]
+ 00000F62  89 45 CC	      C 	mov limit, eax
 			      C 	copyVector ADDR originPos, infoPtr
- 00000E2E  C7 45 EC	      C 	mov originPos.z, 0
+ 00000F71  C7 45 EC	      C 	mov originPos.z, 0
 	   00000000
- 00000E35  C7 45 E0	      C 	mov targetPos.z, 0
+ 00000F78  C7 45 E0	      C 	mov targetPos.z, 0
 	   00000000
 			      C 
- 00000E3C  8B 06	      C 	mov eax, [esi]
- 00000E3E  03 46 08	      C 	add eax, [esi+8]
+ 00000F7F  8B 06	      C 	mov eax, [esi]
+ 00000F81  03 46 08	      C 	add eax, [esi+8]
 			      C 	isB eax, 0
 			      C 	jt DrawSphereProcEnd
- 00000E49  80 3D 0000FAF6 R  1C 	cmp BF, T
+ 00000F8C  80 3D 0000FAF6 R  1C 	cmp BF, T
 	   01
- 00000E50  0F 84 00000116    1C 	je DrawSphereProcEnd
+ 00000F93  0F 84 00000116    1C 	je DrawSphereProcEnd
 			      C 	clamp eax, 0, 159
- 00000E63  89 45 FC	      C 	mov maxX, eax
- 00000E66  8B 75 08	      C 	mov esi, infoPtr
- 00000E69  8B 06	      C 	mov eax, [esi]
- 00000E6B  2B 46 08	      C 	sub eax, [esi+8]
+ 00000FA6  89 45 FC	      C 	mov maxX, eax
+ 00000FA9  8B 75 08	      C 	mov esi, infoPtr
+ 00000FAC  8B 06	      C 	mov eax, [esi]
+ 00000FAE  2B 46 08	      C 	sub eax, [esi+8]
 			      C 	isA eax, 159
 			      C 	jt DrawSphereProcEnd
- 00000E79  80 3D 0000FAF6 R  1C 	cmp BF, T
+ 00000FBC  80 3D 0000FAF6 R  1C 	cmp BF, T
 	   01
- 00000E80  0F 84 000000E6    1C 	je DrawSphereProcEnd
+ 00000FC3  0F 84 000000E6    1C 	je DrawSphereProcEnd
 			      C 	clamp eax, 0, 159
- 00000E93  89 45 F4	      C 	mov minX, eax
+ 00000FD6  89 45 F4	      C 	mov minX, eax
 			      C 
- 00000E96  8B 75 08	      C 	mov esi, infoPtr
- 00000E99  8B 46 04	      C 	mov eax, [esi+4]
- 00000E9C  03 46 08	      C 	add eax, [esi+8]
+ 00000FD9  8B 75 08	      C 	mov esi, infoPtr
+ 00000FDC  8B 46 04	      C 	mov eax, [esi+4]
+ 00000FDF  03 46 08	      C 	add eax, [esi+8]
 			      C 	isB eax, 0
 			      C 	jt DrawSphereProcEnd
- 00000EA7  80 3D 0000FAF6 R  1C 	cmp BF, T
+ 00000FEA  80 3D 0000FAF6 R  1C 	cmp BF, T
 	   01
- 00000EAE  0F 84 000000B8    1C 	je DrawSphereProcEnd
+ 00000FF1  0F 84 000000B8    1C 	je DrawSphereProcEnd
 			      C 	clamp eax, 0, 99
- 00000EBE  89 45 F8	      C 	mov maxY, eax
- 00000EC1  8B 75 08	      C 	mov esi, infoPtr
- 00000EC4  8B 46 04	      C 	mov eax, [esi+4]
- 00000EC7  2B 46 08	      C 	sub eax, [esi+8]
+ 00001001  89 45 F8	      C 	mov maxY, eax
+ 00001004  8B 75 08	      C 	mov esi, infoPtr
+ 00001007  8B 46 04	      C 	mov eax, [esi+4]
+ 0000100A  2B 46 08	      C 	sub eax, [esi+8]
 			      C 	isA eax, 99
 			      C 	jt DrawSphereProcEnd
- 00000ED2  80 3D 0000FAF6 R  1C 	cmp BF, T
+ 00001015  80 3D 0000FAF6 R  1C 	cmp BF, T
 	   01
- 00000ED9  0F 84 0000008D    1C 	je DrawSphereProcEnd
+ 0000101C  0F 84 0000008D    1C 	je DrawSphereProcEnd
 			      C 	clamp eax, 0, 99
- 00000EE9  89 45 F0	      C 	mov minY, eax
- 00000EEC  8B 45 F4	      C 	mov eax, minX
- 00000EEF  89 45 D4	      C 	mov iLoop, eax
- 00000EF2		      C 	DrawSphereProcLoopI:
- 00000EF2  8B 45 F0	      C 		mov eax, minY
- 00000EF5  89 45 D0	      C 		mov jLoop, eax
- 00000EF8		      C 		DrawSphereProcLoopJ:
- 00000EF8  8B 45 D4	      C 			mov eax, iLoop
- 00000EFB  89 45 D8	      C 			mov targetPos.x, eax
- 00000EFE  8B 45 D0	      C 			mov eax, jLoop
- 00000F01  89 45 DC	      C 			mov targetPos.y, eax
+ 0000102C  89 45 F0	      C 	mov minY, eax
+ 0000102F  8B 45 F4	      C 	mov eax, minX
+ 00001032  89 45 D4	      C 	mov iLoop, eax
+ 00001035		      C 	DrawSphereProcLoopI:
+ 00001035  8B 45 F0	      C 		mov eax, minY
+ 00001038  89 45 D0	      C 		mov jLoop, eax
+ 0000103B		      C 		DrawSphereProcLoopJ:
+ 0000103B  8B 45 D4	      C 			mov eax, iLoop
+ 0000103E  89 45 D8	      C 			mov targetPos.x, eax
+ 00001041  8B 45 D0	      C 			mov eax, jLoop
+ 00001044  89 45 DC	      C 			mov targetPos.y, eax
 			      C 			subVector ADDR targetPos, ADDR originPos
 			      C 			vectorLen ADDR targetPos
 			      C 			isBE eax, limit
 			      C 			jf DrawSphereProcDontDraw
- 00000F23  80 3D 0000FAF6 R  1C 	cmp BF, F
+ 00001066  80 3D 0000FAF6 R  1C 	cmp BF, F
 	   00
- 00000F2A  74 12	     1C 	je DrawSphereProcDontDraw
+ 0000106D  74 12	     1C 	je DrawSphereProcDontDraw
 			      C 				setPixel iLoop, jLoop, color
- 00000F3E		      C 			DrawSphereProcDontDraw:
- 00000F3E  FF 45 D0	      C 		inc jLoop
-			      C 		isBE jLoop, maxY
+ 00001081		      C 			DrawSphereProcDontDraw:
+ 00001081  FF 45 D0	      C 		inc jLoop
+			      C 		isB jLoop, maxY
 			      C 		jt DrawSphereProcLoopJ
- 00000F4C  80 3D 0000FAF6 R  1C 	cmp BF, T
+ 0000108F  80 3D 0000FAF6 R  1C 	cmp BF, T
 	   01
- 00000F53  74 A3	     1C 	je DrawSphereProcLoopJ
- 00000F55  FF 45 D4	      C 	inc iLoop
-			      C 	isBE iLoop, maxX
+ 00001096  74 A3	     1C 	je DrawSphereProcLoopJ
+ 00001098  FF 45 D4	      C 	inc iLoop
+			      C 	isB iLoop, maxX
 			      C 	jt DrawSphereProcLoopI
- 00000F63  80 3D 0000FAF6 R  1C 	cmp BF, T
+ 000010A6  80 3D 0000FAF6 R  1C 	cmp BF, T
 	   01
- 00000F6A  74 86	     1C 	je DrawSphereProcLoopI
- 00000F6C		      C 	DrawSphereProcEnd:
+ 000010AD  74 86	     1C 	je DrawSphereProcLoopI
+ 000010AF		      C 	DrawSphereProcEnd:
 			      C ret
- 00000F75		      C DrawSphereProc ENDP
+ 000010B8		      C DrawSphereProc ENDP
 			      C 
 				INCLUDE Core/Movement.asm
- 00000F75		      C CameraMovement Proc uses eax ebx
+ 000010B8		      C CameraMovement Proc uses eax ebx
 			      C 	local moveVec:vector
- 00000F7D  66| A1	      C 	mov ax, keyDownCode
+ 000010C0  66| A1	      C 	mov ax, keyDownCode
 	   0000FAF4 R
 			      C 	.IF ax == 01177h ; W
 			      C 		setVector moveVec,0 ,0 ,moveSpeed
- 00000F89  50		     1C push eax
- 00000F8A  B8 00000000	     1C 	mov eax,0
- 00000F8F  89 45 F4	     1C 	mov moveVec.x, eax
- 00000F92  B8 00000000	     1C 	mov eax,0
- 00000F97  89 45 F8	     1C 	mov moveVec.y, eax
- 00000F9A  A1 0000FAF0 R     1C 	mov eax,moveSpeed
- 00000F9F  89 45 FC	     1C 	mov moveVec.z, eax
- 00000FA2  58		     1C pop eax
+ 000010CC  50		     1C push eax
+ 000010CD  B8 00000000	     1C 	mov eax,0
+ 000010D2  89 45 F4	     1C 	mov moveVec.x, eax
+ 000010D5  B8 00000000	     1C 	mov eax,0
+ 000010DA  89 45 F8	     1C 	mov moveVec.y, eax
+ 000010DD  A1 0000FAF0 R     1C 	mov eax,moveSpeed
+ 000010E2  89 45 FC	     1C 	mov moveVec.z, eax
+ 000010E5  58		     1C pop eax
 			      C 		rotVector ADDR moveVec, ADDR neg_cameraRotMat
- 00000FB1  C7 45 F8	      C 		mov moveVec.y, 0
+ 000010F4  C7 45 F8	      C 		mov moveVec.y, 0
 	   00000000
 			      C 		addVector ADDR camera.pos, ADDR moveVec
 			      C 	.EndIF
 			      C 	.IF ax == 01E61h ; A
- 00000FCC  8B 1D 0000FAF0 R   C 		mov ebx, moveSpeed
- 00000FD2  F7 DB	      C 		neg ebx
+ 0000110F  8B 1D 0000FAF0 R   C 		mov ebx, moveSpeed
+ 00001115  F7 DB	      C 		neg ebx
 			      C 		setVector moveVec,ebx ,0 ,0
- 00000FD4  50		     1C push eax
- 00000FD5  8B C3	     1C 	mov eax,ebx
- 00000FD7  89 45 F4	     1C 	mov moveVec.x, eax
- 00000FDA  B8 00000000	     1C 	mov eax,0
- 00000FDF  89 45 F8	     1C 	mov moveVec.y, eax
- 00000FE2  B8 00000000	     1C 	mov eax,0
- 00000FE7  89 45 FC	     1C 	mov moveVec.z, eax
- 00000FEA  58		     1C pop eax
+ 00001117  50		     1C push eax
+ 00001118  8B C3	     1C 	mov eax,ebx
+ 0000111A  89 45 F4	     1C 	mov moveVec.x, eax
+ 0000111D  B8 00000000	     1C 	mov eax,0
+ 00001122  89 45 F8	     1C 	mov moveVec.y, eax
+ 00001125  B8 00000000	     1C 	mov eax,0
+ 0000112A  89 45 FC	     1C 	mov moveVec.z, eax
+ 0000112D  58		     1C pop eax
 			      C 		rotVector ADDR moveVec, ADDR neg_cameraRotMat
- 00000FF9  C7 45 F8	      C 		mov moveVec.y, 0
+ 0000113C  C7 45 F8	      C 		mov moveVec.y, 0
 	   00000000
 			      C 		addVector ADDR camera.pos, ADDR moveVec
 			      C 	.EndIF
 			      C 	.IF ax == 01F73h ; S
- 00001014  8B 1D 0000FAF0 R   C 		mov ebx, moveSpeed
- 0000101A  F7 DB	      C 		neg ebx
+ 00001157  8B 1D 0000FAF0 R   C 		mov ebx, moveSpeed
+ 0000115D  F7 DB	      C 		neg ebx
 			      C 		setVector moveVec,0 ,0 ,ebx
- 0000101C  50		     1C push eax
- 0000101D  B8 00000000	     1C 	mov eax,0
- 00001022  89 45 F4	     1C 	mov moveVec.x, eax
- 00001025  B8 00000000	     1C 	mov eax,0
- 0000102A  89 45 F8	     1C 	mov moveVec.y, eax
- 0000102D  8B C3	     1C 	mov eax,ebx
- 0000102F  89 45 FC	     1C 	mov moveVec.z, eax
- 00001032  58		     1C pop eax
+ 0000115F  50		     1C push eax
+ 00001160  B8 00000000	     1C 	mov eax,0
+ 00001165  89 45 F4	     1C 	mov moveVec.x, eax
+ 00001168  B8 00000000	     1C 	mov eax,0
+ 0000116D  89 45 F8	     1C 	mov moveVec.y, eax
+ 00001170  8B C3	     1C 	mov eax,ebx
+ 00001172  89 45 FC	     1C 	mov moveVec.z, eax
+ 00001175  58		     1C pop eax
 			      C 		rotVector ADDR moveVec, ADDR neg_cameraRotMat
- 00001041  C7 45 F8	      C 		mov moveVec.y, 0
+ 00001184  C7 45 F8	      C 		mov moveVec.y, 0
 	   00000000
 			      C 		addVector ADDR camera.pos, ADDR moveVec
 			      C 	.EndIF
 			      C 	.IF ax == 02064h ; D
 			      C 		setVector moveVec,moveSpeed ,0 ,0
- 0000105C  50		     1C push eax
- 0000105D  A1 0000FAF0 R     1C 	mov eax,moveSpeed
- 00001062  89 45 F4	     1C 	mov moveVec.x, eax
- 00001065  B8 00000000	     1C 	mov eax,0
- 0000106A  89 45 F8	     1C 	mov moveVec.y, eax
- 0000106D  B8 00000000	     1C 	mov eax,0
- 00001072  89 45 FC	     1C 	mov moveVec.z, eax
- 00001075  58		     1C pop eax
+ 0000119F  50		     1C push eax
+ 000011A0  A1 0000FAF0 R     1C 	mov eax,moveSpeed
+ 000011A5  89 45 F4	     1C 	mov moveVec.x, eax
+ 000011A8  B8 00000000	     1C 	mov eax,0
+ 000011AD  89 45 F8	     1C 	mov moveVec.y, eax
+ 000011B0  B8 00000000	     1C 	mov eax,0
+ 000011B5  89 45 FC	     1C 	mov moveVec.z, eax
+ 000011B8  58		     1C pop eax
 			      C 		rotVector ADDR moveVec, ADDR neg_cameraRotMat
- 00001084  C7 45 F8	      C 		mov moveVec.y, 0 
+ 000011C7  C7 45 F8	      C 		mov moveVec.y, 0 
 	   00000000
 			      C 		addVector ADDR camera.pos, ADDR moveVec
 			      C 	.EndIF
 			      C 
 			      C 	.IF ax == 01769h ; I
- 0000109F  A1 0000FA20 R      C 		mov eax, camera.euler.x
- 000010A4  83 E8 01	      C 		sub eax, 1
+ 000011E2  A1 0000FA20 R      C 		mov eax, camera.euler.x
+ 000011E7  83 E8 01	      C 		sub eax, 1
 			      C 		degNor eax
- 000010AD  A3 0000FA20 R      C 		mov camera.euler.x, eax
+ 000011F0  A3 0000FA20 R      C 		mov camera.euler.x, eax
 			      C 	.EndIF
 			      C 	.IF ax == 0256Bh ; K
- 000010B8  A1 0000FA20 R      C 		mov eax, camera.euler.x
- 000010BD  83 C0 01	      C 		add eax, 1
+ 000011FB  A1 0000FA20 R      C 		mov eax, camera.euler.x
+ 00001200  83 C0 01	      C 		add eax, 1
 			      C 		degNor eax
- 000010C6  A3 0000FA20 R      C 		mov camera.euler.x, eax
+ 00001209  A3 0000FA20 R      C 		mov camera.euler.x, eax
 			      C 	.EndIF
 			      C 	.IF ax == 9322 ; J
- 000010D1  A1 0000FA24 R      C 		mov eax, camera.euler.y
- 000010D6  83 E8 01	      C 		sub eax, 1
+ 00001214  A1 0000FA24 R      C 		mov eax, camera.euler.y
+ 00001219  83 E8 01	      C 		sub eax, 1
 			      C 		degNor eax
- 000010DF  A3 0000FA24 R      C 		mov camera.euler.y, eax
+ 00001222  A3 0000FA24 R      C 		mov camera.euler.y, eax
 			      C 	.EndIF
 			      C 	.IF ax == 9836 ; L
- 000010EA  A1 0000FA24 R      C 		mov eax, camera.euler.y
- 000010EF  83 C0 01	      C 		add eax, 1
+ 0000122D  A1 0000FA24 R      C 		mov eax, camera.euler.y
+ 00001232  83 C0 01	      C 		add eax, 1
 			      C 		degNor eax
- 000010F8  A3 0000FA24 R      C 		mov camera.euler.y, eax
+ 0000123B  A3 0000FA24 R      C 		mov camera.euler.y, eax
+			      C 	.EndIF
+			      C 	.IF ax == 14624 ; space
+ 00001246  A1 0000FA18 R      C 		mov eax, camera.pos.y
+ 0000124B  03 05 0000FAF0 R   C 		add eax, moveSpeed
+ 00001251  A3 0000FA18 R      C 		mov camera.pos.y, eax
+			      C 	.EndIF
+			      C 	.IF ax == 11386 ; z
+ 0000125C  A1 0000FA18 R      C 		mov eax, camera.pos.y
+ 00001261  2B 05 0000FAF0 R   C 		sub eax, moveSpeed
+ 00001267  A3 0000FA18 R      C 		mov camera.pos.y, eax
 			      C 	.EndIF
 			      C ret
- 00001101		      C CameraMovement EndP
+ 00001270		      C CameraMovement EndP
 			      C 
 				INCLUDE Core/System.asm
- 00001101		      C init Proc
+ 00001270		      C init Proc
 			      C ; Get HANDLE
 			      C ;=============================================================================
 			      C 	INVOKE GetStdHandle, STD_OUTPUT_HANDLE
- 00001108  A3 00000000 R      C 	mov consoleHandle,eax
+ 00001277  A3 00000000 R      C 	mov consoleHandle,eax
 			      C 	
 			      C ; Set Display rect
 			      C ;=============================================================================
@@ -1809,10 +1897,10 @@ FinalProject\MathMethod/RotationMatrix.asm(161) : warning A6004:procedure argume
 			      C 		consoleHandle,            ; screen buffer handle
 			      C 		TRUE,             ; coordinate type
 			      C 		ADDR windowRect  ; ptr to window rectangle
- 0000111F  C3		      C ret
- 00001120		      C init ENDP
+ 0000128E  C3		      C ret
+ 0000128F		      C init ENDP
 			      C 
- 00001120		      C updateSystemValue Proc
+ 0000128F		      C updateSystemValue Proc
 			      C local Euler:Vector
 			      C 	; camera
 			      C 	copyVector ADDR Euler, ADDR camera.euler
@@ -1820,351 +1908,357 @@ FinalProject\MathMethod/RotationMatrix.asm(161) : warning A6004:procedure argume
 			      C 	mulVector ADDR Euler, -1
 			      C 	EulerToRotMatrix ADDR cameraRotMat, ADDR Euler
 			      C 	setVector cameraFacing, 0, 0 ,1000 ; 1.000
- 0000115B  50		     1C push eax
- 0000115C  B8 00000000	     1C 	mov eax,0
- 00001161  A3 0000FA2C R     1C 	mov cameraFacing.x, eax
- 00001166  B8 00000000	     1C 	mov eax,0
- 0000116B  A3 0000FA30 R     1C 	mov cameraFacing.y, eax
- 00001170  B8 000003E8	     1C 	mov eax,1000
- 00001175  A3 0000FA34 R     1C 	mov cameraFacing.z, eax
- 0000117A  58		     1C pop eax
+ 000012CA  50		     1C push eax
+ 000012CB  B8 00000000	     1C 	mov eax,0
+ 000012D0  A3 0000FA2C R     1C 	mov cameraFacing.x, eax
+ 000012D5  B8 00000000	     1C 	mov eax,0
+ 000012DA  A3 0000FA30 R     1C 	mov cameraFacing.y, eax
+ 000012DF  B8 000003E8	     1C 	mov eax,1000
+ 000012E4  A3 0000FA34 R     1C 	mov cameraFacing.z, eax
+ 000012E9  58		     1C pop eax
 			      C 	RotVector ADDR cameraFacing, ADDR cameraRotMat
 			      C ret
- 0000118C		      C updateSystemValue EndP
+ 000012FB		      C updateSystemValue EndP
 			      C 
- 0000118C		      C logSystem Proc uses eax
+ 000012FB		      C logSystem Proc uses eax
 			      C 	logc "C"
- 0000118D  66| 50	     1C 	push ax
- 0000118F  B0 43	     1C 	mov al, "C"
- 00001191  E8 00000000 E     1C 	call writeChar
- 00001196  66| 58	     1C 	pop ax
+ 000012FC  66| 50	     1C 	push ax
+ 000012FE  B0 43	     1C 	mov al, "C"
+ 00001300  E8 00000000 E     1C 	call writeChar
+ 00001305  66| 58	     1C 	pop ax
 			      C 	logc "a"
- 00001198  66| 50	     1C 	push ax
- 0000119A  B0 61	     1C 	mov al, "a"
- 0000119C  E8 00000000 E     1C 	call writeChar
- 000011A1  66| 58	     1C 	pop ax
+ 00001307  66| 50	     1C 	push ax
+ 00001309  B0 61	     1C 	mov al, "a"
+ 0000130B  E8 00000000 E     1C 	call writeChar
+ 00001310  66| 58	     1C 	pop ax
 			      C 	logc "m"
- 000011A3  66| 50	     1C 	push ax
- 000011A5  B0 6D	     1C 	mov al, "m"
- 000011A7  E8 00000000 E     1C 	call writeChar
- 000011AC  66| 58	     1C 	pop ax
+ 00001312  66| 50	     1C 	push ax
+ 00001314  B0 6D	     1C 	mov al, "m"
+ 00001316  E8 00000000 E     1C 	call writeChar
+ 0000131B  66| 58	     1C 	pop ax
 			      C 	logc "e"
- 000011AE  66| 50	     1C 	push ax
- 000011B0  B0 65	     1C 	mov al, "e"
- 000011B2  E8 00000000 E     1C 	call writeChar
- 000011B7  66| 58	     1C 	pop ax
+ 0000131D  66| 50	     1C 	push ax
+ 0000131F  B0 65	     1C 	mov al, "e"
+ 00001321  E8 00000000 E     1C 	call writeChar
+ 00001326  66| 58	     1C 	pop ax
 			      C 	logc "r"
- 000011B9  66| 50	     1C 	push ax
- 000011BB  B0 72	     1C 	mov al, "r"
- 000011BD  E8 00000000 E     1C 	call writeChar
- 000011C2  66| 58	     1C 	pop ax
+ 00001328  66| 50	     1C 	push ax
+ 0000132A  B0 72	     1C 	mov al, "r"
+ 0000132C  E8 00000000 E     1C 	call writeChar
+ 00001331  66| 58	     1C 	pop ax
 			      C 	logc "a"
- 000011C4  66| 50	     1C 	push ax
- 000011C6  B0 61	     1C 	mov al, "a"
- 000011C8  E8 00000000 E     1C 	call writeChar
- 000011CD  66| 58	     1C 	pop ax
+ 00001333  66| 50	     1C 	push ax
+ 00001335  B0 61	     1C 	mov al, "a"
+ 00001337  E8 00000000 E     1C 	call writeChar
+ 0000133C  66| 58	     1C 	pop ax
 			      C 	logc " "
- 000011CF  66| 50	     1C 	push ax
- 000011D1  B0 20	     1C 	mov al, " "
- 000011D3  E8 00000000 E     1C 	call writeChar
- 000011D8  66| 58	     1C 	pop ax
+ 0000133E  66| 50	     1C 	push ax
+ 00001340  B0 20	     1C 	mov al, " "
+ 00001342  E8 00000000 E     1C 	call writeChar
+ 00001347  66| 58	     1C 	pop ax
 			      C 	logc ":"
- 000011DA  66| 50	     1C 	push ax
- 000011DC  B0 3A	     1C 	mov al, ":"
- 000011DE  E8 00000000 E     1C 	call writeChar
- 000011E3  66| 58	     1C 	pop ax
- 000011E5  E8 00000000 E      C 	call crlf
+ 00001349  66| 50	     1C 	push ax
+ 0000134B  B0 3A	     1C 	mov al, ":"
+ 0000134D  E8 00000000 E     1C 	call writeChar
+ 00001352  66| 58	     1C 	pop ax
+ 00001354  E8 00000000 E      C 	call crlf
 			      C 	logc "P"
- 000011EA  66| 50	     1C 	push ax
- 000011EC  B0 50	     1C 	mov al, "P"
- 000011EE  E8 00000000 E     1C 	call writeChar
- 000011F3  66| 58	     1C 	pop ax
+ 00001359  66| 50	     1C 	push ax
+ 0000135B  B0 50	     1C 	mov al, "P"
+ 0000135D  E8 00000000 E     1C 	call writeChar
+ 00001362  66| 58	     1C 	pop ax
 			      C 	logc "o"
- 000011F5  66| 50	     1C 	push ax
- 000011F7  B0 6F	     1C 	mov al, "o"
- 000011F9  E8 00000000 E     1C 	call writeChar
- 000011FE  66| 58	     1C 	pop ax
+ 00001364  66| 50	     1C 	push ax
+ 00001366  B0 6F	     1C 	mov al, "o"
+ 00001368  E8 00000000 E     1C 	call writeChar
+ 0000136D  66| 58	     1C 	pop ax
 			      C 	logc "s"
- 00001200  66| 50	     1C 	push ax
- 00001202  B0 73	     1C 	mov al, "s"
- 00001204  E8 00000000 E     1C 	call writeChar
- 00001209  66| 58	     1C 	pop ax
+ 0000136F  66| 50	     1C 	push ax
+ 00001371  B0 73	     1C 	mov al, "s"
+ 00001373  E8 00000000 E     1C 	call writeChar
+ 00001378  66| 58	     1C 	pop ax
 			      C 	logc " "
- 0000120B  66| 50	     1C 	push ax
- 0000120D  B0 20	     1C 	mov al, " "
- 0000120F  E8 00000000 E     1C 	call writeChar
- 00001214  66| 58	     1C 	pop ax
+ 0000137A  66| 50	     1C 	push ax
+ 0000137C  B0 20	     1C 	mov al, " "
+ 0000137E  E8 00000000 E     1C 	call writeChar
+ 00001383  66| 58	     1C 	pop ax
 			      C 	logc ":"
- 00001216  66| 50	     1C 	push ax
- 00001218  B0 3A	     1C 	mov al, ":"
- 0000121A  E8 00000000 E     1C 	call writeChar
- 0000121F  66| 58	     1C 	pop ax
+ 00001385  66| 50	     1C 	push ax
+ 00001387  B0 3A	     1C 	mov al, ":"
+ 00001389  E8 00000000 E     1C 	call writeChar
+ 0000138E  66| 58	     1C 	pop ax
 			      C 	logv camera.pos
- 00001221  50		     1C 	push eax
- 00001222  66| 50	     2C 	push ax
- 00001224  B0 28	     2C 	mov al, "("
- 00001226  E8 00000000 E     2C 	call writeChar
- 0000122B  66| 58	     2C 	pop ax
- 0000122D  A1 0000FA14 R     1C 	mov eax, camera.pos.x
- 00001232  E8 00000000 E     1C 	call writeInt
- 00001237  66| 50	     2C 	push ax
- 00001239  B0 2C	     2C 	mov al, ","
- 0000123B  E8 00000000 E     2C 	call writeChar
- 00001240  66| 58	     2C 	pop ax
- 00001242  66| 50	     2C 	push ax
- 00001244  B0 20	     2C 	mov al, " "
- 00001246  E8 00000000 E     2C 	call writeChar
- 0000124B  66| 58	     2C 	pop ax
- 0000124D  A1 0000FA18 R     1C 	mov eax, camera.pos.y
- 00001252  E8 00000000 E     1C 	call writeInt
- 00001257  66| 50	     2C 	push ax
- 00001259  B0 2C	     2C 	mov al, ","
- 0000125B  E8 00000000 E     2C 	call writeChar
- 00001260  66| 58	     2C 	pop ax
- 00001262  66| 50	     2C 	push ax
- 00001264  B0 20	     2C 	mov al, " "
- 00001266  E8 00000000 E     2C 	call writeChar
- 0000126B  66| 58	     2C 	pop ax
- 0000126D  A1 0000FA1C R     1C 	mov eax, camera.pos.z
- 00001272  E8 00000000 E     1C 	call writeInt
- 00001277  66| 50	     2C 	push ax
- 00001279  B0 29	     2C 	mov al, ")"
- 0000127B  E8 00000000 E     2C 	call writeChar
- 00001280  66| 58	     2C 	pop ax
- 00001282  E8 00000000 E     1C 	call crlf
- 00001287  58		     1C 	pop eax
+ 00001390  50		     1C 	push eax
+ 00001391  66| 50	     2C 	push ax
+ 00001393  B0 28	     2C 	mov al, "("
+ 00001395  E8 00000000 E     2C 	call writeChar
+ 0000139A  66| 58	     2C 	pop ax
+ 0000139C  A1 0000FA14 R     1C 	mov eax, camera.pos.x
+ 000013A1  E8 00000000 E     1C 	call writeInt
+ 000013A6  66| 50	     2C 	push ax
+ 000013A8  B0 2C	     2C 	mov al, ","
+ 000013AA  E8 00000000 E     2C 	call writeChar
+ 000013AF  66| 58	     2C 	pop ax
+ 000013B1  66| 50	     2C 	push ax
+ 000013B3  B0 20	     2C 	mov al, " "
+ 000013B5  E8 00000000 E     2C 	call writeChar
+ 000013BA  66| 58	     2C 	pop ax
+ 000013BC  A1 0000FA18 R     1C 	mov eax, camera.pos.y
+ 000013C1  E8 00000000 E     1C 	call writeInt
+ 000013C6  66| 50	     2C 	push ax
+ 000013C8  B0 2C	     2C 	mov al, ","
+ 000013CA  E8 00000000 E     2C 	call writeChar
+ 000013CF  66| 58	     2C 	pop ax
+ 000013D1  66| 50	     2C 	push ax
+ 000013D3  B0 20	     2C 	mov al, " "
+ 000013D5  E8 00000000 E     2C 	call writeChar
+ 000013DA  66| 58	     2C 	pop ax
+ 000013DC  A1 0000FA1C R     1C 	mov eax, camera.pos.z
+ 000013E1  E8 00000000 E     1C 	call writeInt
+ 000013E6  66| 50	     2C 	push ax
+ 000013E8  B0 29	     2C 	mov al, ")"
+ 000013EA  E8 00000000 E     2C 	call writeChar
+ 000013EF  66| 58	     2C 	pop ax
+ 000013F1  E8 00000000 E     1C 	call crlf
+ 000013F6  58		     1C 	pop eax
 			      C 	logc "R"
- 00001288  66| 50	     1C 	push ax
- 0000128A  B0 52	     1C 	mov al, "R"
- 0000128C  E8 00000000 E     1C 	call writeChar
- 00001291  66| 58	     1C 	pop ax
+ 000013F7  66| 50	     1C 	push ax
+ 000013F9  B0 52	     1C 	mov al, "R"
+ 000013FB  E8 00000000 E     1C 	call writeChar
+ 00001400  66| 58	     1C 	pop ax
 			      C 	logc "o"
- 00001293  66| 50	     1C 	push ax
- 00001295  B0 6F	     1C 	mov al, "o"
- 00001297  E8 00000000 E     1C 	call writeChar
- 0000129C  66| 58	     1C 	pop ax
+ 00001402  66| 50	     1C 	push ax
+ 00001404  B0 6F	     1C 	mov al, "o"
+ 00001406  E8 00000000 E     1C 	call writeChar
+ 0000140B  66| 58	     1C 	pop ax
 			      C 	logc "t"
- 0000129E  66| 50	     1C 	push ax
- 000012A0  B0 74	     1C 	mov al, "t"
- 000012A2  E8 00000000 E     1C 	call writeChar
- 000012A7  66| 58	     1C 	pop ax
+ 0000140D  66| 50	     1C 	push ax
+ 0000140F  B0 74	     1C 	mov al, "t"
+ 00001411  E8 00000000 E     1C 	call writeChar
+ 00001416  66| 58	     1C 	pop ax
 			      C 	logc " "
- 000012A9  66| 50	     1C 	push ax
- 000012AB  B0 20	     1C 	mov al, " "
- 000012AD  E8 00000000 E     1C 	call writeChar
- 000012B2  66| 58	     1C 	pop ax
+ 00001418  66| 50	     1C 	push ax
+ 0000141A  B0 20	     1C 	mov al, " "
+ 0000141C  E8 00000000 E     1C 	call writeChar
+ 00001421  66| 58	     1C 	pop ax
 			      C 	logc ":"
- 000012B4  66| 50	     1C 	push ax
- 000012B6  B0 3A	     1C 	mov al, ":"
- 000012B8  E8 00000000 E     1C 	call writeChar
- 000012BD  66| 58	     1C 	pop ax
+ 00001423  66| 50	     1C 	push ax
+ 00001425  B0 3A	     1C 	mov al, ":"
+ 00001427  E8 00000000 E     1C 	call writeChar
+ 0000142C  66| 58	     1C 	pop ax
 			      C 	logv camera.euler
- 000012BF  50		     1C 	push eax
- 000012C0  66| 50	     2C 	push ax
- 000012C2  B0 28	     2C 	mov al, "("
- 000012C4  E8 00000000 E     2C 	call writeChar
- 000012C9  66| 58	     2C 	pop ax
- 000012CB  A1 0000FA20 R     1C 	mov eax, camera.euler.x
- 000012D0  E8 00000000 E     1C 	call writeInt
- 000012D5  66| 50	     2C 	push ax
- 000012D7  B0 2C	     2C 	mov al, ","
- 000012D9  E8 00000000 E     2C 	call writeChar
- 000012DE  66| 58	     2C 	pop ax
- 000012E0  66| 50	     2C 	push ax
- 000012E2  B0 20	     2C 	mov al, " "
- 000012E4  E8 00000000 E     2C 	call writeChar
- 000012E9  66| 58	     2C 	pop ax
- 000012EB  A1 0000FA24 R     1C 	mov eax, camera.euler.y
- 000012F0  E8 00000000 E     1C 	call writeInt
- 000012F5  66| 50	     2C 	push ax
- 000012F7  B0 2C	     2C 	mov al, ","
- 000012F9  E8 00000000 E     2C 	call writeChar
- 000012FE  66| 58	     2C 	pop ax
- 00001300  66| 50	     2C 	push ax
- 00001302  B0 20	     2C 	mov al, " "
- 00001304  E8 00000000 E     2C 	call writeChar
- 00001309  66| 58	     2C 	pop ax
- 0000130B  A1 0000FA28 R     1C 	mov eax, camera.euler.z
- 00001310  E8 00000000 E     1C 	call writeInt
- 00001315  66| 50	     2C 	push ax
- 00001317  B0 29	     2C 	mov al, ")"
- 00001319  E8 00000000 E     2C 	call writeChar
- 0000131E  66| 58	     2C 	pop ax
- 00001320  E8 00000000 E     1C 	call crlf
- 00001325  58		     1C 	pop eax
- 00001326  E8 00000000 E      C 	call crlf
+ 0000142E  50		     1C 	push eax
+ 0000142F  66| 50	     2C 	push ax
+ 00001431  B0 28	     2C 	mov al, "("
+ 00001433  E8 00000000 E     2C 	call writeChar
+ 00001438  66| 58	     2C 	pop ax
+ 0000143A  A1 0000FA20 R     1C 	mov eax, camera.euler.x
+ 0000143F  E8 00000000 E     1C 	call writeInt
+ 00001444  66| 50	     2C 	push ax
+ 00001446  B0 2C	     2C 	mov al, ","
+ 00001448  E8 00000000 E     2C 	call writeChar
+ 0000144D  66| 58	     2C 	pop ax
+ 0000144F  66| 50	     2C 	push ax
+ 00001451  B0 20	     2C 	mov al, " "
+ 00001453  E8 00000000 E     2C 	call writeChar
+ 00001458  66| 58	     2C 	pop ax
+ 0000145A  A1 0000FA24 R     1C 	mov eax, camera.euler.y
+ 0000145F  E8 00000000 E     1C 	call writeInt
+ 00001464  66| 50	     2C 	push ax
+ 00001466  B0 2C	     2C 	mov al, ","
+ 00001468  E8 00000000 E     2C 	call writeChar
+ 0000146D  66| 58	     2C 	pop ax
+ 0000146F  66| 50	     2C 	push ax
+ 00001471  B0 20	     2C 	mov al, " "
+ 00001473  E8 00000000 E     2C 	call writeChar
+ 00001478  66| 58	     2C 	pop ax
+ 0000147A  A1 0000FA28 R     1C 	mov eax, camera.euler.z
+ 0000147F  E8 00000000 E     1C 	call writeInt
+ 00001484  66| 50	     2C 	push ax
+ 00001486  B0 29	     2C 	mov al, ")"
+ 00001488  E8 00000000 E     2C 	call writeChar
+ 0000148D  66| 58	     2C 	pop ax
+ 0000148F  E8 00000000 E     1C 	call crlf
+ 00001494  58		     1C 	pop eax
+ 00001495  E8 00000000 E      C 	call crlf
 			      C 	logc "K"
- 0000132B  66| 50	     1C 	push ax
- 0000132D  B0 4B	     1C 	mov al, "K"
- 0000132F  E8 00000000 E     1C 	call writeChar
- 00001334  66| 58	     1C 	pop ax
+ 0000149A  66| 50	     1C 	push ax
+ 0000149C  B0 4B	     1C 	mov al, "K"
+ 0000149E  E8 00000000 E     1C 	call writeChar
+ 000014A3  66| 58	     1C 	pop ax
 			      C 	logc "e"
- 00001336  66| 50	     1C 	push ax
- 00001338  B0 65	     1C 	mov al, "e"
- 0000133A  E8 00000000 E     1C 	call writeChar
- 0000133F  66| 58	     1C 	pop ax
+ 000014A5  66| 50	     1C 	push ax
+ 000014A7  B0 65	     1C 	mov al, "e"
+ 000014A9  E8 00000000 E     1C 	call writeChar
+ 000014AE  66| 58	     1C 	pop ax
 			      C 	logc "y"
- 00001341  66| 50	     1C 	push ax
- 00001343  B0 79	     1C 	mov al, "y"
- 00001345  E8 00000000 E     1C 	call writeChar
- 0000134A  66| 58	     1C 	pop ax
+ 000014B0  66| 50	     1C 	push ax
+ 000014B2  B0 79	     1C 	mov al, "y"
+ 000014B4  E8 00000000 E     1C 	call writeChar
+ 000014B9  66| 58	     1C 	pop ax
 			      C 	logc "C"
- 0000134C  66| 50	     1C 	push ax
- 0000134E  B0 43	     1C 	mov al, "C"
- 00001350  E8 00000000 E     1C 	call writeChar
- 00001355  66| 58	     1C 	pop ax
+ 000014BB  66| 50	     1C 	push ax
+ 000014BD  B0 43	     1C 	mov al, "C"
+ 000014BF  E8 00000000 E     1C 	call writeChar
+ 000014C4  66| 58	     1C 	pop ax
 			      C 	logc "o"
- 00001357  66| 50	     1C 	push ax
- 00001359  B0 6F	     1C 	mov al, "o"
- 0000135B  E8 00000000 E     1C 	call writeChar
- 00001360  66| 58	     1C 	pop ax
+ 000014C6  66| 50	     1C 	push ax
+ 000014C8  B0 6F	     1C 	mov al, "o"
+ 000014CA  E8 00000000 E     1C 	call writeChar
+ 000014CF  66| 58	     1C 	pop ax
 			      C 	logc "d"
- 00001362  66| 50	     1C 	push ax
- 00001364  B0 64	     1C 	mov al, "d"
- 00001366  E8 00000000 E     1C 	call writeChar
- 0000136B  66| 58	     1C 	pop ax
+ 000014D1  66| 50	     1C 	push ax
+ 000014D3  B0 64	     1C 	mov al, "d"
+ 000014D5  E8 00000000 E     1C 	call writeChar
+ 000014DA  66| 58	     1C 	pop ax
 			      C 	logc "e"
- 0000136D  66| 50	     1C 	push ax
- 0000136F  B0 65	     1C 	mov al, "e"
- 00001371  E8 00000000 E     1C 	call writeChar
- 00001376  66| 58	     1C 	pop ax
+ 000014DC  66| 50	     1C 	push ax
+ 000014DE  B0 65	     1C 	mov al, "e"
+ 000014E0  E8 00000000 E     1C 	call writeChar
+ 000014E5  66| 58	     1C 	pop ax
 			      C 	logc " "
- 00001378  66| 50	     1C 	push ax
- 0000137A  B0 20	     1C 	mov al, " "
- 0000137C  E8 00000000 E     1C 	call writeChar
- 00001381  66| 58	     1C 	pop ax
+ 000014E7  66| 50	     1C 	push ax
+ 000014E9  B0 20	     1C 	mov al, " "
+ 000014EB  E8 00000000 E     1C 	call writeChar
+ 000014F0  66| 58	     1C 	pop ax
 			      C 	logc ":"
- 00001383  66| 50	     1C 	push ax
- 00001385  B0 3A	     1C 	mov al, ":"
- 00001387  E8 00000000 E     1C 	call writeChar
- 0000138C  66| 58	     1C 	pop ax
+ 000014F2  66| 50	     1C 	push ax
+ 000014F4  B0 3A	     1C 	mov al, ":"
+ 000014F6  E8 00000000 E     1C 	call writeChar
+ 000014FB  66| 58	     1C 	pop ax
 			      C 	logc " "
- 0000138E  66| 50	     1C 	push ax
- 00001390  B0 20	     1C 	mov al, " "
- 00001392  E8 00000000 E     1C 	call writeChar
- 00001397  66| 58	     1C 	pop ax
- 00001399  0F BF 05	      C 	movsx eax, keyDownCode
+ 000014FD  66| 50	     1C 	push ax
+ 000014FF  B0 20	     1C 	mov al, " "
+ 00001501  E8 00000000 E     1C 	call writeChar
+ 00001506  66| 58	     1C 	pop ax
+ 00001508  0F BF 05	      C 	movsx eax, keyDownCode
 	   0000FAF4 R
 			      C 	log eax
- 000013A0  50		     1C 	push eax
- 000013A1  8B C0	     1C 	mov eax, eax
- 000013A3  E8 00000000 E     1C 	call writeInt
- 000013A8  E8 00000000 E     1C 	call crlf
- 000013AD  58		     1C 	pop eax
+ 0000150F  50		     1C 	push eax
+ 00001510  8B C0	     1C 	mov eax, eax
+ 00001512  E8 00000000 E     1C 	call writeInt
+ 00001517  E8 00000000 E     1C 	call crlf
+ 0000151C  58		     1C 	pop eax
 			      C 	
 			      C ret
- 000013B0		      C logSystem EndP
+ 0000151F		      C logSystem EndP
 			      C 
-				 
+				  
 				 temp MACRO oo, color
 					VectorLen ADDR oo
-					world2camera ADDR oo, ADDR sc
-					mov eax, sc.z
-					dive eax, 300000000  
-					mult eax, 2 
-					inc eax     
-					mov sc.z, eax
-					INVOKE DrawSphereproc, ADDR sc, color
+					world2camera ADDR oo, ADDR sc  ; posX, posY, depth
+					mov sc.z, 1
+					INVOKE DrawSphereproc, ADDR sc, color ; posX, posY, r
 				 ENDM
 				      
- 000013B0			main PROC
- 000013B0  E8 FFFFFD4C		call init
- 000013B5  5E			pop esi
- 000013B6  E8 00000000 E	call ClrScr
- 000013BB			appLoop:    
- 000013BB  E8 FFFFFD60			call UpdateSystemValue
+ 0000151F			main PROC
+ 0000151F  E8 FFFFFD4C		call init
+ 00001524  5E			pop esi
+ 00001525  E8 00000000 E	call ClrScr
+ 0000152A			appLoop:    
+ 0000152A  E8 FFFFFD60			call UpdateSystemValue
 					INVOKE SetConsoleCursorPosition, consoleHandle, cursorPos  
 					Invoke SetScreen, 070h
 
 					; draw ground
- 000013D8  B8 00000032			mov eax, 50
- 000013DD  8B 1D 0000FA20 R		mov ebx, camera.euler.x
+ 00001547  B8 00000032			mov eax, 50
+ 0000154C  8B 1D 0000FA20 R		mov ebx, camera.euler.x
 					isA ebx, 180
 					.IF BF == T
- 000013F7  81 EB 00000168			sub ebx, 360
+ 00001566  81 EB 00000168			sub ebx, 360
 					.EndIF 
 					mult ebx, 10
 					mult eax, 40 ; 4.0
 					dive eax, 100
- 00001415  8B D8			mov ebx, eax
- 00001417  B8 00000032			mov eax, 50
- 0000141C  2B C3			sub eax, ebx
+ 00001584  8B D8			mov ebx, eax 
+ 00001586  B8 00000032			mov eax, 50
+ 0000158B  2B C3			sub eax, ebx
 					
 					isB eax, 100
 					jf groundEnd
- 00001426  80 3D 0000FAF6 R  1		cmp BF, F
+ 00001595  80 3D 0000FAF6 R  1		cmp BF, F
 	   00
- 0000142D  74 39	     1		je groundEnd
+ 0000159C  74 39	     1		je groundEnd
 					isAE eax, 0
 					jf groundEnd
- 00001437  80 3D 0000FAF6 R  1		cmp BF, F
+ 000015A6  80 3D 0000FAF6 R  1		cmp BF, F
 	   00
- 0000143E  74 28	     1		je groundEnd
- 00001440				testLoopA:
- 00001440  B9 000000A0				mov ecx, 160
- 00001445					testLoopB:
- 00001445  8B D9					mov ebx, ecx
- 00001447  4B						dec ebx
+ 000015AD  74 28	     1		je groundEnd
+ 000015AF				testLoopA:
+ 000015AF  B9 000000A0				mov ecx, 160
+ 000015B4					testLoopB:
+ 000015B4  8B D9					mov ebx, ecx
+ 000015B6  4B						dec ebx
 							setPixel ebx, eax, 080h
- 00001454  E2 EF					loop testLoopB
- 00001456  40					inc eax
+ 000015C3  E2 EF					loop testLoopB
+ 000015C5  40					inc eax
 						isB eax, 100
 						jt testLoopA
- 0000145F  80 3D 0000FAF6 R  1		cmp BF, T
+ 000015CE  80 3D 0000FAF6 R  1		cmp BF, T
 	   01
- 00001466  74 D8	     1		je testLoopA
- 00001468				groundEnd:
+ 000015D5  74 D8	     1		je testLoopA
+ 000015D7				groundEnd:
 
 
 					; draw sphere
-					temp obj1, 010h
- 00001481  A1 0000FB8F R     1		mov eax, sc.z
- 00001499  40		     1		inc eax     
- 0000149A  A3 0000FB8F R     1		mov sc.z, eax
-					temp obj2, 020h
- 000014C4  A1 0000FB8F R     1		mov eax, sc.z
- 000014DC  40		     1		inc eax     
- 000014DD  A3 0000FB8F R     1		mov sc.z, eax
-					temp obj3, 030h
- 00001507  A1 0000FB8F R     1		mov eax, sc.z
- 0000151F  40		     1		inc eax     
- 00001520  A3 0000FB8F R     1		mov sc.z, eax
-					temp obj4, 040h
- 0000154A  A1 0000FB8F R     1		mov eax, sc.z
- 00001562  40		     1		inc eax     
- 00001563  A3 0000FB8F R     1		mov sc.z, eax
-					temp obj5, 050h
- 0000158D  A1 0000FB8F R     1		mov eax, sc.z
- 000015A5  40		     1		inc eax     
- 000015A6  A3 0000FB8F R     1		mov sc.z, eax
-					temp obj6, 0A0h
- 000015D0  A1 0000FB8F R     1		mov eax, sc.z
- 000015E8  40		     1		inc eax     
- 000015E9  A3 0000FB8F R     1		mov sc.z, eax
-					temp obj7, 0B0h
- 00001616  A1 0000FB8F R     1		mov eax, sc.z
- 0000162E  40		     1		inc eax     
- 0000162F  A3 0000FB8F R     1		mov sc.z, eax
-					temp obj8, 090h  
- 0000165C  A1 0000FB8F R     1		mov eax, sc.z
- 00001674  40		     1		inc eax     
- 00001675  A3 0000FB8F R     1		mov sc.z, eax
+					;temp obj1, 010h
+					;temp obj2, 020h
+					;temp obj3, 030h
+					;temp obj4, 040h
+					;temp obj5, 050h
+					;temp obj6, 0A0h
+					;temp obj7, 0B0h
+					;temp obj8, 090h  
+					World2Camera ADDR obj1.pos, ADDR p1
+					World2Camera ADDR obj2.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 030h
+					World2Camera ADDR obj3.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 010h
+					World2Camera ADDR obj4.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 030h
+
+					World2Camera ADDR obj5.pos, ADDR p1
+					World2Camera ADDR obj3.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 020h
+					World2Camera ADDR obj2.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 010h
+					World2Camera ADDR obj8.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 020h
+
+					World2Camera ADDR obj7.pos, ADDR p1
+					World2Camera ADDR obj2.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 030h 
+					World2Camera ADDR obj4.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 030h
+					World2Camera ADDR obj8.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 010h
+
+					World2Camera ADDR obj6.pos, ADDR p1
+					World2Camera ADDR obj3.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 020h
+					World2Camera ADDR obj4.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 010h
+					World2Camera ADDR obj8.pos, ADDR p2
+					INVOKE DrawLineProc, ADDR p1, ADDR p2, 020h
+
 					setPixel 80, 50, 040h
-					 
- 00001694  E8 FFFFF6C3			call repaint  
- 00001699  E8 FFFFFAEE			call logSystem   
- 0000169E  E8 00000000 E		call ReadChar
- 000016A3  66| A3			mov keyDownCode, ax
+					
+
+ 0000179E  E8 FFFFF5BD			call repaint  
+ 000017A3  E8 FFFFFB53			call logSystem   
+
+ 000017A8  E8 00000000 E		call ReadChar
+ 000017AD  66| A3			mov keyDownCode, ax
 	   0000FAF4 R
- 000016A9  E8 FFFFF8C7			call cameraMovement
+ 000017B3  E8 FFFFF900			call cameraMovement
 					.IF keyDownCode != 283
- 000016B9  E9 FFFFFCFD				jmp appLoop
+ 000017C3  E9 FFFFFD62				jmp appLoop
 					.ENDIF
 					exit     
- 000016C5			main ENDP
+ 000017CF			main ENDP
 				END main
 
-Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/22/22 08:39:46
+Microsoft (R) Macro Assembler Version 14.29.30146.0	    12/24/22 17:46:22
 FinalProject\main.asm					     Symbols 2 - 1
 
 
@@ -2335,15 +2429,15 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 0000FB93 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000016C5 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000FBAB Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 000017CF Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
 
                 N a m e                 Type     Value    Attr
 
-CameraMovement . . . . . . . . .	P Near	 00000F75 _TEXT	Length= 0000018C Public STDCALL
+CameraMovement . . . . . . . . .	P Near	 000010B8 _TEXT	Length= 000001B8 Public STDCALL
   moveVec  . . . . . . . . . . .		 bp - 0000000C
 ClampProc  . . . . . . . . . . .	P Near	 00000455 _TEXT	Length= 00000040 Public STDCALL
   val  . . . . . . . . . . . . .	DWord	 bp + 00000008
@@ -2364,7 +2458,18 @@ DiveProc . . . . . . . . . . . .	P Near	 000004D4 _TEXT	Length= 0000004F Public 
   val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
   DiveProcNotNeg . . . . . . . .	L Near	 0000051C _TEXT	
   DiveProcEnd  . . . . . . . . .	L Near	 0000051E _TEXT	
-DrawSphereProc . . . . . . . . .	P Near	 00000DD7 _TEXT	Length= 0000019E Public STDCALL
+DrawLineProc . . . . . . . . . .	P Near	 00000DDB _TEXT	Length= 0000013F Public STDCALL
+  fromPtr  . . . . . . . . . . .	DWord	 bp + 00000008
+  toPtr  . . . . . . . . . . . .	DWord	 bp + 0000000C
+  color  . . . . . . . . . . . .	Word	 bp + 00000010
+  from . . . . . . . . . . . . .		 bp - 0000000C
+  to . . . . . . . . . . . . . .		 bp - 00000018
+  posOffset  . . . . . . . . . .		 bp - 00000024
+  iLoop  . . . . . . . . . . . .	DWord	 bp - 00000028
+  len  . . . . . . . . . . . . .	DWord	 bp - 0000002C
+  DrawLineProcLoopI  . . . . . .	L Near	 00000E5F _TEXT	
+  DrawLineProcEnd  . . . . . . .	L Near	 00000F10 _TEXT	
+DrawSphereProc . . . . . . . . .	P Near	 00000F1A _TEXT	Length= 0000019E Public STDCALL
   infoPtr  . . . . . . . . . . .	DWord	 bp + 00000008
   color  . . . . . . . . . . . .	Word	 bp + 0000000C
   maxX . . . . . . . . . . . . .	DWord	 bp - 00000004
@@ -2376,10 +2481,10 @@ DrawSphereProc . . . . . . . . .	P Near	 00000DD7 _TEXT	Length= 0000019E Public 
   iLoop  . . . . . . . . . . . .	DWord	 bp - 0000002C
   jLoop  . . . . . . . . . . . .	DWord	 bp - 00000030
   limit  . . . . . . . . . . . .	DWord	 bp - 00000034
-  DrawSphereProcLoopI  . . . . .	L Near	 00000EF2 _TEXT	
-  DrawSphereProcLoopJ  . . . . .	L Near	 00000EF8 _TEXT	
-  DrawSphereProcDontDraw . . . .	L Near	 00000F3E _TEXT	
-  DrawSphereProcEnd  . . . . . .	L Near	 00000F6C _TEXT	
+  DrawSphereProcLoopI  . . . . .	L Near	 00001035 _TEXT	
+  DrawSphereProcLoopJ  . . . . .	L Near	 0000103B _TEXT	
+  DrawSphereProcDontDraw . . . .	L Near	 00001081 _TEXT	
+  DrawSphereProcEnd  . . . . . .	L Near	 000010AF _TEXT	
 DumpMem  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 DumpRegs . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 EulerToRotMatrixProc . . . . . .	P Near	 00000A59 _TEXT	Length= 00000116 Public STDCALL
@@ -2469,10 +2574,10 @@ PeekConsoleInputA  . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 Random32 . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 RandomRange  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Randomize  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-RePaint  . . . . . . . . . . . .	P Near	 00000D5C _TEXT	Length= 0000004D Public STDCALL
+RePaint  . . . . . . . . . . . .	P Near	 00000D60 _TEXT	Length= 0000004D Public STDCALL
   writeCount . . . . . . . . . .	Word	 bp - 00000002
   pos  . . . . . . . . . . . . .	DWord	 bp - 00000008
-  RePaintLoop  . . . . . . . . .	L Near	 00000D7F _TEXT	
+  RePaintLoop  . . . . . . . . .	L Near	 00000D83 _TEXT	
 ReadChar . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 ReadConsoleA . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 ReadConsoleInputA  . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -2498,13 +2603,13 @@ SetConsoleTitleA . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 SetConsoleWindowInfo . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 SetFilePointer . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 SetLocalTime . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-SetPixelProc . . . . . . . . . .	P Near	 00000D33 _TEXT	Length= 00000029 Public STDCALL
+SetPixelProc . . . . . . . . . .	P Near	 00000D37 _TEXT	Length= 00000029 Public STDCALL
   x  . . . . . . . . . . . . . .	DWord	 bp + 00000008
   y  . . . . . . . . . . . . . .	DWord	 bp + 0000000C
   color  . . . . . . . . . . . .	Word	 bp + 00000010
-SetScreen  . . . . . . . . . . .	P Near	 00000D0E _TEXT	Length= 00000025 Public STDCALL
+SetScreen  . . . . . . . . . . .	P Near	 00000D12 _TEXT	Length= 00000025 Public STDCALL
   color  . . . . . . . . . . . .	Word	 bp + 00000008
-  SetScreenLoop  . . . . . . . .	L Near	 00000D23 _TEXT	
+  SetScreenLoop  . . . . . . . .	L Near	 00000D27 _TEXT	
 SetSphereProc  . . . . . . . . .	P Near	 00000589 _TEXT	Length= 00000025 Public STDCALL
   spherePtr  . . . . . . . . . .	DWord	 bp + 00000008
   posX . . . . . . . . . . . . .	DWord	 bp + 0000000C
@@ -2512,8 +2617,8 @@ SetSphereProc  . . . . . . . . .	P Near	 00000589 _TEXT	Length= 00000025 Public 
   posZ . . . . . . . . . . . . .	DWord	 bp + 00000014
   r  . . . . . . . . . . . . . .	DWord	 bp + 00000018
 SetTextColor . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-ShowColor  . . . . . . . . . . .	P Near	 00000DA9 _TEXT	Length= 0000002E Public STDCALL
-  ShowColorLoop  . . . . . . . .	L Near	 00000DB7 _TEXT	
+ShowColor  . . . . . . . . . . .	P Near	 00000DAD _TEXT	Length= 0000002E Public STDCALL
+  ShowColorLoop  . . . . . . . .	L Near	 00000DBB _TEXT	
 ShowFPUStack . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 Sleep  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 SqrtProc . . . . . . . . . . . .	P Near	 00000523 _TEXT	Length= 00000066 Public STDCALL
@@ -2531,14 +2636,14 @@ SystemTimeToFileTime . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 VectorLenProc  . . . . . . . . .	P Near	 00000800 _TEXT	Length= 00000037 Public STDCALL
   vec  . . . . . . . . . . . . .	DWord	 bp + 00000008
 WaitMsg  . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-World2CameraProc . . . . . . . .	P Near	 00000C33 _TEXT	Length= 000000DB Public STDCALL
+World2CameraProc . . . . . . . .	P Near	 00000C33 _TEXT	Length= 000000DF Public STDCALL
   pos  . . . . . . . . . . . . .	DWord	 bp + 00000008
   cor  . . . . . . . . . . . . .	DWord	 bp + 0000000C
   position . . . . . . . . . . .		 bp - 0000000C
   posOffset  . . . . . . . . . .		 bp - 00000018
   tempVec  . . . . . . . . . . .		 bp - 00000024
   vLen . . . . . . . . . . . . .	DWord	 bp - 00000028
-  World2CameraProcEnd  . . . . .	L Near	 00000D07 _TEXT	
+  World2CameraProcEnd  . . . . .	L Near	 00000D0B _TEXT	
 WriteBinB  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteBin . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteChar  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
@@ -2579,7 +2684,7 @@ degNorProc . . . . . . . . . . .	P Near	 000005AE _TEXT	Length= 0000003D Public 
 divVectorProc  . . . . . . . . .	P Near	 00000784 _TEXT	Length= 00000036 Public STDCALL
   v1 . . . . . . . . . . . . . .	DWord	 bp + 00000008
   k  . . . . . . . . . . . . . .	DWord	 bp + 0000000C
-init . . . . . . . . . . . . . .	P Near	 00001101 _TEXT	Length= 0000001F Public STDCALL
+init . . . . . . . . . . . . . .	P Near	 00001270 _TEXT	Length= 0000001F Public STDCALL
 isAEProc . . . . . . . . . . . .	P Near	 0000039A _TEXT	Length= 00000021 Public STDCALL
   val1 . . . . . . . . . . . . .	DWord	 bp + 00000008
   val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
@@ -2605,7 +2710,7 @@ isEProc  . . . . . . . . . . . .	P Near	 00000358 _TEXT	Length= 00000021 Public 
   val2 . . . . . . . . . . . . .	DWord	 bp + 0000000C
   isEfalsePart . . . . . . . . .	L Near	 0000036D _TEXT	
   isEendProc . . . . . . . . . .	L Near	 00000374 _TEXT	
-logSystem  . . . . . . . . . . .	P Near	 0000118C _TEXT	Length= 00000224 Public STDCALL
+logSystem  . . . . . . . . . . .	P Near	 000012FB _TEXT	Length= 00000224 Public STDCALL
 logm3Proc  . . . . . . . . . . .	P Near	 0000003B _TEXT	Length= 0000027D Public STDCALL
   matrix . . . . . . . . . . . .	DWord	 bp + 00000008
   fix  . . . . . . . . . . . . .		 bp - 0000000C
@@ -2642,15 +2747,15 @@ scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 sinProc45  . . . . . . . . . . .	P Near	 000006AE _TEXT	Length= 00000068 Public STDCALL
 sinProc  . . . . . . . . . . . .	P Near	 000005EB _TEXT	Length= 000000C3 Public STDCALL
   deg  . . . . . . . . . . . . .	DWord	 bp + 00000008
-start@0  . . . . . . . . . . . .	P Near	 000013B0 _TEXT	Length= 00000315 Public STDCALL
-  appLoop  . . . . . . . . . . .	L Near	 000013BB _TEXT	
-  testLoopA  . . . . . . . . . .	L Near	 00001440 _TEXT	
-  testLoopB  . . . . . . . . . .	L Near	 00001445 _TEXT	
-  groundEnd  . . . . . . . . . .	L Near	 00001468 _TEXT	
+start@0  . . . . . . . . . . . .	P Near	 0000151F _TEXT	Length= 000002B0 Public STDCALL
+  appLoop  . . . . . . . . . . .	L Near	 0000152A _TEXT	
+  testLoopA  . . . . . . . . . .	L Near	 000015AF _TEXT	
+  testLoopB  . . . . . . . . . .	L Near	 000015B4 _TEXT	
+  groundEnd  . . . . . . . . . .	L Near	 000015D7 _TEXT	
 subVectorProc  . . . . . . . . .	P Near	 000007BA _TEXT	Length= 00000023 Public STDCALL
   v1 . . . . . . . . . . . . . .	DWord	 bp + 00000008
   v2 . . . . . . . . . . . . . .	DWord	 bp + 0000000C
-updateSystemValue  . . . . . . .	P Near	 00001120 _TEXT	Length= 0000006C Public STDCALL
+updateSystemValue  . . . . . . .	P Near	 0000128F _TEXT	Length= 0000006C Public STDCALL
   Euler  . . . . . . . . . . . .		 bp - 0000000C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
@@ -2916,9 +3021,11 @@ obj5 . . . . . . . . . . . . . .	SphereData  0000FB47 _DATA
 obj6 . . . . . . . . . . . . . .	SphereData  0000FB57 _DATA	
 obj7 . . . . . . . . . . . . . .	SphereData  0000FB67 _DATA	
 obj8 . . . . . . . . . . . . . .	SphereData  0000FB77 _DATA	
+p1 . . . . . . . . . . . . . . .	Vector	 0000FB87 _DATA	
+p2 . . . . . . . . . . . . . . .	Vector	 0000FB93 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
 screenSize . . . . . . . . . . .	COORD	 00000008 _DATA	
-sc . . . . . . . . . . . . . . .	Vector	 0000FB87 _DATA	
+sc . . . . . . . . . . . . . . .	Vector	 0000FB9F _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 windowRect . . . . . . . . . . .	SMALL_RECT  0000000C _DATA	
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA

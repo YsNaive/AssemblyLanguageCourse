@@ -125,7 +125,7 @@ World2CameraProc Proc uses eax ebx esi, pos:DWORD, cor:DWORD
 	rotVector ADDR position, ADDR cameraRotMat
 	rotVector ADDR posOffset, ADDR cameraRotMat
 	subVector ADDR position, ADDR posOffset
-	isBE position.z, 0
+	isBE position.z, CameraDepth
 	.IF BF == T
 		setVector position, -1, -1, -1
 		jmp World2CameraProcEnd
@@ -137,7 +137,7 @@ World2CameraProc Proc uses eax ebx esi, pos:DWORD, cor:DWORD
 
 	mulVector ADDR position, eax
 	divVector ADDR position, 1000
-
+	; toDo z as scale
 
 	
 
