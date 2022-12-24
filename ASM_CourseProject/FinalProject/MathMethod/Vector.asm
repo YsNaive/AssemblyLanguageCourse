@@ -96,3 +96,36 @@ VectorLenProc ENDP
 VectorLen MACRO vec
 	INVOKE VectorLenProc, vec
 	ENDM
+
+; ptr: array begin, length: arr length
+SortVectorByZ Proc uses eax ebx esi edi, arrayPtr:DWORD, len:DWORD
+	local iloop:DWORD, jloop:DWORD, tempVec:vector
+	mov eax, len
+	mov iloop, eax
+	dec iloop
+	SortVectorByZLoopI:
+		mov esi, arrayPtr
+		mov jloop, 0
+		SortVectorByZLoopJ:
+			mov eax, [esi+8]
+			mov ebx, [esi+20]
+			isa eax, ebx
+			.IF BF == T
+				mov ecx, esi
+				mov ebx, esi
+				add ebx, 12
+				copyVector ADDR tempVec, ecx
+				copyVector ecx, ebx
+				copyVector ebx, ADDR tempVec
+			.EndIF
+
+			add esi, 12
+			inc jLoop
+			isB jLoop, iloop
+			jt SortVectorByZLoopJ
+
+		dec iloop
+		isA iloop, 0
+		jt SortVectorByZLoopI
+ret
+SortVectorByZ EndP

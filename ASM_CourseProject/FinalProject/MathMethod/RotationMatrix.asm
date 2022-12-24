@@ -137,11 +137,9 @@ World2CameraProc Proc uses eax ebx esi, pos:DWORD, cor:DWORD
 
 	mulVector ADDR position, eax
 	divVector ADDR position, 1000
-	; toDo z as scale
-
 	
-
-	mov [esi+8], eax ;output z as scale
+	mov eax, position.z
+	mov [esi+8], eax ;output z as depth
 	
 	; screen offset to mid
 	mov eax, position.x
